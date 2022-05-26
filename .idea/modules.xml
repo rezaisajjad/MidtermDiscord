@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/MServer.iml" filepath="$PROJECT_DIR$/MServer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/MidtermDiscordServer.iml" filepath="$PROJECT_DIR$/.idea/MidtermDiscordServer.iml" />
     </modules>
   </component>
 </project>
