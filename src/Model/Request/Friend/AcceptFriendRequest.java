@@ -15,7 +15,6 @@ public class AcceptFriendRequest implements Serializable {
     public AcceptFriendRequest(FriendRequest friendRequest) {
         this.friendRequest = friendRequest;
     }
-
     public FriendRequest getFriendRequest() {
         return friendRequest;
     }
