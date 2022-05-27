@@ -10,5 +10,13 @@ public class AcceptFriendRequest implements Serializable {
      * friendRequest
      * برابر با نال شده و این کلاس برمیگردد
      */
-    FriendRequest friendRequest;
+    private FriendRequest friendRequest;
+
+    public AcceptFriendRequest(FriendRequest friendRequest) {
+        this.friendRequest = friendRequest;
+    }
+
+    public FriendRequest getFriendRequest() {
+        return friendRequest;
+    }
 }
