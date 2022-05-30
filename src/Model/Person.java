@@ -2,13 +2,12 @@ package Model;
 
 import java.awt.image.BufferedImage;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.HashSet;
 
 /**
  * Created by 40031020 on 5/23/2022.
  */
-public class Person implements Serializable {
+public class Person extends Conversation implements Serializable {
     private String userName;
     private String passWord;
     private String email;
@@ -24,6 +23,7 @@ public class Person implements Serializable {
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.status = status;
+
         this.friends = friends;
     }
 
