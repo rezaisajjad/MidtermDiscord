@@ -1,12 +1,11 @@
 package Model.Request;
+import Model.Chat;
+import Model.Requestable;
+
 import java.io.Serializable;
 
-public class Request implements Serializable {
-    RequestType requestType;
-    Serializable object;
+abstract public class Request implements Serializable {
+    abstract public boolean contactsAct();
+    abstract public boolean serverAct();
 
-    public Request(RequestType requestType, Serializable object) {
-        this.requestType = requestType;
-        this.object = object;
-    }
 }

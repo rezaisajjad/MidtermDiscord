@@ -8,8 +8,7 @@ import java.util.HashSet;
 /**
  * Created by 40031020 on 5/23/2022.
  */
-public class Person implements Serializable {
-    private String userName;
+public class Person extends Requestable implements Serializable {
     private String passWord;
     private String email;
     private String phoneNumber;
