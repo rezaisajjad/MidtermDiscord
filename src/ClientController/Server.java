@@ -1,4 +1,4 @@
-package Controller;
+package ClientController;
 
 import Model.Request.Request;
 

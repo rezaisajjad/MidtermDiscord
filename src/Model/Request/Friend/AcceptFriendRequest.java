@@ -1,22 +1,15 @@
 package Model.Request.Friend;
 
-import Model.Request.Request;
+import Model.Person;
+import Model.Request.*;
 
-import java.io.Serializable;
+import java.io.*;
+import java.util.*;
 
 public class AcceptFriendRequest extends Request implements Serializable {
-    /**
-     * درخواست دوستی که از سرور دریافت شده بود در این کلاس قرار دارد
-     * این کلاس به سرور میرود و سرور در صورت موفقیت همین را بازمیگرداند
-     * در غیر این صورت
-     * friendRequest
-     * برابر با نال شده و این کلاس برمیگردد
-     */
-    private FriendRequest friendRequest;
+    private final FriendRequest friendRequest;
 
     public AcceptFriendRequest(FriendRequest friendRequest) {
-        super();
-
         this.friendRequest = friendRequest;
     }
     public FriendRequest getFriendRequest() {
@@ -24,12 +17,13 @@ public class AcceptFriendRequest extends Request implements Serializable {
     }
 
     @Override
-    public boolean contactsAct() {
-        return false;
+    public boolean serverAct(HashMap<String,Person> persons) {
+            persons.get(friendRequest.getSender()).addFriend(friendRequest.getReceiver());
+            persons.get(friendRequest.getReceiver()).addFriend(friendRequest.getReceiver());
+            return true;
     }
-
     @Override
-    public boolean serverAct() {
-        return false;
+    public HashSet<String> selfAct(HashMap<String,Person> persons) {
+        return null;
     }
 }

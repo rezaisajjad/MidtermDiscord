@@ -1,21 +1,30 @@
 package Model.Request.Friend;
 
 import Model.Person;
+import Model.Request.Request;
 
-import java.io.Serializable;
+import java.io.*;
+import java.util.*;
 
-public class BlockPersonRequest implements Serializable {
+public class BlockPersonRequest extends Request implements Serializable {
     /**
      * شخصی که بلاک میکند
      */
-    Person blocker;
+    private String blocker;
     /**
      * شخصی که بلاک میشود
      */
-    Person blocked;
+    private String blocked;
 
-    /**
-     * این کلاس در صورت موفقیت مجدد برگردانده شده و در غیر این صورت
-     * پارامتر ها نال شده و برگردانده میشود
-     */
+    @Override
+    public boolean serverAct(HashMap<String,Person> persons) {
+        if(persons.get(blocker)==null || persons.get(blocked)==null)
+            return false;
+        persons.get(persons.get(blocker).getUserName()).block(blocked);
+        return true;
+    }
+    @Override
+    public HashSet<String> selfAct(HashMap<String,Person> persons) {
+        return null;
+    }
 }

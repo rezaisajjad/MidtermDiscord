@@ -2,20 +2,22 @@ package Model;
 
 import java.awt.image.BufferedImage;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.HashSet;
 
 /**
  * Created by 40031020 on 5/23/2022.
  */
-public class Person extends Requestable implements Serializable {
+public class Person implements Serializable {
+
     private String passWord;
     private String userName;
     private String email;
     private String phoneNumber;
     private Status status;
-    private HashSet<String> friends;
-    private HashSet<String> blockList;
+    private final HashSet<String> friends;
+    private final HashSet<String> blockList;
+    private final HashSet<String> Requests;
+    private final HashSet<String> chatList;
     private BufferedImage image;
 
     // Setters
@@ -63,9 +65,16 @@ public class Person extends Requestable implements Serializable {
     public HashSet<String> getBlockList() {
         return blockList;
     }
+    public HashSet<String> getRequests() {
+        return Requests;
+    }
+    public HashSet<String> getChatList() {
+        return chatList;
+    }
 
     //constructors
     public Person(String userName, String passWord, String email, String phoneNumber, Status status) {
+        super();
         this.userName = userName;
         this.passWord = passWord;
         this.email = email;
@@ -73,6 +82,8 @@ public class Person extends Requestable implements Serializable {
         this.status = status;
         this.blockList = new HashSet<>();
         this.friends = new HashSet<>();
+        this.chatList=new HashSet<>();
+        this.Requests = new HashSet<>();
     }
     public Person(String userName, String passWord, String email) {
         this.userName = userName;
@@ -80,6 +91,8 @@ public class Person extends Requestable implements Serializable {
         this.email = email;
         this.blockList = new HashSet<>();
         this.friends = new HashSet<>();
+        this.chatList=new HashSet<>();
+        this.Requests = new HashSet<>();
     }
 
     //add or remove to lists
@@ -94,6 +107,18 @@ public class Person extends Requestable implements Serializable {
     }
     public void unblock(String person){
         this.blockList.remove(person);
+    }
+    public void addRequest(String request){
+        this.Requests.add(request);
+    }
+    public void removeRequest(String request){
+        this.Requests.remove(request);
+    }
+    public void addChat(String chat){
+        this.chatList.add(chat);
+    }
+    public void removeChat(String chat){
+        this.chatList.remove(chat);
     }
 
 }

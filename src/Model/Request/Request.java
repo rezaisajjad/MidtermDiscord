@@ -1,11 +1,10 @@
 package Model.Request;
-import Model.Chat;
-import Model.Requestable;
+import Model.*;
 
-import java.io.Serializable;
+import java.io.*;
+import java.util.*;
 
 abstract public class Request implements Serializable {
-    abstract public boolean contactsAct();
-    abstract public boolean serverAct();
-
+    abstract public boolean serverAct(HashMap<String,Person> persons);
+    abstract public HashSet<String> selfAct(HashMap<String,Person> persons);
 }

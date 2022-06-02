@@ -1,13 +1,24 @@
 package Model.Request.Friend;
 
+import Model.Person;
+import Model.Request.Request;
+
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 
-public class GetFriendRequest implements Serializable {
+public class GetFriendRequest extends Request implements Serializable {
     String userName;
-    ArrayList<FriendRequest> requests;
-    /**
-     * سرور لیست درخواست های دوستی را برای یوزنیم داده شده پر میکند
-     * در ابتدا لیست خالی است و در سرور پر شده و این کلاس برمیگردد
-     */
+
+    @Override
+    public boolean serverAct(HashMap<String, Person> persons) {
+        return false;
+    }
+
+    @Override
+    public HashSet<String> selfAct(HashMap<String, Person> persons) {
+        return persons.get(userName).getRequests();
+    }
+
 }

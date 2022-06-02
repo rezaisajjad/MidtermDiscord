@@ -1,13 +1,12 @@
-package Controller;
+package ClientController;
 
 import Model.Request.Request;
-import Model.Request.RequestType;
 
 /**
  * send and receives data to server
  */
 public interface IServer {
 
-    public Request sendRequest(Request request);
+    Request sendRequest(Request request);
 
 }
