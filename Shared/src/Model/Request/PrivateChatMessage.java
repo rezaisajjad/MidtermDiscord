@@ -12,7 +12,7 @@ public class PrivateChatMessage implements Serializable {
         this.fileId = fileId;
     }
     public PrivateChatMessage(String senderUserName, String text) {
-        new PrivateChatMessage(senderUserName,text,"");
+        this(senderUserName,text,"");
     }
 
     public String getText() {

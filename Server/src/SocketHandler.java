@@ -45,7 +45,8 @@ public class SocketHandler extends Thread {
         if (request instanceof CheckUserNameAvailabilityRequest res) {
             res.setAvailability(people.isUserNameAvailable(res.getUserName()));
             return res;
-        } else if (request instanceof LoginRequest res) {
+        }
+        else if (request instanceof LoginRequest res) {
             res.setP(people.loginPerson(res.getUserName(), res.getPassWord()).cloneWithoutList());
             return res;
         } else if (request instanceof SignUpRequest res) {

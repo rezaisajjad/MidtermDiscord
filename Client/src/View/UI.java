@@ -154,7 +154,7 @@ public class UI {
             return;
         }
         for (var chat : chats) {
-            System.out.println((++temp) + ") " + chat.getMessages());
+            System.out.println((++temp) + ") " + getPrivateChatPerson(chat).getUserName());
         }
         System.out.println("0) Back");
         if ((temp = scn.readIndex()) == -1) {
@@ -222,6 +222,7 @@ public class UI {
                     }
                 }
                 privateChatHandler(privateChat);
+                doFriendsMenu();
             }
             case 2 -> {
                 System.out.println("Enter userName: ");

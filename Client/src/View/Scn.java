@@ -28,7 +28,7 @@ public class Scn {
 
     public String readLine() {
         String txt = scn.nextLine().trim();
-        return txt.equals("") ? scn.nextLine() : txt;
+        return txt.equals("") ? readLine() : txt;
     }
 
     public String readText() {

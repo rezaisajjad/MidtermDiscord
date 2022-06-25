@@ -15,9 +15,13 @@ public class PeopleRepository {
         p1.setUserName("sajjadre");
         p1.setPassWord("Sajjadre1");
         p1.setEmail("srsjd@yahoo.com");
+        Person p11 = new Person();
+        p11.setUserName("readLine");
+        p11.setPassWord("readLine1");
+        p11.setEmail("srsjd@yahoo.com");
         Person p2 = new Person();
-        p2.setUserName("HamidReza");
-        p2.setPassWord("HamidReza");
+        p2.setUserName("hamidreza");
+        p2.setPassWord("Hamidreza1");
         p2.setEmail("HamidReza@yahoo.com");
         Person p3 = new Person();
         p3.setUserName("Kambiz");
@@ -31,6 +35,7 @@ public class PeopleRepository {
         people.put(p2.getUserName(), p2);
         people.put(p3.getUserName(), p3);
         people.put(p4.getUserName(), p4);
+        people.put(p11.getUserName(),p11);
         var chat = new PrivateChat(p1, p2);
         var message = new PrivateChatMessage("HamidReza", "Salam");
         chat.addMessage(message);
