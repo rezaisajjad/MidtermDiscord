@@ -68,7 +68,7 @@ public class SocketHandler extends Thread {
             return res;
         }
         //endregion
-        //Friends
+        //region Friends
         else if (request instanceof RemoveFriendRequest res) {
             people.removeFriend(res.getSenderUserName(), res.getReceiverUserName());
             return res;
@@ -87,5 +87,6 @@ public class SocketHandler extends Thread {
         }else{
             return null;
         }
+        //endregion
     }
 }

@@ -206,18 +206,24 @@ public class UI {
             case 1 -> {
                 var friendList = server.getPersonFriends(person.getUserName());
                 int temp = 0;
+                if (isListNullOrEmpty(friendList)) {
+                    System.out.println("There isn't any friend !!!");
+                    doFriendsMenu();
+                    return;
+                }
                 for (var item : friendList) {
                     System.out.println((++temp) + ") " + item.getUserName());
                 }
                 System.out.println("0) Back");
                 if ((temp = scn.readIndex()) == -1) {
-                    doMainMenu();
+                    doFriendsMenu();
                     return;
                 }
                 PrivateChat privateChat = new PrivateChat(person, friendList.get(temp));
                 for (var item : server.getPersonPrivateChats(person.getUserName())) {
                     if (item.equals(privateChat)) {
                         privateChatHandler(item);
+                        doFriendsMenu();
                         return;
                     }
                 }
@@ -229,6 +235,7 @@ public class UI {
                 String receiver = scn.readText();
                 server.sendFriendRequest(person.getUserName(), receiver);
                 System.out.println("sent");
+                doFriendsMenu();
             }
             case 3 -> {
                 var requests = server.getPersonFriendRequests(person.getUserName());
@@ -243,19 +250,20 @@ public class UI {
                 }
                 server.acceptFriendRequest(requests.get(temp));
                 System.out.println("Accepted");
+                doFriendsMenu();
             }
             case 4 -> {
                 System.out.println("Enter userName: ");
                 String receiver = scn.readText();
                 server.removePersonFriend(person.getUserName(), receiver);
                 System.out.println("removed");
+                doFriendsMenu();
             }
             case 5 -> {
                 doMainMenu();
                 return;
             }
         }
-        doChatsMenu();
     }
 
     public void showFriendsMenu() {

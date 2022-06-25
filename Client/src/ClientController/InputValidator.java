@@ -25,7 +25,6 @@ public class InputValidator {
     }
     public static boolean validateUserName(String userName) {
         String pattern = "^[A-Za-z][A-Za-z0-9]{5,100}$";
-        Pattern _Pattern = Pattern.compile(pattern);
         return isValidate(pattern, userName);
     }
 }

@@ -30,7 +30,7 @@ public class Server {
     private IRequest sendRequest(IRequest request) {
         Socket socket = null;
         try {
-            socket = new Socket("localhost", 12345);
+            socket = new Socket("localhost", 12344);
             ObjectOutputStream outputStream = new ObjectOutputStream(socket.getOutputStream());
             outputStream.writeObject(request);
             ObjectInputStream inputStream = new ObjectInputStream(socket.getInputStream());
@@ -83,6 +83,7 @@ public class Server {
 
     /**
      * return private chats of a person
+     *
      * @param userName userName
      * @return list of chats
      */
@@ -93,41 +94,61 @@ public class Server {
 
     /**
      * send a message to private chat
-     * @param pc private chat
+     *
+     * @param pc  private chat
      * @param pcm message
      */
     public void sendPrivateChatMessage(PrivateChat pc, PrivateChatMessage pcm) {
         SendMessagePrivateChatRequest request = new SendMessagePrivateChatRequest(pc, pcm);
         sendRequest(request);
     }
-    /////////////////////////////////////////////
+    /**
+     * the friends of a person
+     *
+     * @param userName Username
+     * @return friendList
+     */
+    public ArrayList<Person> getPersonFriends(String userName) {
+        GetAcceptedFriendsRequest request = new GetAcceptedFriendsRequest(userName);
+        return ((GetAcceptedFriendsRequest) sendRequest(request)).getFriends();
+    }
 
-
-
-
-
+    /**
+     * sends a friend request
+     * @param sender friend request sender
+     * @param receiver friend request receiver
+     */
     public void sendFriendRequest(String sender, String receiver) {
         AddFriendRequest request = new AddFriendRequest(sender, receiver);
         sendRequest(request);
     }
 
+    /**
+     * removes a friend
+     * @param remover friend remover
+     * @param receiver removed friend
+     */
     public void removePersonFriend(String remover, String receiver) {
         RemoveFriendRequest request = new RemoveFriendRequest(remover, receiver);
         sendRequest(request);
     }
 
+    /**
+     * returns list of requests
+     * @param userName who you want to get requests
+     * @return list of request
+     */
     public ArrayList<AddFriendRequest> getPersonFriendRequests(String userName) {
         GetPersonRequestsRequest request = new GetPersonRequestsRequest(userName);
         return ((GetPersonRequestsRequest) sendRequest(request)).getRequests();
     }
 
+    /**
+     * accept a friend request
+     * @param friendRequest request
+     */
     public void acceptFriendRequest(AddFriendRequest friendRequest) {
         AcceptFriendRequest acceptFriendRequest = new AcceptFriendRequest(friendRequest);
         sendRequest(acceptFriendRequest);
-    }
-
-    public ArrayList<Person> getPersonFriends(String userName) {
-        GetAcceptedFriendsRequest request = new GetAcceptedFriendsRequest(userName);
-        return ((GetAcceptedFriendsRequest) sendRequest(request)).getFriends();
     }
 }

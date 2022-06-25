@@ -35,7 +35,7 @@ public class PeopleRepository {
         people.put(p2.getUserName(), p2);
         people.put(p3.getUserName(), p3);
         people.put(p4.getUserName(), p4);
-        people.put(p11.getUserName(),p11);
+        people.put(p11.getUserName(), p11);
         var chat = new PrivateChat(p1, p2);
         var message = new PrivateChatMessage("HamidReza", "Salam");
         chat.addMessage(message);
@@ -117,8 +117,10 @@ public class PeopleRepository {
      */
     public void sendPrivateChatMessage(PrivateChat privateChat, PrivateChatMessage message) {
         boolean isFound = false;
+        PrivateChat pc = null;
         for (var item : getPersonPrivateChats(privateChat.getP1().getUserName())) {
             if (item.equals(privateChat)) {
+                pc = item;
                 item.getMessages().add(message);
                 isFound = true;
                 break;
@@ -126,23 +128,37 @@ public class PeopleRepository {
         }
         for (var item : getPersonPrivateChats(privateChat.getP2().getUserName())) {
             if (item.equals(privateChat)) {
+                if (pc == item)
+                    break;
                 item.getMessages().add(message);
                 isFound = true;
                 break;
             }
         }
         if (!isFound) {
+            privateChat = new PrivateChat(people.get(privateChat.getP1().getUserName()), people.get(privateChat.getP2().getUserName()));
             privateChat.addMessage(message);
             privateChat.getP1().addPrivateChat(privateChat);
             privateChat.getP2().addPrivateChat(privateChat);
         }
     }
-    ///////////////////////////////////
 
+    /**
+     * returns list of friends
+     *
+     * @param userName who you want to get friends
+     * @return friend list
+     */
     public ArrayList<Person> getPersonFriends(String userName) {
         return people.get(userName).getFriends();
     }
 
+    /**
+     * remover friend
+     *
+     * @param userName1 person one
+     * @param userName2 person two
+     */
     public void removeFriend(String userName1, String userName2) {
         for (var item : getPersonFriends(userName1)) {
             if (item.getUserName().equals(userName2)) {
@@ -158,11 +174,21 @@ public class PeopleRepository {
         }
     }
 
-    public void _addFriend(String senderUserName, String receiverUserName) {
+    /**
+     * add a friend to both friend list
+     * @param senderUserName person one
+     * @param receiverUserName person two
+     */
+    private void _addFriend(String senderUserName, String receiverUserName) {
         people.get(senderUserName).getFriends().add(people.get(receiverUserName));
         people.get(receiverUserName).getFriends().add(people.get(senderUserName));
     }
 
+    /**
+     * insert a friendship to friend list of both
+     * @param senderUserName sender
+     * @param receiverUserName receiver
+     */
     public void addFriend(String senderUserName, String receiverUserName) {
         if (friendRequests.get(senderUserName) != null) {
             for (var item : friendRequests.get(senderUserName)) {
@@ -177,6 +203,11 @@ public class PeopleRepository {
         friendRequests.get(receiverUserName).add(senderUserName);
     }
 
+    /**
+     * returns request of a person
+     * @param userName person
+     * @return request list
+     */
     public ArrayList<AddFriendRequest> getPersonFriendRequests(String userName) {
         if (friendRequests.get(userName) == null || friendRequests.get(userName).size() == 0) {
             return null;
@@ -189,6 +220,11 @@ public class PeopleRepository {
         }
     }
 
+    /**
+     * accept a friend request
+     * @param userName1 person one
+     * @param userName2 person two
+     */
     public void acceptFriendRequest(String userName1, String userName2) {
         if (friendRequests.get(userName1) != null) {
             for (var item : friendRequests.get(userName1)) {
