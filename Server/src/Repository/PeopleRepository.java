@@ -104,13 +104,13 @@ public class PeopleRepository {
         }
     }
 
-    ///////////////////////////////////
     /**
      * send a message to private chat
+     *
      * @param privateChat private chat
-     * @param message message
+     * @param message     message
      */
-    public void addMessage(PrivateChat privateChat, PrivateChatMessage message) {
+    public void sendPrivateChatMessage(PrivateChat privateChat, PrivateChatMessage message) {
         boolean isFound = false;
         for (var item : getPersonPrivateChats(privateChat.getP1().getUserName())) {
             if (item.equals(privateChat)) {
@@ -132,6 +132,7 @@ public class PeopleRepository {
             privateChat.getP2().addPrivateChat(privateChat);
         }
     }
+    ///////////////////////////////////
 
     public ArrayList<Person> getPersonFriends(String userName) {
         return people.get(userName).getFriends();

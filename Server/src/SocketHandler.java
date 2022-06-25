@@ -63,7 +63,7 @@ public class SocketHandler extends Thread {
             return res;
         }
         else if (request instanceof SendMessagePrivateChatRequest res) {
-            people.addMessage(res.getPrivateChat(), res.getMessage());
+            people.sendPrivateChatMessage(res.getPrivateChat(), res.getMessage());
             return res;
         }
         //endregion

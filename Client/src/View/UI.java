@@ -7,6 +7,7 @@ import Model.Request.PrivateChatMessage;
 import Model.Request.Account.LoginRequest;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 public class UI {
     //region Base
@@ -23,6 +24,10 @@ public class UI {
         for (String arg : args) {
             System.out.println((++i) + ") " + arg);
         }
+    }
+
+    private boolean isListNullOrEmpty(Collection collection) {
+        return (collection == null) || (collection.size() == 0);
     }
     //endregion
 
@@ -143,10 +148,13 @@ public class UI {
     void chatsMenuHandler() {
         int temp = 0;
         ArrayList<PrivateChat> chats = server.getPersonPrivateChats(person.getUserName());
-        if (chats != null) {
-            for (var chat : chats) {
-                System.out.println((++temp) + ") " + chat.getMessages());
-            }
+        if (isListNullOrEmpty(chats)) {
+            System.out.println("There isn't any chat");
+            doMainMenu();
+            return;
+        }
+        for (var chat : chats) {
+            System.out.println((++temp) + ") " + chat.getMessages());
         }
         System.out.println("0) Back");
         if ((temp = scn.readIndex()) == -1) {
@@ -168,14 +176,14 @@ public class UI {
             switch (scn.readNumber()) {
                 case 1 -> {
                     System.out.println("Enter your message: ");
-                    PrivateChatMessage chatMessage = new PrivateChatMessage(person.getUserName(), scn.readLine());
+                    String messageText = scn.readLine();
+                    PrivateChatMessage chatMessage = new PrivateChatMessage(person.getUserName(), messageText);
                     server.sendPrivateChatMessage(chat, chatMessage);
                 }
                 case 2 -> {
                     System.out.println("Sorry isn't complete !!!");
                 }
                 case 3 -> {
-                    doChatsMenu();
                     isBreak = true;
                 }
             }
