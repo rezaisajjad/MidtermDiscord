@@ -2,28 +2,20 @@ package View;
 
 import ClientController.Server;
 import Model.Person;
-import Model.PrivateChat;
-import Model.Request.Account.GetPersonPrivateChats;
+import Model.Request.PrivateChat;
+import Model.Request.PrivateChatMessage;
 import Model.Request.Account.LoginRequest;
-import Model.Request.Account.SignUpRequest;
 
 import java.util.ArrayList;
 
-
-/**
- * Created by 40031020 on 5/23/2022.
- */
 public class UI {
     //region Base
-    Person person = null;
+    private Person person = null;
+    private Server server = Server.getServer();
+    Scn scn = Scn.getScanner();
 
-    private static UI ui = new UI();
-
-    private UI() {
-    }
-
-    public static void start() {
-        ui.doStartMenu();
+    public void start() {
+        doStartMenu();
     }
 
     private void printList(String... args) {
@@ -35,13 +27,13 @@ public class UI {
     //endregion
 
     //region Start Menu
-    void doStartMenu() {
+    private void doStartMenu() {
         showStartMenu();
         startMenuHandler();
     }
 
-    void startMenuHandler() {
-        switch (Scn.readNumber()) {
+    private void startMenuHandler() {
+        switch (scn.readNumber()) {
             case 1 -> {
                 doLoginMenu();
             }
@@ -49,33 +41,28 @@ public class UI {
                 doSignUpMenu();
             }
             case 3 -> {
-                System.out.println("It's not completed");
-                doStartMenu();
-            }
-            case 4 -> {
                 System.exit(0);
             }
         }
     }
 
-    public void showStartMenu() {
-        printList("Login", "SignUp", "Forgot password", "Exit");
+    private void showStartMenu() {
+        printList("Login", "SignUp", "Exit");
     }
     //endregion
 
     //region SignUp Menu
-    void doSignUpMenu() {
+    private void doSignUpMenu() {
         showSignUpMenu();
         signUpMenuHandler();
     }
 
-    void signUpMenuHandler() {
-        Person person = Scn.readPerson();
-        SignUpRequest request = new SignUpRequest(person);
-        SignUpRequest response = (SignUpRequest) Server.sendRequest(request);
-        if (response.getP() != null) {
+    private void signUpMenuHandler() {
+        Person person = scn.readPerson();
+        person = server.signUpPerson(person);
+        if (person != null) {
             System.out.println("Successfully added");
-            this.person = response.getP();
+            this.person = person;
             doMainMenu();
         } else {
             System.out.println("Error");
@@ -83,24 +70,24 @@ public class UI {
         }
     }
 
-    public void showSignUpMenu() {
+    private void showSignUpMenu() {
         //we can add menu option if is needed;
     }
 
     //endregion
 
     //region Login Menu
-    void doLoginMenu() {
+    private void doLoginMenu() {
         showLoginMenu();
         loginMenuHandler();
     }
 
-    void loginMenuHandler() {
-        LoginRequest request = Scn.readLoginRequest();
-        LoginRequest response = (LoginRequest) Server.sendRequest(request);
-        if (response.getP() != null) {
+    private void loginMenuHandler() {
+        LoginRequest request = scn.readLoginRequest();
+        Person p = server.loginPerson(request.getUserName(), request.getPassWord());
+        if (p != null) {
             System.out.println("Successfully logged in");
-            this.person = response.getP();
+            this.person = p;
             doMainMenu();
         } else {
             System.out.println("Error");
@@ -108,20 +95,20 @@ public class UI {
         }
     }
 
-    public void showLoginMenu() {
+    private void showLoginMenu() {
         //we can add menu option if is needed;
     }
 
     //endregion
 
     //region Main menu
-    void doMainMenu() {
+    private void doMainMenu() {
         showMainMenu();
         mainMenuHandler();
     }
 
-    void mainMenuHandler() {
-        switch (Scn.readNumber()) {
+    private void mainMenuHandler() {
+        switch (scn.readNumber()) {
             case 1 -> {
                 doChatsMenu();
             }
@@ -138,77 +125,132 @@ public class UI {
         }
     }
 
-    public void showMainMenu() {
+    private void showMainMenu() {
         printList("chats", "friend", "settings", "log Out");
     }
     //endregion
 
     //region Chats Menu
-    void doChatsMenu() {
+    private void doChatsMenu() {
         showChatsMenu();
         chatsMenuHandler();
     }
 
-    void chatsMenuHandler() {
-        int counter = 0;
-        GetPersonPrivateChats request = new GetPersonPrivateChats(person.getUserName());
-        GetPersonPrivateChats response = (GetPersonPrivateChats) Server.sendRequest(request);
-        if (response.getPrivateChats() != null) {
-            for (var chat : response.getPrivateChats()) {
-                System.out.println((++counter) + ") " + ((chat.getP1().equals(person)) ? chat.getP2().getUserName() : chat.getP1().getUserName()));
-            }
-        }
-        privateChatHandler(Scn.readNumber()-1,response.getPrivateChats());
+    private Person getPrivateChatPerson(PrivateChat pc) {
+        return pc.getP1().equals(person) ? pc.getP2() : pc.getP1();
     }
 
-    void privateChatHandler(int index, ArrayList<PrivateChat> chats) {
-        printList("Send text", "Send file", "exit");
-        switch (Scn.readNumber()) {
-            case 1 -> {
-                System.out.println("Enter your message: ");
-
-            }
-            case 2 -> {
-                System.out.println("Enter your file address: ");
-            }
-            case 3 -> {
-                System.exit(0);
+    void chatsMenuHandler() {
+        int temp = 0;
+        ArrayList<PrivateChat> chats = server.getPersonPrivateChats(person.getUserName());
+        if (chats != null) {
+            for (var chat : chats) {
+                System.out.println((++temp) + ") " + chat.getMessages());
             }
         }
+        System.out.println("0) Back");
+        if ((temp = scn.readIndex()) == -1) {
+            doMainMenu();
+            return;
+        }
+        privateChatHandler(chats.get(temp));
+        doChatsMenu();
+    }
+
+    void privateChatHandler(PrivateChat chat) {
+        ArrayList<PrivateChatMessage> messages = chat.getMessages();
+        for (var item : messages) {
+            System.out.println(item.getSenderUserName() + ": " + item.getText());
+        }
+        boolean isBreak = false;
+        do {
+            printList("Send text", "Send file", "Back");
+            switch (scn.readNumber()) {
+                case 1 -> {
+                    System.out.println("Enter your message: ");
+                    PrivateChatMessage chatMessage = new PrivateChatMessage(person.getUserName(), scn.readLine());
+                    server.sendPrivateChatMessage(chat, chatMessage);
+                }
+                case 2 -> {
+                    System.out.println("Sorry isn't complete !!!");
+                }
+                case 3 -> {
+                    doChatsMenu();
+                    isBreak = true;
+                }
+            }
+        } while (!isBreak);
     }
 
     public void showChatsMenu() {
-        //////
+        ///
     }
     //endregion
 
     //region Friends Menu
     void doFriendsMenu() {
-        showMainMenu();
-        mainMenuHandler();
+        showFriendsMenu();
+        friendsMenuHandler();
     }
 
     void friendsMenuHandler() {
-        switch (Scn.readNumber()) {
+        switch (scn.readNumber()) {
             case 1 -> {
-                doLoginMenu();
+                var friendList = server.getPersonFriends(person.getUserName());
+                int temp = 0;
+                for (var item : friendList) {
+                    System.out.println((++temp) + ") " + item.getUserName());
+                }
+                System.out.println("0) Back");
+                if ((temp = scn.readIndex()) == -1) {
+                    doMainMenu();
+                    return;
+                }
+                PrivateChat privateChat = new PrivateChat(person, friendList.get(temp));
+                for (var item : server.getPersonPrivateChats(person.getUserName())) {
+                    if (item.equals(privateChat)) {
+                        privateChatHandler(item);
+                        return;
+                    }
+                }
+                privateChatHandler(privateChat);
             }
             case 2 -> {
-                doSignUpMenu();
+                System.out.println("Enter userName: ");
+                String receiver = scn.readText();
+                server.sendFriendRequest(person.getUserName(), receiver);
+                System.out.println("sent");
             }
             case 3 -> {
-                System.out.println("It's not completed");
-                doStartMenu();
+                var requests = server.getPersonFriendRequests(person.getUserName());
+                int temp = 0;
+                for (var item : requests) {
+                    System.out.println((++temp) + ") " + item.getSenderUserName());
+                }
+                System.out.println("0) Back");
+                if ((temp = scn.readIndex()) == -1) {
+                    doMainMenu();
+                    return;
+                }
+                server.acceptFriendRequest(requests.get(temp));
+                System.out.println("Accepted");
             }
             case 4 -> {
-                this.person = null;
-                doStartMenu();
+                System.out.println("Enter userName: ");
+                String receiver = scn.readText();
+                server.removePersonFriend(person.getUserName(), receiver);
+                System.out.println("removed");
+            }
+            case 5 -> {
+                doMainMenu();
+                return;
             }
         }
+        doChatsMenu();
     }
 
     public void showFriendsMenu() {
-        printList("chats", "friend", "settings", "log Out");
+        printList("List of friends", "New", "Requests", "Remove", "Back");
     }
     //endregion
 
@@ -219,7 +261,7 @@ public class UI {
     }
 
     void settingMenuHandler() {
-        switch (Scn.readNumber()) {
+        switch (scn.readNumber()) {
             case 1 -> {
                 doLoginMenu();
             }
@@ -238,7 +280,7 @@ public class UI {
     }
 
     public void showSettingMenu() {
-        printList("chats", "friend", "settings", "log Out");
+        printList("change status", "change picture", "change PassWord", "change PhoneNumber", "change Email", "Exit");
     }
     //endregion
 

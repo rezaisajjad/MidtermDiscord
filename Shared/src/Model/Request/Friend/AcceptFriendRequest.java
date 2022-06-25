@@ -1,27 +1,17 @@
 package Model.Request.Friend;
 
-import Model.Person;
-import Model.Request.*;
+import Model.Request.IRequest;
 
-import java.io.*;
-import java.util.*;
+import java.io.Serializable;
 
-public class AcceptFriendRequest  implements Serializable {
-    private final FriendRequest friendRequest;
+public class AcceptFriendRequest implements Serializable, IRequest {
+    AddFriendRequest friendRequest;
 
-    public AcceptFriendRequest(FriendRequest friendRequest) {
+    public AcceptFriendRequest(AddFriendRequest friendRequest) {
         this.friendRequest = friendRequest;
     }
-    public FriendRequest getFriendRequest() {
-        return friendRequest;
-    }
 
-    public boolean serverAct(HashMap<String,Person> persons) {
-            persons.get(friendRequest.getSender()).addFriend(friendRequest.getReceiver());
-            persons.get(friendRequest.getReceiver()).addFriend(friendRequest.getReceiver());
-            return true;
-    }
-    public HashSet<String> selfAct(HashMap<String,Person> persons) {
-        return null;
+    public AddFriendRequest getFriendRequest() {
+        return friendRequest;
     }
 }

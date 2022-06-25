@@ -1,4 +1,6 @@
-package Model;
+package Model.Request;
+
+import Model.Person;
 
 import java.io.Serializable;
 import java.util.ArrayList;

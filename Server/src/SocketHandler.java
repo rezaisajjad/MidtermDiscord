@@ -1,7 +1,10 @@
 import Model.Request.Account.CheckUserNameAvailabilityRequest;
-import Model.Request.Account.GetPersonPrivateChats;
+import Model.Request.Chats.GetPersonPrivateChatsRequest;
 import Model.Request.Account.LoginRequest;
 import Model.Request.Account.SignUpRequest;
+import Model.Request.Chats.SendMessagePrivateChatRequest;
+import Model.Request.Friend.*;
+import Model.Request.IRequest;
 import Repository.PeopleRepository;
 
 import java.io.IOException;
@@ -30,28 +33,58 @@ public class SocketHandler extends Thread {
             ObjectInputStream inputStream = new ObjectInputStream(socket.getInputStream());
             Object request = (Object) inputStream.readObject();
             ObjectOutputStream outputStream = new ObjectOutputStream(socket.getOutputStream());
-            // do work
-            if (request instanceof CheckUserNameAvailabilityRequest res) {
-                res.setAvailability(people.isUserNameAvailable(res.getUserName()));
-                outputStream.writeObject(res);
-            }
-            else if (request instanceof LoginRequest res) {
-                res.setP(people.checkLogin(res.getUserName(), res.getPassWord()));
-                outputStream.writeObject(res);
-            }
-            else if (request instanceof SignUpRequest res) {
-                if (!people.addPerson(res.getP())) {
-                    res.setP(null);
-                }
-                outputStream.writeObject(res);
-            } else if (request instanceof GetPersonPrivateChats res) {
-                res.setPrivateChats(people.getPersonPrivateChats(res.getUserName()));
-                outputStream.writeObject(res);
-            }
+            outputStream.writeObject(processRequest(request));
             socket.close();
         } catch (ClassNotFoundException | IOException e) {
             System.out.println(e.getMessage());
-            //throw new RuntimeException(e);
+        }
+    }
+
+    private IRequest processRequest(Object request) {
+        //region Account
+        if (request instanceof CheckUserNameAvailabilityRequest res) {
+            res.setAvailability(people.isUserNameAvailable(res.getUserName()));
+            return res;
+        } else if (request instanceof LoginRequest res) {
+            res.setP(people.loginPerson(res.getUserName(), res.getPassWord()).cloneWithoutList());
+            return res;
+        } else if (request instanceof SignUpRequest res) {
+            if (!people.addPerson(res.getP())) {
+                res.setP(null);
+            }
+            if (res.getP()!=null)
+                res.setP(res.getP().cloneWithoutList());
+            return res;
+        }
+        //endregion
+        //region Chats
+        else if (request instanceof GetPersonPrivateChatsRequest res) {
+            res.setPrivateChats(people.getPersonPrivateChats(res.getUserName()));
+            return res;
+        }
+        else if (request instanceof SendMessagePrivateChatRequest res) {
+            people.addMessage(res.getPrivateChat(), res.getMessage());
+            return res;
+        }
+        //endregion
+        //Friends
+        else if (request instanceof RemoveFriendRequest res) {
+            people.removeFriend(res.getSenderUserName(), res.getReceiverUserName());
+            return res;
+        } else if (request instanceof GetPersonRequestsRequest res) {
+            res.setRequests(people.getPersonFriendRequests(res.getUserName()));
+            return res;
+        } else if (request instanceof AddFriendRequest res) {
+            people.addFriend(res.getSenderUserName(),res.getReceiverUserName());
+            return res;
+        } else if (request instanceof AcceptFriendRequest res) {
+            people.acceptFriendRequest(res.getFriendRequest().getReceiverUserName(),res.getFriendRequest().getSenderUserName());
+            return res;
+        } else if (request instanceof GetAcceptedFriendsRequest res) {
+            res.setFriends(people.getPersonFriends(res.getUserName()));
+            return res;
+        }else{
+            return null;
         }
     }
 }

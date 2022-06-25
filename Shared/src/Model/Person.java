@@ -1,9 +1,11 @@
 package Model;
 
+import Model.Request.PrivateChat;
+import Model.Request.IRequest;
+
 import java.awt.image.BufferedImage;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashSet;
 
 /**
  * Created by 40031020 on 5/23/2022.
@@ -15,12 +17,27 @@ public class Person implements Serializable {
     private String email;
     private String phoneNumber;
     private Status status;
-    private ArrayList<String> friends;
-    private ArrayList<String> blockList;
-    private ArrayList<String> Requests;
+    private ArrayList<Person> friends;
+    private ArrayList<Person> blockList;
+    private ArrayList<IRequest> Requests;
     private ArrayList<PrivateChat> privateChatList;
     private BufferedImage image;
 
+    public Person cloneWithoutList()
+    {
+        var person = new Person();
+        person.setFriends(null);
+        person.setBlockList(null);
+        person.setRequests(null);
+        person.setPrivateChatList(null);
+        person.setPassWord(passWord);
+        person.setUserName(userName);
+        person.setStatus(status);
+        person.setPhoneNumber(phoneNumber);
+        person.setEmail(email);
+        person.setImage(image);
+        return person;
+    }
     // Setters
 
 
@@ -77,27 +94,28 @@ public class Person implements Serializable {
         return image;
     }
 
-    public ArrayList<String> getFriends() {
+
+    public ArrayList<Person> getFriends() {
         return friends;
     }
 
-    public void setFriends(ArrayList<String> friends) {
+    public void setFriends(ArrayList<Person> friends) {
         this.friends = friends;
     }
 
-    public ArrayList<String> getBlockList() {
+    public ArrayList<Person> getBlockList() {
         return blockList;
     }
 
-    public void setBlockList(ArrayList<String> blockList) {
+    public void setBlockList(ArrayList<Person> blockList) {
         this.blockList = blockList;
     }
 
-    public ArrayList<String> getRequests() {
+    public ArrayList<IRequest> getRequests() {
         return Requests;
     }
 
-    public void setRequests(ArrayList<String> requests) {
+    public void setRequests(ArrayList<IRequest> requests) {
         Requests = requests;
     }
 
@@ -114,25 +132,16 @@ public class Person implements Serializable {
     }
 
     //add or remove to lists
-    public void addFriend(String friend) {
-        this.friends.add(friend);
-    }
 
     public void removeFriend(String friend) {
         this.friends.remove(friend);
     }
 
-    public void block(String person) {
-        this.blockList.add(person);
-    }
 
     public void unblock(String person) {
         this.blockList.remove(person);
     }
 
-    public void addRequest(String request) {
-        this.Requests.add(request);
-    }
 
     public void removeRequest(String request) {
         this.Requests.remove(request);

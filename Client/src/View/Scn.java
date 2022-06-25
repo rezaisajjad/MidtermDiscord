@@ -11,16 +11,36 @@ import java.util.Scanner;
 
 public class Scn {
     private static final Scanner scn = new Scanner(System.in);
+    private static final Scn _scn = new Scn();
+    private Server server = Server.getServer();
 
-    public static int readNumber() {
+    public static Scn getScanner() {
+        return _scn;
+    }
+
+    public int readNumber() {
         return scn.nextInt();
     }
 
-    public static Person readPerson() {
+    public int readIndex() {
+        return readNumber() - 1;
+    }
+
+    public String readLine() {
+        String txt = scn.nextLine().trim();
+        return txt.equals("") ? scn.nextLine() : txt;
+    }
+
+    public String readText() {
+        return scn.next();
+    }
+
+    public Person readPerson() {
         Person p = new Person();
         {
             String userName = "";
             CheckUserNameAvailabilityRequest result = null;
+            boolean res;
             do {
                 System.out.println("User Name: ");
                 userName = scn.next().toLowerCase();
@@ -29,12 +49,11 @@ public class Scn {
                     System.out.println("User Name: ");
                     userName = scn.next().toLowerCase();
                 }
-                CheckUserNameAvailabilityRequest cuna = new CheckUserNameAvailabilityRequest(userName);
-                result = (CheckUserNameAvailabilityRequest) Server.sendRequest(cuna);
-                if (!result.isAvailable()) {
+                res = server.CheckUserNameAvailability(userName);
+                if (!res) {
                     System.out.println("User name isn't available !!!");
                 }
-            } while (!result.isAvailable() || !InputValidator.validateUserName(userName));
+            } while (!res || !InputValidator.validateUserName(userName));
             p.setUserName(userName);
         }
         {
@@ -61,7 +80,7 @@ public class Scn {
         }
         {
             System.out.println("do you want to enter phone number??\n\ttrue (1)\n\tfalse (2)");
-            if (Scn.readNumber() == 1) {
+            if (readNumber() == 1) {
                 String phoneNumber = "";
                 do {
                     if (!phoneNumber.equals(""))
@@ -76,14 +95,13 @@ public class Scn {
         return p;
     }
 
-    public static LoginRequest readLoginRequest() {
+    public LoginRequest readLoginRequest() {
         System.out.println("User Name: ");
         String userName = scn.next().toLowerCase();
         System.out.println("Password: ");
         String passWord = scn.next();
-        if (InputValidator.validateUserName(userName)&&InputValidator.validatePassword(passWord))
-        {
-            return new LoginRequest(userName,passWord);
+        if (InputValidator.validateUserName(userName) && InputValidator.validatePassword(passWord)) {
+            return new LoginRequest(userName, passWord);
         }
         System.out.println("Login failed!!! ");
         return readLoginRequest();

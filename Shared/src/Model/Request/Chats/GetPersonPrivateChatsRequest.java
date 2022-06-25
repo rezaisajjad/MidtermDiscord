@@ -1,17 +1,16 @@
-package Model.Request.Account;
+package Model.Request.Chats;
 
-import Model.Person;
-import Model.PrivateChat;
+import Model.Request.PrivateChat;
 import Model.Request.IRequest;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class GetPersonPrivateChats implements IRequest, Serializable {
+public class GetPersonPrivateChatsRequest implements IRequest, Serializable {
     String userName;
     ArrayList<PrivateChat> privateChats;
 
-    public GetPersonPrivateChats(String userName) {
+    public GetPersonPrivateChatsRequest(String userName) {
         this.userName = userName;
     }
 
@@ -19,14 +18,9 @@ public class GetPersonPrivateChats implements IRequest, Serializable {
         return userName;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
     public ArrayList<PrivateChat> getPrivateChats() {
         return privateChats;
     }
-
     public void setPrivateChats(ArrayList<PrivateChat> privateChats) {
         this.privateChats = privateChats;
     }
