@@ -10,7 +10,14 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 public class PeopleRepository {
-    public PeopleRepository() {
+
+    private static PeopleRepository pr = new PeopleRepository();
+
+    public static PeopleRepository getInstance() {
+        return pr;
+    }
+
+    private PeopleRepository() {
         Person p1 = new Person();
         p1.setUserName("sajjadre");
         p1.setPassWord("Sajjadre1");
@@ -52,7 +59,7 @@ public class PeopleRepository {
     }
 
     private final HashMap<String, HashSet<String>> friendRequests = new HashMap<>();
-    private final HashMap<String, Person> people = new HashMap<>();
+    public final HashMap<String, Person> people = new HashMap<>();
 
     /**
      * adds a person to person list
@@ -117,8 +124,7 @@ public class PeopleRepository {
      */
     public void sendPrivateChatMessage(PrivateChat privateChat, PrivateChatMessage message) {
         if (people.get(privateChat.getP1()).getBlockList().contains(privateChat.getP2())
-                ||people.get(privateChat.getP2()).getBlockList().contains(privateChat.getP1()))
-        {
+                || people.get(privateChat.getP2()).getBlockList().contains(privateChat.getP1())) {
             return;
         }
         boolean isFound = false;
@@ -181,7 +187,8 @@ public class PeopleRepository {
 
     /**
      * add a friend to both friend list
-     * @param senderUserName person one
+     *
+     * @param senderUserName   person one
      * @param receiverUserName person two
      */
     private void _addFriend(String senderUserName, String receiverUserName) {
@@ -191,7 +198,8 @@ public class PeopleRepository {
 
     /**
      * insert a friendship to friend list of both
-     * @param senderUserName sender
+     *
+     * @param senderUserName   sender
      * @param receiverUserName receiver
      */
     public void addFriend(String senderUserName, String receiverUserName) {
@@ -210,6 +218,7 @@ public class PeopleRepository {
 
     /**
      * returns request of a person
+     *
      * @param userName person
      * @return request list
      */
@@ -227,6 +236,7 @@ public class PeopleRepository {
 
     /**
      * accept a friend request
+     *
      * @param userName1 person one
      * @param userName2 person two
      */
@@ -238,6 +248,7 @@ public class PeopleRepository {
 
     /**
      * accept a friend request
+     *
      * @param userName1 person one
      * @param userName2 person two
      */
@@ -251,32 +262,43 @@ public class PeopleRepository {
             }
         }
     }
+
     /**
      * returns blocked persons
+     *
      * @param userName person who block
      * @return block list
      */
-    public ArrayList<String> getPersonBlockedList(String userName)
-    {
+    public ArrayList<String> getPersonBlockedList(String userName) {
         return people.get(userName).getBlockList();
     }
 
     /**
      * block a person
+     *
      * @param blocker who blocks
      * @param blocked who blocked
      */
-    public void blockAPerson(String blocker,String blocked)
-    {
+    public void blockAPerson(String blocker, String blocked) {
         people.get(blocker).addBlockedPerson(blocked);
     }
+
     /**
      * unblock a person
+     *
      * @param blocker who unblocks
      * @param blocked who unblocked
      */
-    public void unBlockAPerson(String blocker,String blocked)
-    {
+    public void unBlockAPerson(String blocker, String blocked) {
         people.get(blocker).removeBlockedPerson(blocked);
+    }
+
+    /**
+     * return person status
+     *
+     * @return person status
+     */
+    public String getStatus(String userName) {
+        return people.get(userName).getIsOnline() ? people.get(userName).getStatus().toString() : "Offline";
     }
 }

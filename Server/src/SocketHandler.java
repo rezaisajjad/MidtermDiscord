@@ -13,7 +13,7 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 public class SocketHandler extends Thread {
-    public static PeopleRepository people = new PeopleRepository();
+    public static PeopleRepository people = PeopleRepository.getInstance();
 
     private Socket socket;
 
@@ -67,6 +67,10 @@ public class SocketHandler extends Thread {
         }
         //endregion
         //region Friends
+        else if (request instanceof GetStatusRequest res) {
+            res.setStatus(people.getStatus(res.getUserName()));
+            return res;
+        }
         else if (request instanceof RemoveFriendRequest res) {
             people.removeFriend(res.getSenderUserName(), res.getReceiverUserName());
             return res;

@@ -15,17 +15,13 @@ public class Person implements Serializable {
     private String userName;
     private String email;
     private String phoneNumber;
-    private Status status;
-    private ArrayList<String> friends;
-    private ArrayList<String> blockList;
-    private ArrayList<PrivateChat> privateChatList;
+    private Status status = Status.Idle;
+    private boolean isOnline = false;
+    private ArrayList<String> friends = new ArrayList<>();
+    private ArrayList<String> blockList = new ArrayList<>();
+    private ArrayList<PrivateChat> privateChatList = new ArrayList<>();
     private BufferedImage image;
 
-    public Person() {
-        friends = new ArrayList<>();
-        blockList = new ArrayList<>();
-        privateChatList = new ArrayList<>();
-    }
 
     public Person cloneWithoutList() {
         var person = new Person();
@@ -34,6 +30,7 @@ public class Person implements Serializable {
         person.setEmail(email);
         person.setPhoneNumber(phoneNumber);
         person.setStatus(status);
+        person.setOnline(false);
         person.setFriends(null);
         person.setBlockList(null);
         person.setPrivateChatList(null);
@@ -67,6 +64,11 @@ public class Person implements Serializable {
     }
 
     //getters
+
+    public boolean getIsOnline() {
+        return isOnline;
+    }
+
     public String getPassWord() {
         return passWord;
     }
@@ -122,6 +124,10 @@ public class Person implements Serializable {
 
     public void setStatus(Status status) {
         this.status = status;
+    }
+
+    public void setOnline(boolean online) {
+        isOnline = online;
     }
 
     public void setFriends(ArrayList<String> friends) {

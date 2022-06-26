@@ -4,7 +4,9 @@ import View.UI;
 
 public class Main {
     public static void main(String[] args) {
-        UI ui= new UI();
+        OnlineThread onlineThread= new OnlineThread();
+        onlineThread.start();
+        UI ui= UI.get();
         ui.start();
     }
 }

@@ -167,6 +167,7 @@ public class Server {
         BlockPersonRequest request = new BlockPersonRequest(blocker, blocked);
         sendRequest(request);
     }
+
     /**
      * unblocks a person
      *
@@ -177,13 +178,25 @@ public class Server {
         UnBlockPersonRequest request = new UnBlockPersonRequest(blocker, blocked);
         sendRequest(request);
     }
+
     /**
      * returns blocked persons
+     *
      * @param userName person who block
      * @return block list
      */
     public ArrayList<String> getPersonBlockList(String userName) {
         GetBlockListRequest request = new GetBlockListRequest(userName);
         return ((GetBlockListRequest) sendRequest(request)).getPersons();
+    }
+
+    /**
+     * return person status
+     *
+     * @return person status
+     */
+    public String getStatus(String userName) {
+        GetStatusRequest request = new GetStatusRequest(userName);
+        return ((GetStatusRequest) sendRequest(request)).getStatus();
     }
 }

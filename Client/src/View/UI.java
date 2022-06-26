@@ -2,6 +2,7 @@ package View;
 
 import ClientController.Server;
 import Model.Person;
+import Model.PublicStatic;
 import Model.Request.PrivateChat;
 import Model.Request.PrivateChatMessage;
 import Model.Request.Account.LoginRequest;
@@ -12,9 +13,23 @@ import java.util.Locale;
 
 public class UI {
     //region Base
+    private static UI ui=new UI();
     private Person person = null;
     private Server server = Server.getServer();
     Scn scn = Scn.getScanner();
+
+    private UI() {
+    }
+    public String getPersonUserName()
+    {
+        if (person!=null)
+            return person.getUserName();
+        return "";
+    }
+    public static UI get()
+    {
+        return ui;
+    }
 
     public void start() {
         doStartMenu();
@@ -214,7 +229,7 @@ public class UI {
                     return;
                 }
                 for (var item : friendList) {
-                    System.out.println((++temp) + ") " + item);
+                    System.out.println((++temp) + ") " + item+"["+server.getStatus(item)+"]");
                 }
                 System.out.println("0) Back");
                 if ((temp = scn.readIndex()) == -1) {
