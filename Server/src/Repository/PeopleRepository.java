@@ -26,36 +26,10 @@ public class PeopleRepository {
         p11.setUserName("alireza");
         p11.setPassWord("Alireza1");
         p11.setEmail("srsjd@yahoo.com");
-        Person p2 = new Person();
-        p2.setUserName("hamidreza");
-        p2.setPassWord("Hamidreza1");
-        p2.setEmail("HamidReza@yahoo.com");
-        Person p3 = new Person();
-        p3.setUserName("Kambiz");
-        p3.setPassWord("Kambiz");
-        p3.setEmail("Kambiz@yahoo.com");
-        Person p4 = new Person();
-        p4.setUserName("Mohammad");
-        p4.setPassWord("Mohammad");
-        p4.setEmail("Mohammad@yahoo.com");
+        p1.addFriend(p11.getUserName());
+        p11.addFriend(p1.getUserName());
         people.put(p1.getUserName(), p1);
-        people.put(p2.getUserName(), p2);
-        people.put(p3.getUserName(), p3);
-        people.put(p4.getUserName(), p4);
         people.put(p11.getUserName(), p11);
-        var chat = new PrivateChat(p1.getUserName(), p2.getUserName());
-        var message = new PrivateChatMessage("HamidReza", "Salam");
-        chat.addMessage(message);
-        message = new PrivateChatMessage("HamidReza", "Khoobi?");
-        chat.addMessage(message);
-        message = new PrivateChatMessage("Sajjad", "Khoobam");
-        chat.addMessage(message);
-        message = new PrivateChatMessage("Sajjad", "To Chetori?");
-        chat.addMessage(message);
-        p1.addPrivateChat(chat);
-        p1.getFriends().add("HamidReza");
-        p1.getFriends().add("Kambiz");
-        p1.getFriends().add("Mohammad");
     }
 
     private final HashMap<String, HashSet<String>> friendRequests = new HashMap<>();

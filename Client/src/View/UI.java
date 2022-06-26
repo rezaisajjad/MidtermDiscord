@@ -354,10 +354,6 @@ public class UI {
                 doSignUpMenu();
             }
             case 3 -> {
-                System.out.println("It's not completed");
-                doStartMenu();
-            }
-            case 4 -> {
                 this.person = null;
                 doStartMenu();
             }
@@ -365,7 +361,7 @@ public class UI {
     }
 
     public void showSettingMenu() {
-        printList("change status", "change picture", "change PassWord", "change PhoneNumber", "change Email", "Exit");
+        printList("change status", "change picture", "Back");
     }
     //endregion
 

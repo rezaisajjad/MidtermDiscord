@@ -30,7 +30,9 @@ public class OnlineHandler extends Thread {
     @Override
     public void run() {
         try {
+            Thread.sleep(2000);
             Scanner scn = new Scanner(socket.getInputStream());
+            if (scn.hasNext())
             if ((p = PeopleRepository.getInstance().people.get(scn.next())) != null) {
                 p.setOnline(true);
                 lastOnline.put(p.getUserName(), LocalDateTime.now());
@@ -38,6 +40,8 @@ public class OnlineHandler extends Thread {
             socket.close();
         } catch (IOException e) {
             System.out.println(e.getMessage());
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
         }
     }
 }

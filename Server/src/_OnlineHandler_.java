@@ -13,7 +13,7 @@ public class _OnlineHandler_ extends Thread{
         while (true)
         {
             for (var item:OnlineHandler.lastOnline.keySet()) {
-                if (Duration.between(OnlineHandler.lastOnline.get(item),LocalDateTime.now()).getSeconds()>=90)
+                if (Duration.between(OnlineHandler.lastOnline.get(item),LocalDateTime.now()).getSeconds()>=15)
                 {
                     OnlineHandler.lastOnline.remove(item);
                     PeopleRepository.getInstance().people.get(item).setOnline(false);

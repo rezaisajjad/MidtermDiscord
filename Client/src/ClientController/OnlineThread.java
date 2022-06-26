@@ -16,6 +16,11 @@ public class OnlineThread extends Thread {
     public void run() {
         Socket socket = null;
         String userName = "";
+        try {
+            Thread.sleep(10000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
         while (true) {
             try {
                 socket = new Socket("localhost", 15151);
@@ -25,7 +30,7 @@ public class OnlineThread extends Thread {
                     pw.flush();
                     socket.close();
                 }
-                Thread.sleep(15000);
+                Thread.sleep(10000);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             } finally {
