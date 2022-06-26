@@ -59,11 +59,11 @@ public class Person implements Serializable {
     }
 
     public boolean removeBlockedPerson(String userName) {
-        return blockList.add(userName);
+        return blockList.remove(userName);
     }
 
     public boolean removeFriend(String userName) {
-        return friends.add(userName);
+        return friends.remove(userName);
     }
 
     //getters

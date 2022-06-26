@@ -86,10 +86,10 @@ public class SocketHandler extends Thread {
             res.setPersons(people.getPersonBlockedList(res.getUserName()));
             return res;
         } else if (request instanceof BlockPersonRequest res) {
-            people.blockAPerson(res.getBlocked(),res.getBlocked());
+            people.blockAPerson(res.getBlocker(),res.getBlocked());
             return res;
         } else if (request instanceof UnBlockPersonRequest res) {
-            people.unBlockAPerson(res.getBlocked(),res.getBlocked());
+            people.unBlockAPerson(res.getBlocker(),res.getBlocked());
             return res;
         } else {
             return null;

@@ -268,7 +268,7 @@ public class PeopleRepository {
      */
     public void blockAPerson(String blocker,String blocked)
     {
-        people.get(blocked).addBlockedPerson(blocked);
+        people.get(blocker).addBlockedPerson(blocked);
     }
     /**
      * unblock a person
@@ -277,6 +277,6 @@ public class PeopleRepository {
      */
     public void unBlockAPerson(String blocker,String blocked)
     {
-        people.get(blocked).removeBlockedPerson(blocked);
+        people.get(blocker).removeBlockedPerson(blocked);
     }
 }

@@ -9,7 +9,7 @@ public class Main {
     public static ArrayList<Requestable> requestAbles;
     public static void main(String[] args) {
         try {
-            ServerSocket server = new ServerSocket(12344);
+            ServerSocket server = new ServerSocket(11223);
             while (true) SocketHandler.New(server.accept());
         } catch (IOException e) {
             throw new RuntimeException(e);
