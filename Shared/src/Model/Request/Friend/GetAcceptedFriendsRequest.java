@@ -8,17 +8,17 @@ import java.util.ArrayList;
 
 public class GetAcceptedFriendsRequest implements Serializable, IRequest {
     String userName;
-    ArrayList<Person> friends;
+    ArrayList<String> friends;
 
     public GetAcceptedFriendsRequest(String userName) {
         this.userName = userName;
     }
 
-    public ArrayList<Person> getFriends() {
+    public ArrayList<String> getFriends() {
         return friends;
     }
 
-    public void setFriends(ArrayList<Person> friends) {
+    public void setFriends(ArrayList<String> friends) {
         this.friends = friends;
     }
 

@@ -11,65 +11,62 @@ import java.util.ArrayList;
  * Created by 40031020 on 5/23/2022.
  */
 public class Person implements Serializable {
-
     private String passWord;
     private String userName;
     private String email;
     private String phoneNumber;
     private Status status;
-    private ArrayList<Person> friends;
-    private ArrayList<Person> blockList;
-    private ArrayList<IRequest> Requests;
+    private ArrayList<String> friends;
+    private ArrayList<String> blockList;
     private ArrayList<PrivateChat> privateChatList;
     private BufferedImage image;
 
-    public Person cloneWithoutList()
-    {
+    public Person() {
+        friends = new ArrayList<>();
+        blockList = new ArrayList<>();
+        privateChatList = new ArrayList<>();
+    }
+
+    public Person cloneWithoutList() {
         var person = new Person();
-        person.setFriends(null);
-        person.setBlockList(null);
-        person.setRequests(null);
-        person.setPrivateChatList(null);
         person.setPassWord(passWord);
         person.setUserName(userName);
-        person.setStatus(status);
-        person.setPhoneNumber(phoneNumber);
         person.setEmail(email);
+        person.setPhoneNumber(phoneNumber);
+        person.setStatus(status);
+        person.setFriends(null);
+        person.setBlockList(null);
+        person.setPrivateChatList(null);
         person.setImage(image);
         return person;
     }
-    // Setters
 
-
-    public void setPrivateChatList(ArrayList<PrivateChat> privateChatList) {
-        this.privateChatList = privateChatList;
+    // list methods
+    public boolean addPrivateChat(PrivateChat pc) {
+        return privateChatList.add(pc);
     }
 
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+    public boolean addBlockedPerson(String userName) {
+        return blockList.add(userName);
     }
 
-    public void setStatus(Status status) {
-        this.status = status;
+    public boolean addFriend(String userName) {
+        return friends.add(userName);
     }
 
-    public void setImage(BufferedImage image) {
-        this.image = image;
+    public boolean removePrivateChat(PrivateChat pc) {
+        return privateChatList.remove(pc);
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public boolean removeBlockedPerson(String userName) {
+        return blockList.add(userName);
     }
 
-    public void setPassWord(String passWord) {
-        this.passWord = passWord;
+    public boolean removeFriend(String userName) {
+        return friends.add(userName);
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    // Getters
+    //getters
     public String getPassWord() {
         return passWord;
     }
@@ -90,69 +87,57 @@ public class Person implements Serializable {
         return status;
     }
 
-    public BufferedImage getImage() {
-        return image;
-    }
-
-
-    public ArrayList<Person> getFriends() {
+    public ArrayList<String> getFriends() {
         return friends;
     }
 
-    public void setFriends(ArrayList<Person> friends) {
-        this.friends = friends;
-    }
-
-    public ArrayList<Person> getBlockList() {
+    public ArrayList<String> getBlockList() {
         return blockList;
-    }
-
-    public void setBlockList(ArrayList<Person> blockList) {
-        this.blockList = blockList;
-    }
-
-    public ArrayList<IRequest> getRequests() {
-        return Requests;
-    }
-
-    public void setRequests(ArrayList<IRequest> requests) {
-        Requests = requests;
     }
 
     public ArrayList<PrivateChat> getPrivateChatList() {
         return privateChatList;
     }
 
-    //constructors
-    public Person() {
-        this.blockList = new ArrayList<>();
-        this.friends = new ArrayList<>();
-        this.privateChatList = new ArrayList<>();
-        this.Requests = new ArrayList<>();
+    public BufferedImage getImage() {
+        return image;
+    }
+    //setters
+
+    public void setPassWord(String passWord) {
+        this.passWord = passWord;
     }
 
-    //add or remove to lists
-
-    public void removeFriend(String friend) {
-        this.friends.remove(friend);
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
-
-    public void unblock(String person) {
-        this.blockList.remove(person);
+    public void setEmail(String email) {
+        this.email = email;
     }
 
-
-    public void removeRequest(String request) {
-        this.Requests.remove(request);
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
-    public void addPrivateChat(PrivateChat chat) {
-        this.privateChatList.add(chat);
+    public void setStatus(Status status) {
+        this.status = status;
     }
 
-    public void removeChat(String chat) {
-        this.privateChatList.remove(chat);
+    public void setFriends(ArrayList<String> friends) {
+        this.friends = friends;
+    }
+
+    public void setBlockList(ArrayList<String> blockList) {
+        this.blockList = blockList;
+    }
+
+    public void setPrivateChatList(ArrayList<PrivateChat> privateChatList) {
+        this.privateChatList = privateChatList;
+    }
+
+    public void setImage(BufferedImage image) {
+        this.image = image;
     }
 
     @Override
@@ -162,27 +147,12 @@ public class Person implements Serializable {
 
         Person person = (Person) o;
 
-        if (getPassWord() != null ? !getPassWord().equals(person.getPassWord()) : person.getPassWord() != null)
-            return false;
-        if (getUserName() != null ? !getUserName().equals(person.getUserName()) : person.getUserName() != null)
-            return false;
-        if (getEmail() != null ? !getEmail().equals(person.getEmail()) : person.getEmail() != null) return false;
-        return getPhoneNumber() != null ? getPhoneNumber().equals(person.getPhoneNumber()) : person.getPhoneNumber() == null;
+        return getUserName().equals(person.getUserName());
     }
 
     @Override
     public int hashCode() {
-        int result = getPassWord() != null ? getPassWord().hashCode() : 0;
-        result = 31 * result + (getUserName() != null ? getUserName().hashCode() : 0);
-        result = 31 * result + (getEmail() != null ? getEmail().hashCode() : 0);
-        result = 31 * result + (getPhoneNumber() != null ? getPhoneNumber().hashCode() : 0);
-        result = 31 * result + (getStatus() != null ? getStatus().hashCode() : 0);
-        result = 31 * result + (getFriends() != null ? getFriends().hashCode() : 0);
-        result = 31 * result + (getBlockList() != null ? getBlockList().hashCode() : 0);
-        result = 31 * result + (getRequests() != null ? getRequests().hashCode() : 0);
-        result = 31 * result + (getPrivateChatList() != null ? getPrivateChatList().hashCode() : 0);
-        result = 31 * result + (getImage() != null ? getImage().hashCode() : 0);
-        return result;
+        return getUserName().hashCode();
     }
 }
 

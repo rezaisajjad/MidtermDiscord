@@ -16,8 +16,8 @@ public class PeopleRepository {
         p1.setPassWord("Sajjadre1");
         p1.setEmail("srsjd@yahoo.com");
         Person p11 = new Person();
-        p11.setUserName("readLine");
-        p11.setPassWord("readLine1");
+        p11.setUserName("alireza");
+        p11.setPassWord("Alireza1");
         p11.setEmail("srsjd@yahoo.com");
         Person p2 = new Person();
         p2.setUserName("hamidreza");
@@ -36,7 +36,7 @@ public class PeopleRepository {
         people.put(p3.getUserName(), p3);
         people.put(p4.getUserName(), p4);
         people.put(p11.getUserName(), p11);
-        var chat = new PrivateChat(p1, p2);
+        var chat = new PrivateChat(p1.getUserName(), p2.getUserName());
         var message = new PrivateChatMessage("HamidReza", "Salam");
         chat.addMessage(message);
         message = new PrivateChatMessage("HamidReza", "Khoobi?");
@@ -46,9 +46,9 @@ public class PeopleRepository {
         message = new PrivateChatMessage("Sajjad", "To Chetori?");
         chat.addMessage(message);
         p1.addPrivateChat(chat);
-        p1.getFriends().add(p2);
-        p1.getFriends().add(p3);
-        p1.getFriends().add(p4);
+        p1.getFriends().add("HamidReza");
+        p1.getFriends().add("Kambiz");
+        p1.getFriends().add("Mohammad");
     }
 
     private final HashMap<String, HashSet<String>> friendRequests = new HashMap<>();
@@ -86,7 +86,7 @@ public class PeopleRepository {
      * @return logged in person
      */
     public Person loginPerson(String userName, String passWord) {
-        Person p = null;
+        Person p;
         if ((p = people.get(userName)) != null && p.getPassWord().equals(passWord)) {
             return p;
         } else {
@@ -101,7 +101,7 @@ public class PeopleRepository {
      * @return list of chats
      */
     public ArrayList<PrivateChat> getPersonPrivateChats(String userName) {
-        Person p = null;
+        Person p;
         if ((p = people.get(userName)) != null) {
             return p.getPrivateChatList();
         } else {
@@ -116,9 +116,14 @@ public class PeopleRepository {
      * @param message     message
      */
     public void sendPrivateChatMessage(PrivateChat privateChat, PrivateChatMessage message) {
+        if (people.get(privateChat.getP1()).getBlockList().contains(privateChat.getP2())
+                ||people.get(privateChat.getP2()).getBlockList().contains(privateChat.getP1()))
+        {
+            return;
+        }
         boolean isFound = false;
         PrivateChat pc = null;
-        for (var item : getPersonPrivateChats(privateChat.getP1().getUserName())) {
+        for (var item : getPersonPrivateChats(privateChat.getP1())) {
             if (item.equals(privateChat)) {
                 pc = item;
                 item.getMessages().add(message);
@@ -126,7 +131,7 @@ public class PeopleRepository {
                 break;
             }
         }
-        for (var item : getPersonPrivateChats(privateChat.getP2().getUserName())) {
+        for (var item : getPersonPrivateChats(privateChat.getP2())) {
             if (item.equals(privateChat)) {
                 if (pc == item)
                     break;
@@ -136,10 +141,10 @@ public class PeopleRepository {
             }
         }
         if (!isFound) {
-            privateChat = new PrivateChat(people.get(privateChat.getP1().getUserName()), people.get(privateChat.getP2().getUserName()));
+            privateChat = new PrivateChat(people.get(privateChat.getP1()).getUserName(), people.get(privateChat.getP2()).getUserName());
             privateChat.addMessage(message);
-            privateChat.getP1().addPrivateChat(privateChat);
-            privateChat.getP2().addPrivateChat(privateChat);
+            people.get(privateChat.getP1()).addPrivateChat(privateChat);
+            people.get(privateChat.getP2()).addPrivateChat(privateChat);
         }
     }
 
@@ -149,7 +154,7 @@ public class PeopleRepository {
      * @param userName who you want to get friends
      * @return friend list
      */
-    public ArrayList<Person> getPersonFriends(String userName) {
+    public ArrayList<String> getPersonFriends(String userName) {
         return people.get(userName).getFriends();
     }
 
@@ -161,13 +166,13 @@ public class PeopleRepository {
      */
     public void removeFriend(String userName1, String userName2) {
         for (var item : getPersonFriends(userName1)) {
-            if (item.getUserName().equals(userName2)) {
+            if (item.equals(userName2)) {
                 getPersonFriends(userName1).remove(item);
                 break;
             }
         }
         for (var item : getPersonFriends(userName2)) {
-            if (item.getUserName().equals(userName1)) {
+            if (item.equals(userName1)) {
                 getPersonFriends(userName2).remove(item);
                 break;
             }
@@ -180,8 +185,8 @@ public class PeopleRepository {
      * @param receiverUserName person two
      */
     private void _addFriend(String senderUserName, String receiverUserName) {
-        people.get(senderUserName).getFriends().add(people.get(receiverUserName));
-        people.get(receiverUserName).getFriends().add(people.get(senderUserName));
+        people.get(senderUserName).addFriend(people.get(receiverUserName).getUserName());
+        people.get(receiverUserName).addFriend(people.get(senderUserName).getUserName());
     }
 
     /**
@@ -226,14 +231,17 @@ public class PeopleRepository {
      * @param userName2 person two
      */
     public void acceptFriendRequest(String userName1, String userName2) {
-        if (friendRequests.get(userName1) != null) {
-            for (var item : friendRequests.get(userName1)) {
-                if (item.equals(userName2)) {
-                    friendRequests.get(userName1).remove(userName2);
-                    if (friendRequests.get(userName1).size() == 0) friendRequests.put(userName1, null);
-                }
-            }
-        }
+        _acceptFriendRequest(userName2, userName1);
+        _acceptFriendRequest(userName1, userName2);
+        _addFriend(userName1, userName2);
+    }
+
+    /**
+     * accept a friend request
+     * @param userName1 person one
+     * @param userName2 person two
+     */
+    private void _acceptFriendRequest(String userName1, String userName2) {
         if (friendRequests.get(userName2) != null) {
             for (var item : friendRequests.get(userName2)) {
                 if (item.equals(userName1)) {
@@ -242,6 +250,33 @@ public class PeopleRepository {
                 }
             }
         }
-        _addFriend(userName1, userName2);
+    }
+    /**
+     * returns blocked persons
+     * @param userName person who block
+     * @return block list
+     */
+    public ArrayList<String> getPersonBlockedList(String userName)
+    {
+        return people.get(userName).getBlockList();
+    }
+
+    /**
+     * block a person
+     * @param blocker who blocks
+     * @param blocked who blocked
+     */
+    public void blockAPerson(String blocker,String blocked)
+    {
+        people.get(blocked).addBlockedPerson(blocked);
+    }
+    /**
+     * unblock a person
+     * @param blocker who unblocks
+     * @param blocked who unblocked
+     */
+    public void unBlockAPerson(String blocker,String blocked)
+    {
+        people.get(blocked).removeBlockedPerson(blocked);
     }
 }

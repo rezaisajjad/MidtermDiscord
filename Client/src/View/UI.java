@@ -8,6 +8,7 @@ import Model.Request.Account.LoginRequest;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Locale;
 
 public class UI {
     //region Base
@@ -141,8 +142,8 @@ public class UI {
         chatsMenuHandler();
     }
 
-    private Person getPrivateChatPerson(PrivateChat pc) {
-        return pc.getP1().equals(person) ? pc.getP2() : pc.getP1();
+    private String getPrivateChatPerson(PrivateChat pc) {
+        return pc.getP1().equals(person.getUserName()) ? pc.getP2() : pc.getP1();
     }
 
     void chatsMenuHandler() {
@@ -154,7 +155,7 @@ public class UI {
             return;
         }
         for (var chat : chats) {
-            System.out.println((++temp) + ") " + getPrivateChatPerson(chat).getUserName());
+            System.out.println((++temp) + ") " + getPrivateChatPerson(chat));
         }
         System.out.println("0) Back");
         if ((temp = scn.readIndex()) == -1) {
@@ -181,6 +182,7 @@ public class UI {
                     server.sendPrivateChatMessage(chat, chatMessage);
                 }
                 case 2 -> {
+
                     System.out.println("Sorry isn't complete !!!");
                 }
                 case 3 -> {
@@ -212,14 +214,14 @@ public class UI {
                     return;
                 }
                 for (var item : friendList) {
-                    System.out.println((++temp) + ") " + item.getUserName());
+                    System.out.println((++temp) + ") " + item);
                 }
                 System.out.println("0) Back");
                 if ((temp = scn.readIndex()) == -1) {
                     doFriendsMenu();
                     return;
                 }
-                PrivateChat privateChat = new PrivateChat(person, friendList.get(temp));
+                PrivateChat privateChat = new PrivateChat(person.getUserName(), friendList.get(temp));
                 for (var item : server.getPersonPrivateChats(person.getUserName())) {
                     if (item.equals(privateChat)) {
                         privateChatHandler(item);
@@ -233,13 +235,23 @@ public class UI {
             case 2 -> {
                 System.out.println("Enter userName: ");
                 String receiver = scn.readText();
-                server.sendFriendRequest(person.getUserName(), receiver);
+                if (server.CheckUserNameAvailability(receiver.toLowerCase(Locale.ROOT))) {
+                    System.out.println("Person not found");
+                    doFriendsMenu();
+                    return;
+                }
+                server.sendFriendRequest(person.getUserName(), receiver.toLowerCase(Locale.ROOT));
                 System.out.println("sent");
                 doFriendsMenu();
             }
             case 3 -> {
                 var requests = server.getPersonFriendRequests(person.getUserName());
                 int temp = 0;
+                if (isListNullOrEmpty(requests)) {
+                    System.out.println("There isn't any request");
+                    doFriendsMenu();
+                    return;
+                }
                 for (var item : requests) {
                     System.out.println((++temp) + ") " + item.getSenderUserName());
                 }
@@ -255,19 +267,60 @@ public class UI {
             case 4 -> {
                 System.out.println("Enter userName: ");
                 String receiver = scn.readText();
+                if (server.CheckUserNameAvailability(receiver.toLowerCase(Locale.ROOT))) {
+                    System.out.println("Person not found");
+                    doFriendsMenu();
+                    return;
+                }
                 server.removePersonFriend(person.getUserName(), receiver);
                 System.out.println("removed");
                 doFriendsMenu();
             }
             case 5 -> {
+                System.out.println("Enter userName: ");
+                String blocked = scn.readText();
+                if (server.CheckUserNameAvailability(blocked.toLowerCase(Locale.ROOT))) {
+                    System.out.println("Person not found");
+                    doFriendsMenu();
+                    return;
+                }
+                server.blockPerson(person.getUserName(), blocked);
+                System.out.println("Blocked");
+                doFriendsMenu();
+            }
+            case 6 -> {
+                System.out.println("Enter userName: ");
+                String blocked = scn.readText();
+                if (server.CheckUserNameAvailability(blocked.toLowerCase(Locale.ROOT))) {
+                    System.out.println("Person not found");
+                    doFriendsMenu();
+                    return;
+                }
+                server.unBlockPerson(person.getUserName(), blocked);
+                System.out.println("UnBlocked");
+                doFriendsMenu();
+            }
+            case 7 -> {
+                var friendList = server.getPersonBlockList(person.getUserName());
+                int temp = 0;
+                if (isListNullOrEmpty(friendList)) {
+                    System.out.println("There isn't any blocked person !!!");
+                    doFriendsMenu();
+                    return;
+                }
+                for (var item : friendList) {
+                    System.out.println((++temp) + ") " + item);
+                }
+                doFriendsMenu();
+            }
+            case 8 -> {
                 doMainMenu();
-                return;
             }
         }
     }
 
     public void showFriendsMenu() {
-        printList("List of friends", "New", "Requests", "Remove", "Back");
+        printList("friend list", "New", "Requests", "Remove", "Block", "Unblock", "Block list", "Back");
     }
     //endregion
 

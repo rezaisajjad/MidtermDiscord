@@ -102,20 +102,22 @@ public class Server {
         SendMessagePrivateChatRequest request = new SendMessagePrivateChatRequest(pc, pcm);
         sendRequest(request);
     }
+
     /**
      * the friends of a person
      *
      * @param userName Username
      * @return friendList
      */
-    public ArrayList<Person> getPersonFriends(String userName) {
+    public ArrayList<String> getPersonFriends(String userName) {
         GetAcceptedFriendsRequest request = new GetAcceptedFriendsRequest(userName);
         return ((GetAcceptedFriendsRequest) sendRequest(request)).getFriends();
     }
 
     /**
      * sends a friend request
-     * @param sender friend request sender
+     *
+     * @param sender   friend request sender
      * @param receiver friend request receiver
      */
     public void sendFriendRequest(String sender, String receiver) {
@@ -125,7 +127,8 @@ public class Server {
 
     /**
      * removes a friend
-     * @param remover friend remover
+     *
+     * @param remover  friend remover
      * @param receiver removed friend
      */
     public void removePersonFriend(String remover, String receiver) {
@@ -135,6 +138,7 @@ public class Server {
 
     /**
      * returns list of requests
+     *
      * @param userName who you want to get requests
      * @return list of request
      */
@@ -145,10 +149,41 @@ public class Server {
 
     /**
      * accept a friend request
+     *
      * @param friendRequest request
      */
     public void acceptFriendRequest(AddFriendRequest friendRequest) {
         AcceptFriendRequest acceptFriendRequest = new AcceptFriendRequest(friendRequest);
         sendRequest(acceptFriendRequest);
+    }
+
+    /**
+     * blocks a person
+     *
+     * @param blocker person who block
+     * @param blocked blocked person
+     */
+    public void blockPerson(String blocker, String blocked) {
+        BlockPersonRequest request = new BlockPersonRequest(blocker, blocked);
+        sendRequest(request);
+    }
+    /**
+     * unblocks a person
+     *
+     * @param blocker person who block
+     * @param blocked blocked person
+     */
+    public void unBlockPerson(String blocker, String blocked) {
+        UnBlockPersonRequest request = new UnBlockPersonRequest(blocker, blocked);
+        sendRequest(request);
+    }
+    /**
+     * returns blocked persons
+     * @param userName person who block
+     * @return block list
+     */
+    public ArrayList<String> getPersonBlockList(String userName) {
+        GetBlockListRequest request = new GetBlockListRequest(userName);
+        return ((GetBlockListRequest) sendRequest(request)).getPersons();
     }
 }

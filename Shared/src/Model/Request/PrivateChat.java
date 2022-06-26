@@ -7,18 +7,18 @@ import java.util.ArrayList;
 
 public class PrivateChat implements Serializable {
     private ArrayList<PrivateChatMessage> messages = new ArrayList<>();
-    Person p1, p2;
+    String p1, p2;
 
-    public PrivateChat(Person p1, Person p2) {
+    public PrivateChat(String p1, String p2) {
         this.p1 = p1;
         this.p2 = p2;
     }
 
-    public Person getP1() {
+    public String getP1() {
         return p1;
     }
 
-    public Person getP2() {
+    public String getP2() {
         return p2;
     }
 
