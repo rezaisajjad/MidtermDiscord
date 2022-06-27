@@ -1,9 +1,11 @@
 package Repository;
 
 import Model.Person;
+import Model.Request.Account.ChangeStatusRequest;
 import Model.Request.Friend.AddFriendRequest;
 import Model.Request.PrivateChat;
 import Model.Request.PrivateChatMessage;
+import Model.Status;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -274,5 +276,23 @@ public class PeopleRepository {
      */
     public String getStatus(String userName) {
         return people.get(userName).getIsOnline() ? people.get(userName).getStatus().toString() : "Offline";
+    }
+    /**
+     * sets person status
+     *
+     */
+    public void setStatus(String userName, Status status) {
+        people.get(userName).setStatus(status);
+    }
+
+    /**
+     * sets person picture
+     * @param userName person username
+     * @param bytes file bytes
+     * @param extension file format
+     */
+    public void setPersonProfilePicture(String userName, byte[] bytes,String extension) {
+        people.get(userName).setImage(bytes);
+        people.get(userName).setImageFormat(extension);
     }
 }

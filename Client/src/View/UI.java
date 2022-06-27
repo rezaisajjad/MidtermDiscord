@@ -6,28 +6,35 @@ import Model.PublicStatic;
 import Model.Request.PrivateChat;
 import Model.Request.PrivateChatMessage;
 import Model.Request.Account.LoginRequest;
+import Model.Status;
 
+import javax.swing.filechooser.FileNameExtensionFilter;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Locale;
 
 public class UI {
     //region Base
-    private static UI ui=new UI();
+    private static UI ui = new UI();
     private Person person = null;
     private Server server = Server.getServer();
     Scn scn = Scn.getScanner();
 
     private UI() {
     }
-    public String getPersonUserName()
-    {
-        if (person!=null)
+
+    public String getPersonUserName() {
+        if (person != null)
             return person.getUserName();
         return "";
     }
-    public static UI get()
-    {
+
+    public static UI get() {
         return ui;
     }
 
@@ -229,7 +236,7 @@ public class UI {
                     return;
                 }
                 for (var item : friendList) {
-                    System.out.println((++temp) + ") " + item+"["+server.getStatus(item)+"]");
+                    System.out.println((++temp) + ") " + item + "[" + server.getStatus(item) + "]");
                 }
                 System.out.println("0) Back");
                 if ((temp = scn.readIndex()) == -1) {
@@ -341,21 +348,43 @@ public class UI {
 
     //region Setting Menu
     void doSettingMenu() {
-        showMainMenu();
-        mainMenuHandler();
+        showSettingMenu();
+        settingMenuHandler();
     }
 
     void settingMenuHandler() {
         switch (scn.readNumber()) {
             case 1 -> {
-                doLoginMenu();
+                int temp = 0;
+                for (var item : Status.values()) {
+                    System.out.println((++temp) + ") " + item.toString());
+                }
+                temp = scn.readIndex();
+                server.setStatus(person.getUserName(), Status.values()[temp]);
+                System.out.println("Status changed !!!");
+                doSettingMenu();
             }
             case 2 -> {
-                doSignUpMenu();
+                System.out.println("enter your image address:");
+                String path = scn.readLine();
+                Path _path = Paths.get(path);
+                if (!Files.exists(_path))
+                {
+                    System.out.println("File not found !!!");
+                    doSettingMenu();
+                    return;
+                }
+                try {
+                    server.setPersonProfilePicture(person.getUserName(),Files.readAllBytes(_path), path.substring(path.lastIndexOf('.')+1));
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                System.out.println("Saved");
+                doSettingMenu();
             }
             case 3 -> {
                 this.person = null;
-                doStartMenu();
+                doMainMenu();
             }
         }
     }

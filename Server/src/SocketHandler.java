@@ -1,7 +1,5 @@
-import Model.Request.Account.CheckUserNameAvailabilityRequest;
+import Model.Request.Account.*;
 import Model.Request.Chats.GetPersonPrivateChatsRequest;
-import Model.Request.Account.LoginRequest;
-import Model.Request.Account.SignUpRequest;
 import Model.Request.Chats.SendMessagePrivateChatRequest;
 import Model.Request.Friend.*;
 import Model.Request.IRequest;
@@ -94,6 +92,13 @@ public class SocketHandler extends Thread {
             return res;
         } else if (request instanceof UnBlockPersonRequest res) {
             people.unBlockAPerson(res.getBlocker(),res.getBlocked());
+            return res;
+        }else if (request instanceof ChangeStatusRequest res) {
+            people.setStatus(res.getUserName(),res.getStatus());
+            return res;
+        }else if (request instanceof ChangeProfilePictureRequest res) {
+            people.setPersonProfilePicture(res.getUserName(),res.getImage(),res.getSuffix());
+            res = new ChangeProfilePictureRequest("",null,"");
             return res;
         } else {
             return null;

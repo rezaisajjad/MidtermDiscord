@@ -1,15 +1,14 @@
 package ClientController;
 
 import Model.Person;
+import Model.Request.Account.*;
 import Model.Request.Friend.*;
 import Model.Request.PrivateChat;
 import Model.Request.PrivateChatMessage;
-import Model.Request.Account.CheckUserNameAvailabilityRequest;
 import Model.Request.Chats.GetPersonPrivateChatsRequest;
-import Model.Request.Account.LoginRequest;
-import Model.Request.Account.SignUpRequest;
 import Model.Request.Chats.SendMessagePrivateChatRequest;
 import Model.Request.IRequest;
+import Model.Status;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -198,5 +197,26 @@ public class Server {
     public String getStatus(String userName) {
         GetStatusRequest request = new GetStatusRequest(userName);
         return ((GetStatusRequest) sendRequest(request)).getStatus();
+    }
+
+    /**
+     * sets person status
+     *
+     */
+    public void setStatus(String userName, Status status) {
+        ChangeStatusRequest request = new ChangeStatusRequest(userName,status);
+        sendRequest(request);
+    }
+
+    /**
+     * change profile picture
+     * @param bytes file bytes
+     * @param format file format (suffix)
+     * @param userName person userName
+     */
+    public void setPersonProfilePicture(String userName,byte[] bytes,String format)
+    {
+        ChangeProfilePictureRequest request = new ChangeProfilePictureRequest(userName,bytes,format);
+        sendRequest(request);
     }
 }
