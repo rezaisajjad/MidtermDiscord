@@ -193,32 +193,38 @@ public class UI {
     private void showServerMenu() {
         printList("Server list", "new Server", "back");
     }
-
     private void serverHandler(Integer serverUniqueID) {
-        printList("channels", "members", "roles", "back");
+        var personRoles = server.getPersonRoles(person.getUserName(), serverUniqueID);
+        Role allPersonRolls = Role.integrateRolls(personRoles);
+        printList("channels", "members", "roles", "remove server", "back");
         switch (scn.readNumber()) {
             case 1 -> {
                 printList("list of channels", "add channel", "back");
                 switch (scn.readNumber()) {
                     case 1 -> {
                         var names = server.getServerChannels(serverUniqueID);
-                        int temp=0;
+                        int temp = 0;
                         String channelName;
-                        for (var item:names.toArray()) {
-                            System.out.println((++temp)+") "+item);
+                        for (var item : names.toArray()) {
+                            System.out.println((++temp) + ") " + item);
                         }
                         System.out.println("0) back");
-                        if ((temp=scn.readIndex())==-1)
-                        {
+                        if ((temp = scn.readIndex()) == -1) {
                             serverHandler(serverUniqueID);
                             return;
                         }
-                        channelName=(String) names.toArray()[scn.readIndex()];
+                        channelName = (String) names.toArray()[scn.readIndex()];
+                        printList("messages", "rename", "remove");
                     }
                     case 2 -> {
+                        if (!allPersonRolls.isCreateChannel()) {
+                            System.out.println("access blocked");
+                            serverHandler(serverUniqueID);
+                            return;
+                        }
                         System.out.println("Enter Channel Name");
                         String name = scn.readLine().trim();
-                        while (!server.checkChannelNameAvailability(serverUniqueID,name)) {
+                        while (!server.checkChannelNameAvailability(serverUniqueID, name)) {
                             System.out.println("name isn't available \n enter Again:");
                             name = scn.readLine().trim();
                         }
@@ -242,6 +248,26 @@ public class UI {
             case 3 -> {
             }
             case 4 -> {
+                boolean isAdmin = false;
+                for (var role : personRoles) {
+                    if (role.getName().trim().equals("owner")) {
+                        isAdmin = true;
+                        break;
+                    }
+                }
+                if (!isAdmin) {
+                    System.out.println("access blocked");
+                    serverHandler(serverUniqueID);
+                    return;
+                }
+                System.out.println("Are you sure?\nPlease types yes or no");
+                if (scn.readText().trim().equals("yes")) {
+                    server.removeServer(serverUniqueID);
+                    System.out.println("removed");
+                }
+                serverHandler(serverUniqueID);
+            }
+            case 5 -> {
                 doServerMenu();
             }
         }
@@ -507,7 +533,6 @@ public class UI {
         showSettingMenu();
         settingMenuHandler();
     }
-
     void settingMenuHandler() {
         switch (scn.readNumber()) {
             case 1 -> {

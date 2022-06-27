@@ -116,6 +116,9 @@ public class SocketHandler extends Thread {
         } else if (request instanceof GetServerChannelsRequest res) {
             res.setChannelsName(people.getServerChannels(res.getServerUniqueID()));
             return res;
+        }  else if (request instanceof GetPersonRolesRequest res) {
+            res.setRoles(people.getPersonRoles(res.getUserName(),res.getUniqueID()));
+            return res;
         } else {
             return null;
         }

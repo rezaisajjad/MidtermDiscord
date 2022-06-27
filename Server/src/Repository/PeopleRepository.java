@@ -361,4 +361,24 @@ public class PeopleRepository {
         var res = new HashSet<>(servers.get(uniqueID).getChannels().keySet());
         return res;
     }
+
+    /**
+     * returns person roles
+     *
+     * @param userName person username
+     * @param serverUniqueID serverID
+     * @return list of rules
+     */
+    public ArrayList<Role> getPersonRoles(String userName, Integer serverUniqueID) {
+        ArrayList<Role> roles = new ArrayList<>();
+        for (var item : servers.get(serverUniqueID).getRoles().values()) {
+            for (var item2 : item.getMembers()) {
+                if (item2.trim().equals(userName.trim())) {
+                    roles.add(item);
+                    break;
+                }
+            }
+        }
+        return roles;
+    }
 }

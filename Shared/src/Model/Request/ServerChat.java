@@ -1,19 +1,24 @@
 package Model.Request;
 
 import java.util.HashMap;
+import java.util.HashSet;
 
 public class ServerChat {
     HashMap<String, Role> roles = new HashMap<>();
     HashMap<String, ServerChannel> channels = new HashMap<>();
-    String name;
-    String creator;
 
+    HashSet<String> members = new HashSet<>();
+    String name;
     Integer uniqueID;
 
-    public ServerChat(String name, String creator,Integer uniqueID) {
+    public ServerChat(String name, String creator, Integer uniqueID) {
         this.name = name;
-        this.creator = creator;
-        this.uniqueID=uniqueID;
+        this.uniqueID = uniqueID;
+        Role owner = new Role("owner",true, true, true,
+                true, true, true, true,
+                true);
+        owner.getMembers().add(creator);
+        roles.put(owner.getName(), owner);
     }
 
     public HashMap<String, Role> getRoles() {
@@ -25,7 +30,7 @@ public class ServerChat {
     }
 
     public String getCreator() {
-        return creator;
+        return (String) roles.get("owner").getMembers().toArray()[0];
     }
 
     public Integer getUniqueID() {

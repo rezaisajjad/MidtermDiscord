@@ -275,4 +275,22 @@ public class Server {
         GetServerChannelsRequest request = new GetServerChannelsRequest(uniqueID);
         return ((GetServerChannelsRequest) sendRequest(request)).getChannelsName();
     }
+
+    /**
+     * returns person roles
+     *
+     * @param userName person username
+     * @param serverUniqueID serverID
+     * @return list of rules
+     */
+    public ArrayList<Role> getPersonRoles(String userName, Integer serverUniqueID) {
+        GetPersonRolesRequest request= new GetPersonRolesRequest(serverUniqueID,userName);
+        return ((GetPersonRolesRequest)sendRequest(request)).getRoles();
+    }
+    public void removeServer(Integer serverID)
+    {
+        RemoveServerRequest request= new RemoveServerRequest(serverID);
+
+
+    }
 }
