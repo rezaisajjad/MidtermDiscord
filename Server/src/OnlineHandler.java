@@ -1,14 +1,10 @@
-import Model.Person;
+import Model.Request.Person;
 import Repository.PeopleRepository;
 
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Scanner;
 
 public class OnlineHandler extends Thread {

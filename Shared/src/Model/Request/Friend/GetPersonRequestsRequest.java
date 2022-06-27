@@ -1,6 +1,5 @@
 package Model.Request.Friend;
 
-import Model.Person;
 import Model.Request.IRequest;
 
 import java.io.Serializable;

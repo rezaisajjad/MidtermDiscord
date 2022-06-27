@@ -1,7 +1,7 @@
 package Model.Request.Account;
 
 import Model.Request.IRequest;
-import Model.Status;
+import Model.Request.Status;
 
 import java.io.Serializable;
 

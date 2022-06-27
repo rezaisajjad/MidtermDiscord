@@ -1,14 +1,11 @@
 package Model.Request;
 
-import Model.Person;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 
 public class PrivateChat implements Serializable {
     private ArrayList<PrivateChatMessage> messages = new ArrayList<>();
     String p1, p2;
-
     public PrivateChat(String p1, String p2) {
         this.p1 = p1;
         this.p2 = p2;

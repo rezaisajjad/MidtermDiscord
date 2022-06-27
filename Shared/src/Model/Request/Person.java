@@ -1,11 +1,8 @@
-package Model;
+package Model.Request;
 
-import Model.Request.PrivateChat;
-import Model.Request.IRequest;
-
-import java.awt.image.BufferedImage;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 /**
  * Created by 40031020 on 5/23/2022.
@@ -20,8 +17,9 @@ public class Person implements Serializable {
     private ArrayList<String> friends = new ArrayList<>();
     private ArrayList<String> blockList = new ArrayList<>();
     private ArrayList<PrivateChat> privateChatList = new ArrayList<>();
+    private HashSet<Integer> serverChatsList = new HashSet<>();
     private byte[] image;
-    private String imageFormat="";
+    private String imageFormat = "";
 
 
     public Person cloneWithoutList() {
@@ -64,8 +62,20 @@ public class Person implements Serializable {
         return friends.remove(userName);
     }
 
+    public boolean addServerChat(Integer id) {
+        return serverChatsList.add(id);
+    }
+
+    public boolean removeServerChat(Integer id) {
+        return serverChatsList.remove(id);
+    }
+
     //getters
 
+
+    public HashSet<Integer> getServerChatsList() {
+        return serverChatsList;
+    }
 
     public String getImageFormat() {
         return imageFormat;
@@ -164,6 +174,10 @@ public class Person implements Serializable {
         Person person = (Person) o;
 
         return getUserName().equals(person.getUserName());
+    }
+
+    public void setServerChatsList(HashSet<Integer> serverChatsList) {
+        this.serverChatsList = serverChatsList;
     }
 
     @Override

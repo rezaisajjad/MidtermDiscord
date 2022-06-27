@@ -2,12 +2,10 @@ package View;
 
 import ClientController.InputValidator;
 import ClientController.Server;
-import Model.FormatErrorException;
-import Model.Person;
-import Model.Request.Account.CheckUserNameAvailabilityRequest;
+import Model.Request.FormatErrorException;
+import Model.Request.Person;
 import Model.Request.Account.LoginRequest;
 
-import javax.xml.validation.Validator;
 import java.util.Scanner;
 
 public class Scn {

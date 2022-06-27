@@ -1,20 +1,19 @@
 package ClientController;
 
-import Model.Person;
 import Model.Request.Account.*;
-import Model.Request.Friend.*;
-import Model.Request.PrivateChat;
-import Model.Request.PrivateChatMessage;
+import Model.Request.*;
 import Model.Request.Chats.GetPersonPrivateChatsRequest;
 import Model.Request.Chats.SendMessagePrivateChatRequest;
-import Model.Request.IRequest;
-import Model.Status;
+import Model.Request.Friend.*;
+import Model.Request.SC.*;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 
 public class Server {
     private static Server server = new Server();
@@ -49,7 +48,7 @@ public class Server {
     /**
      * sign up a new account in server
      *
-     * @param p Person
+     * @param p Model.Request.Person
      * @return signed up person
      */
     public Person signUpPerson(Person p) {
@@ -210,13 +209,70 @@ public class Server {
 
     /**
      * change profile picture
-     * @param bytes file bytes
-     * @param format file format (suffix)
+     *
+     * @param bytes    file bytes
+     * @param format   file format (suffix)
      * @param userName person userName
      */
-    public void setPersonProfilePicture(String userName,byte[] bytes,String format)
-    {
-        ChangeProfilePictureRequest request = new ChangeProfilePictureRequest(userName,bytes,format);
+    public void setPersonProfilePicture(String userName, byte[] bytes, String format) {
+        ChangeProfilePictureRequest request = new ChangeProfilePictureRequest(userName, bytes, format);
         sendRequest(request);
+    }
+
+    /**
+     * creat a new serverChat
+     *
+     * @param creator    creator username
+     * @param serverName name
+     */
+    public void createServer(String creator, String serverName) {
+        CreateServerRequest request = new CreateServerRequest(creator, serverName);
+        sendRequest(request);
+    }
+
+    /**
+     * returns server list name and uniqueID
+     *
+     * @param userName person who want server list
+     * @return server list name and uniqueID
+     */
+    public HashMap<String, Integer> getPersonServerChats(String userName) {
+        GetPersonServersRequest request = new GetPersonServersRequest(userName);
+        return ((GetPersonServersRequest) sendRequest(request)).getList();
+    }
+
+    /**
+     * create a channel in specific serve
+     *
+     * @param name           channel name
+     * @param type           channel type
+     * @param serverUniqueID channel server
+     */
+    public void createServerChannel(String name, ChannelType type, Integer serverUniqueID) {
+        CreateServerChannelRequest request = new CreateServerChannelRequest(name, type, serverUniqueID);
+        sendRequest(request);
+    }
+
+    /**
+     * check if a name is free
+     *
+     * @param serverUniqueID serverUniqueID
+     * @param channelName    channelName
+     * @return result
+     */
+    public boolean checkChannelNameAvailability(Integer serverUniqueID, String channelName) {
+        CheckChannelNameAvailabilityRequest request = new CheckChannelNameAvailabilityRequest(serverUniqueID, channelName);
+        return ((CheckChannelNameAvailabilityRequest) sendRequest(request)).getResult();
+    }
+
+    /**
+     * return all channels name of a server
+     *
+     * @param uniqueID serverID
+     * @return list of names
+     */
+    public HashSet<String> getServerChannels(Integer uniqueID) {
+        GetServerChannelsRequest request = new GetServerChannelsRequest(uniqueID);
+        return ((GetServerChannelsRequest) sendRequest(request)).getChannelsName();
     }
 }

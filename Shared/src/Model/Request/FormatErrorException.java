@@ -1,4 +1,4 @@
-package Model;
+package Model.Request;
 
 public class FormatErrorException extends Exception {
     public String message;

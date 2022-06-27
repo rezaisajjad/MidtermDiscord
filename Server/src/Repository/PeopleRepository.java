@@ -1,15 +1,12 @@
 package Repository;
 
-import Model.Person;
-import Model.Request.Account.ChangeStatusRequest;
+import Model.Request.*;
 import Model.Request.Friend.AddFriendRequest;
-import Model.Request.PrivateChat;
-import Model.Request.PrivateChatMessage;
-import Model.Status;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Random;
 
 public class PeopleRepository {
 
@@ -32,10 +29,19 @@ public class PeopleRepository {
         p11.addFriend(p1.getUserName());
         people.put(p1.getUserName(), p1);
         people.put(p11.getUserName(), p11);
+        servers.put(1414, new ServerChat("SSSSS1", "sajjadre", 1414));
+        servers.put(1416, new ServerChat("AAA2", "sajjadre", 1416));
+        servers.put(1418, new ServerChat("asddsaadsdsa3", "sajjadre", 1418));
+        p1.addServerChat(1414);
+        p1.addServerChat(1416);
+        p1.addServerChat(1418);
     }
 
     private final HashMap<String, HashSet<String>> friendRequests = new HashMap<>();
     public final HashMap<String, Person> people = new HashMap<>();
+    public final HashMap<Integer, ServerChat> servers = new HashMap<>();
+
+    public final Random random = new Random();
 
     /**
      * adds a person to person list
@@ -287,12 +293,72 @@ public class PeopleRepository {
 
     /**
      * sets person picture
-     * @param userName person username
-     * @param bytes file bytes
+     *
+     * @param userName  person username
+     * @param bytes     file bytes
      * @param extension file format
      */
-    public void setPersonProfilePicture(String userName, byte[] bytes,String extension) {
+    public void setPersonProfilePicture(String userName, byte[] bytes, String extension) {
         people.get(userName).setImage(bytes);
         people.get(userName).setImageFormat(extension);
+    }
+
+    /**
+     * creat a new serverChat
+     *
+     * @param creator    creator username
+     * @param serverName name
+     */
+    public void createServer(String creator, String serverName) {
+        ServerChat serverChat = new ServerChat(serverName, creator, random.nextInt(0, 20000));
+        servers.put(serverChat.getUniqueID(), serverChat);
+        people.get(creator).addServerChat(serverChat.getUniqueID());
+    }
+
+    /**
+     * returns server list name and uniqueID
+     *
+     * @param userName person who want server list
+     * @return server list name and uniqueID
+     */
+    public HashMap<String, Integer> getPersonServerChats(String userName) {
+        HashMap<String, Integer> list = new HashMap<>();
+        for (var item : people.get(userName).getServerChatsList()) {
+            list.put(servers.get(item).getName(), item);
+        }
+        return list;
+    }
+
+    /**
+     * create a channel in specific serve
+     *
+     * @param name           channel name
+     * @param type           channel type
+     * @param serverUniqueID channel server
+     */
+    public void createServerChannel(String name, ChannelType type, Integer serverUniqueID) {
+        servers.get(serverUniqueID).getChannels().put(name, new ServerChannel(name, type));
+    }
+
+    /**
+     * check if a name is free
+     *
+     * @param serverUniqueID serverUniqueID
+     * @param channelName    channelName
+     * @return result
+     */
+    public boolean checkChannelNameAvailability(Integer serverUniqueID, String channelName) {
+        return !servers.get(serverUniqueID).getChannels().containsKey(channelName);
+    }
+
+    /**
+     * return all channels name of a server
+     *
+     * @param uniqueID serverID
+     * @return list of names
+     */
+    public HashSet<String> getServerChannels(Integer uniqueID) {
+        var res = new HashSet<>(servers.get(uniqueID).getChannels().keySet());
+        return res;
     }
 }

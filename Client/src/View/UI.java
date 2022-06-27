@@ -1,21 +1,16 @@
 package View;
 
 import ClientController.Server;
-import Model.Person;
-import Model.PublicStatic;
-import Model.Request.PrivateChat;
-import Model.Request.PrivateChatMessage;
 import Model.Request.Account.LoginRequest;
-import Model.Status;
+import Model.Request.*;
 
-import javax.swing.filechooser.FileNameExtensionFilter;
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Locale;
 
 public class UI {
@@ -138,15 +133,18 @@ public class UI {
     private void mainMenuHandler() {
         switch (scn.readNumber()) {
             case 1 -> {
-                doChatsMenu();
+                doPrivateChatsMenu();
             }
             case 2 -> {
-                doFriendsMenu();
+                doServerMenu();
             }
             case 3 -> {
-                doSettingMenu();
+                doFriendsMenu();
             }
             case 4 -> {
+                doSettingMenu();
+            }
+            case 5 -> {
                 this.person = null;
                 doStartMenu();
             }
@@ -154,21 +152,179 @@ public class UI {
     }
 
     private void showMainMenu() {
-        printList("chats", "friend", "settings", "log Out");
+        printList("chats", "servers", "friend", "settings", "log Out");
     }
     //endregion
 
+    //region Server menu
+    private void doServerMenu() {
+        showServerMenu();
+        serverMenuHandler();
+    }
+
+    private void serverMenuHandler() {
+        switch (scn.readNumber()) {
+            case 1 -> {
+                HashMap<String, Integer> list = server.getPersonServerChats(person.getUserName());
+                for (int i = 1; i <= list.size(); i++) {
+                    System.out.println(i + ") " + list.keySet().toArray()[i - 1]);
+                }
+                int index;
+                System.out.println("0) back");
+                if ((index=scn.readIndex())==-1)
+                {
+                    doServerMenu();
+                    return;
+                }
+                serverHandler(list.get(list.keySet().toArray()[index]));
+            }
+            case 2 -> {
+                System.out.println("Enter channel name: ");
+                server.createServer(person.getUserName(), scn.readText());
+                System.out.println("created");
+                doServerMenu();
+            }
+            case 3 -> {
+                doMainMenu();
+            }
+        }
+    }
+
+    private void showServerMenu() {
+        printList("Server list", "new Server", "back");
+    }
+
+    private void serverHandler(Integer serverUniqueID) {
+        printList("channels", "members", "roles", "back");
+        switch (scn.readNumber()) {
+            case 1 -> {
+                printList("list of channels", "add channel", "back");
+                switch (scn.readNumber()) {
+                    case 1 -> {
+                        var names = server.getServerChannels(serverUniqueID);
+                        int temp=0;
+                        String channelName;
+                        for (var item:names.toArray()) {
+                            System.out.println((++temp)+") "+item);
+                        }
+                        System.out.println("0) back");
+                        if ((temp=scn.readIndex())==-1)
+                        {
+                            serverHandler(serverUniqueID);
+                            return;
+                        }
+                        channelName=(String) names.toArray()[scn.readIndex()];
+                    }
+                    case 2 -> {
+                        System.out.println("Enter Channel Name");
+                        String name = scn.readLine().trim();
+                        while (!server.checkChannelNameAvailability(serverUniqueID,name)) {
+                            System.out.println("name isn't available \n enter Again:");
+                            name = scn.readLine().trim();
+                        }
+                        int temp = 0;
+                        System.out.println("Enter Channel Type");
+                        for (var item : ChannelType.values()) {
+                            System.out.println((++temp) + ") " + item);
+                        }
+                        temp = scn.readIndex();
+                        server.createServerChannel(name, ChannelType.values()[temp], serverUniqueID);
+                        System.out.println("Created");
+                        serverHandler(serverUniqueID);
+                    }
+                    case 3 -> {
+                        serverHandler(serverUniqueID);
+                    }
+                }
+            }
+            case 2 -> {
+            }
+            case 3 -> {
+            }
+            case 4 -> {
+                doServerMenu();
+            }
+        }
+    }
+
+    //region channel menu
+    private void _doChannelMenu() {
+        _showChannelMenu();
+        _channelMenuHandler();
+    }
+
+    private void _showChannelMenu() {
+        printList("enter channel", "new channel", "remove channel", "back");
+    }
+
+    private void _channelMenuHandler() {
+        switch (scn.readNumber()) {
+            case 1 -> {
+            }
+            case 2 -> {
+            }
+            case 3 -> {
+            }
+        }
+    }
+
+    //endregion
+    //region role menu
+    private void _doRoleMenu() {
+        _showRoleMenu();
+        _roleMenuHandler();
+    }
+
+    private void _showRoleMenu() {
+        printList("role list", "new role", "back");
+    }
+
+    private void _roleMenuHandler() {
+        switch (scn.readNumber()) {
+            case 1 -> {
+            }
+            case 2 -> {
+            }
+            case 3 -> {
+            }
+        }
+    }
+
+    private void _doRoleListMenu() {
+        _showRoleListMenu();
+        _roleListMenuHandler();
+    }
+
+    private void _showRoleListMenu() {
+        printList("persons", "add person", "remove person", "back");
+    }
+
+    private void _roleListMenuHandler() {
+        switch (scn.readNumber()) {
+            case 1 -> {
+            }
+            case 2 -> {
+            }
+            case 3 -> {
+            }
+        }
+    }
+    //endregion
+
+
+    //endregion
+
     //region Chats Menu
-    private void doChatsMenu() {
-        showChatsMenu();
-        chatsMenuHandler();
+    private void doPrivateChatsMenu() {
+        showPrivateChatsMenu();
+        privateChatsMenuHandler();
     }
 
     private String getPrivateChatPerson(PrivateChat pc) {
         return pc.getP1().equals(person.getUserName()) ? pc.getP2() : pc.getP1();
     }
 
-    void chatsMenuHandler() {
+    void privateChatsMenuHandler() {
         int temp = 0;
         ArrayList<PrivateChat> chats = server.getPersonPrivateChats(person.getUserName());
         if (isListNullOrEmpty(chats)) {
@@ -185,7 +341,7 @@ public class UI {
             return;
         }
         privateChatHandler(chats.get(temp));
-        doChatsMenu();
+        doPrivateChatsMenu();
     }
 
     void privateChatHandler(PrivateChat chat) {
@@ -214,7 +370,7 @@ public class UI {
         } while (!isBreak);
     }
 
-    public void showChatsMenu() {
+    public void showPrivateChatsMenu() {
         ///
     }
     //endregion
@@ -258,7 +414,7 @@ public class UI {
                 System.out.println("Enter userName: ");
                 String receiver = scn.readText();
                 if (server.CheckUserNameAvailability(receiver.toLowerCase(Locale.ROOT))) {
-                    System.out.println("Person not found");
+                    System.out.println("Model.Request.Person not found");
                     doFriendsMenu();
                     return;
                 }
@@ -290,7 +446,7 @@ public class UI {
                 System.out.println("Enter userName: ");
                 String receiver = scn.readText();
                 if (server.CheckUserNameAvailability(receiver.toLowerCase(Locale.ROOT))) {
-                    System.out.println("Person not found");
+                    System.out.println("Model.Request.Person not found");
                     doFriendsMenu();
                     return;
                 }
@@ -302,7 +458,7 @@ public class UI {
                 System.out.println("Enter userName: ");
                 String blocked = scn.readText();
                 if (server.CheckUserNameAvailability(blocked.toLowerCase(Locale.ROOT))) {
-                    System.out.println("Person not found");
+                    System.out.println("Model.Request.Person not found");
                     doFriendsMenu();
                     return;
                 }
@@ -314,7 +470,7 @@ public class UI {
                 System.out.println("Enter userName: ");
                 String blocked = scn.readText();
                 if (server.CheckUserNameAvailability(blocked.toLowerCase(Locale.ROOT))) {
-                    System.out.println("Person not found");
+                    System.out.println("Model.Request.Person not found");
                     doFriendsMenu();
                     return;
                 }
@@ -383,7 +539,6 @@ public class UI {
                 doSettingMenu();
             }
             case 3 -> {
-                this.person = null;
                 doMainMenu();
             }
         }
@@ -394,22 +549,4 @@ public class UI {
     }
     //endregion
 
-    ///////////////////
-    //region
-    //endregion
-    //region
-    //endregion
-    //region
-    //endregion
-    //region
-    //endregion
-    //region
-    //endregion
-    //region
-    //endregion
-    //region
-    //endregion
-    //region
-    //endregion
-    //region
 }

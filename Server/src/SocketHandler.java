@@ -3,6 +3,7 @@ import Model.Request.Chats.GetPersonPrivateChatsRequest;
 import Model.Request.Chats.SendMessagePrivateChatRequest;
 import Model.Request.Friend.*;
 import Model.Request.IRequest;
+import Model.Request.SC.*;
 import Repository.PeopleRepository;
 
 import java.io.IOException;
@@ -97,8 +98,23 @@ public class SocketHandler extends Thread {
             people.setStatus(res.getUserName(),res.getStatus());
             return res;
         }else if (request instanceof ChangeProfilePictureRequest res) {
-            people.setPersonProfilePicture(res.getUserName(),res.getImage(),res.getSuffix());
-            res = new ChangeProfilePictureRequest("",null,"");
+            people.setPersonProfilePicture(res.getUserName(), res.getImage(), res.getSuffix());
+            res = new ChangeProfilePictureRequest("", null, "");
+            return res;
+        } else if (request instanceof CreateServerRequest res) {
+            people.createServer(res.getCreatorUserName(), res.getName());
+            return res;
+        } else if (request instanceof GetPersonServersRequest res) {
+            res.setList(people.getPersonServerChats(res.getUserName()));
+            return res;
+        } else if (request instanceof CreateServerChannelRequest res) {
+            people.createServerChannel(res.getName(),res.getType(),res.getServerUniqueID());
+            return res;
+        } else if (request instanceof CheckChannelNameAvailabilityRequest res) {
+            res.setResult(people.checkChannelNameAvailability(res.getServerUniqueID(),res.getChannelName()));
+            return res;
+        } else if (request instanceof GetServerChannelsRequest res) {
+            res.setChannelsName(people.getServerChannels(res.getServerUniqueID()));
             return res;
         } else {
             return null;
