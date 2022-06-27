@@ -74,7 +74,7 @@ public class Server {
      * @param userName username
      * @return true:available false:unavailable
      */
-    public boolean CheckUserNameAvailability(String userName) {
+    public boolean checkUserNameAvailability(String userName) {
         CheckUserNameAvailabilityRequest request = new CheckUserNameAvailabilityRequest(userName);
         return ((CheckUserNameAvailabilityRequest) sendRequest(request)).isAvailable();
     }
@@ -287,10 +287,36 @@ public class Server {
         GetPersonRolesRequest request= new GetPersonRolesRequest(serverUniqueID,userName);
         return ((GetPersonRolesRequest)sendRequest(request)).getRoles();
     }
+
+    /**
+     * removes server
+     * @param serverID serverID
+     */
     public void removeServer(Integer serverID)
     {
         RemoveServerRequest request= new RemoveServerRequest(serverID);
+        sendRequest(request);
+    }
 
+    /**
+     * adds a perosn to server
+     * @param userName person username
+     * @param serverUniqueID server id
+     */
+    public void addPersonToServer(String userName,Integer serverUniqueID)
+    {
+        AddPersonToServerRequest request = new AddPersonToServerRequest(userName,serverUniqueID);
+        sendRequest(request);
+    }
 
+    /**
+     * returns list of server members
+     * @param serverUniqueID server id
+     * @return Hashset <#UserName, #Status>
+     */
+    public HashMap<String,String> getServerMembers(Integer serverUniqueID)
+    {
+        GetMemberServerListRequest request = new GetMemberServerListRequest(serverUniqueID);
+        return ((GetMemberServerListRequest)sendRequest(request)).getUsers();
     }
 }

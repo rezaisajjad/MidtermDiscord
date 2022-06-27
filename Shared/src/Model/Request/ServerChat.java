@@ -33,6 +33,14 @@ public class ServerChat {
         return (String) roles.get("owner").getMembers().toArray()[0];
     }
 
+    public HashSet<String> getMembers() {
+        return members;
+    }
+
+    public void setMembers(HashSet<String> members) {
+        this.members = members;
+    }
+
     public Integer getUniqueID() {
         return uniqueID;
     }

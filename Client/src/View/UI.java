@@ -244,8 +244,28 @@ public class UI {
                 }
             }
             case 2 -> {
+                printList("list of members", "add member", "back");
+                switch (scn.readNumber()) {
+                    case 1 -> {
+
+                    }
+                    case 2 -> {
+                        String uName="";
+                        System.out.println("Enter person userName");
+                        do {
+                            uName=scn.readText().trim();
+                            server.addPersonToServer(uName,serverUniqueID);
+                        }while (!server.checkUserNameAvailability(uName));
+
+                    }
+                    case 3 -> {
+                        serverHandler(serverUniqueID);
+                    }
+                }
             }
             case 3 -> {
+                printList("list of roles", "add role", "back");
+
             }
             case 4 -> {
                 boolean isAdmin = false;
@@ -439,7 +459,7 @@ public class UI {
             case 2 -> {
                 System.out.println("Enter userName: ");
                 String receiver = scn.readText();
-                if (server.CheckUserNameAvailability(receiver.toLowerCase(Locale.ROOT))) {
+                if (server.checkUserNameAvailability(receiver.toLowerCase(Locale.ROOT))) {
                     System.out.println("Model.Request.Person not found");
                     doFriendsMenu();
                     return;
@@ -471,7 +491,7 @@ public class UI {
             case 4 -> {
                 System.out.println("Enter userName: ");
                 String receiver = scn.readText();
-                if (server.CheckUserNameAvailability(receiver.toLowerCase(Locale.ROOT))) {
+                if (server.checkUserNameAvailability(receiver.toLowerCase(Locale.ROOT))) {
                     System.out.println("Model.Request.Person not found");
                     doFriendsMenu();
                     return;
@@ -483,7 +503,7 @@ public class UI {
             case 5 -> {
                 System.out.println("Enter userName: ");
                 String blocked = scn.readText();
-                if (server.CheckUserNameAvailability(blocked.toLowerCase(Locale.ROOT))) {
+                if (server.checkUserNameAvailability(blocked.toLowerCase(Locale.ROOT))) {
                     System.out.println("Model.Request.Person not found");
                     doFriendsMenu();
                     return;
@@ -495,7 +515,7 @@ public class UI {
             case 6 -> {
                 System.out.println("Enter userName: ");
                 String blocked = scn.readText();
-                if (server.CheckUserNameAvailability(blocked.toLowerCase(Locale.ROOT))) {
+                if (server.checkUserNameAvailability(blocked.toLowerCase(Locale.ROOT))) {
                     System.out.println("Model.Request.Person not found");
                     doFriendsMenu();
                     return;

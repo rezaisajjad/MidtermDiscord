@@ -381,4 +381,40 @@ public class PeopleRepository {
         }
         return roles;
     }
+
+    /**
+     * removes server
+     *
+     * @param serverID serverID
+     */
+    public void removeServer(Integer serverID) {
+        for (var item : servers.get(serverID).getMembers()) {
+            people.get(item).getServerChatsList().remove(serverID);
+        }
+        servers.remove(serverID);
+    }
+
+    /**
+     * adds a perosn to server
+     *
+     * @param userName       person username
+     * @param serverUniqueID server id
+     */
+    public void addPersonToServer(String userName, Integer serverUniqueID) {
+        servers.get(serverUniqueID).getMembers().add(userName);
+    }
+
+    /**
+     * returns list of server members
+     *
+     * @param serverUniqueID server id
+     * @return Hashset <#UserName, #Status>
+     */
+    public HashMap<String, String> getServerMembers(Integer serverUniqueID) {
+        HashMap<String, String> result = new HashMap<>();
+        for (var item:servers.get(serverUniqueID).getMembers()) {
+            result.put(item,getStatus(item));
+        }
+        return result;
+    }
 }

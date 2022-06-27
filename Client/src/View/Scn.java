@@ -131,7 +131,7 @@ public class Scn {
             System.out.println("User Name: ");
             userName = scn.next().toLowerCase();
         }
-        res = server.CheckUserNameAvailability(userName);
+        res = server.checkUserNameAvailability(userName);
         if (!res) {
             System.out.println("User name isn't available !!!");
         }
