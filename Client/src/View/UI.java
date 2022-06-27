@@ -244,21 +244,44 @@ public class UI {
                 }
             }
             case 2 -> {
-                printList("list of members", "add member", "back");
+                printList("list of members", "add member", "remove member", "back");
                 switch (scn.readNumber()) {
                     case 1 -> {
-
+                        var members = server.getServerMembers(serverUniqueID);
+                        for (var item : members.keySet()) {
+                            System.out.println(item + " [" + members.get(item) + "]");
+                        }
+                        serverHandler(serverUniqueID);
                     }
                     case 2 -> {
                         String uName="";
                         System.out.println("Enter person userName");
                         do {
-                            uName=scn.readText().trim();
-                            server.addPersonToServer(uName,serverUniqueID);
+                            if (!uName.equals(""))
+                                System.out.println("user not found!!!");
+                            uName = scn.readText().trim();
                         }while (!server.checkUserNameAvailability(uName));
-
+                        server.addPersonToServer(uName, serverUniqueID);
+                        System.out.println("removed");
                     }
                     case 3 -> {
+                        if (!allPersonRolls.isRemovePerson())
+                        {
+                            System.out.println("access blocked");
+                            serverHandler(serverUniqueID);
+                            return;
+                        }
+                        String uName="";
+                        System.out.println("Enter person userName");
+                        do {
+                            if (!uName.equals(""))
+                                System.out.println("user not found!!!");
+                            uName = scn.readText().trim();
+                        }while (!server.checkUserNameAvailability(uName));
+                        server.removePersonFromServer(uName, serverUniqueID);
+                        System.out.println("removed");
+                    }
+                    case 4 -> {
                         serverHandler(serverUniqueID);
                     }
                 }

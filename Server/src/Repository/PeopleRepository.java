@@ -2,6 +2,7 @@ package Repository;
 
 import Model.Request.*;
 import Model.Request.Friend.AddFriendRequest;
+import Model.Request.SC.RemovePersonFromServerRequest;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -402,6 +403,7 @@ public class PeopleRepository {
      */
     public void addPersonToServer(String userName, Integer serverUniqueID) {
         servers.get(serverUniqueID).getMembers().add(userName);
+        people.get(userName).addServerChat(serverUniqueID);
     }
 
     /**
@@ -416,5 +418,19 @@ public class PeopleRepository {
             result.put(item,getStatus(item));
         }
         return result;
+    }
+    /**
+     * removes a person from server
+     * @param userName person username
+     * @param serverUniqueID server id
+     */
+    public void removePersonFromServer(String userName, Integer serverUniqueID)
+    {
+        people.get(userName).removeServerChat(serverUniqueID);
+        servers.get(serverUniqueID).getMembers().remove(userName);
+        for (var item:servers.get(serverUniqueID).getRoles().values()
+             ) {
+            item.getMembers().remove(userName);
+        }
     }
 }

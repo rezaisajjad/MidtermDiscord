@@ -299,7 +299,7 @@ public class Server {
     }
 
     /**
-     * adds a perosn to server
+     * adds a person to server
      * @param userName person username
      * @param serverUniqueID server id
      */
@@ -308,7 +308,16 @@ public class Server {
         AddPersonToServerRequest request = new AddPersonToServerRequest(userName,serverUniqueID);
         sendRequest(request);
     }
-
+    /**
+     * removes a person from server
+     * @param userName person username
+     * @param serverUniqueID server id
+     */
+    public void removePersonFromServer(String userName, Integer serverUniqueID)
+    {
+        RemovePersonFromServerRequest request = new RemovePersonFromServerRequest(userName,serverUniqueID);
+        sendRequest(request);
+    }
     /**
      * returns list of server members
      * @param serverUniqueID server id
