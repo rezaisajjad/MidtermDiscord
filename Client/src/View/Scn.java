@@ -72,7 +72,11 @@ public class Scn {
         p.setPhoneNumber(_getPhoneNumber());
         return p;
     }
-
+public String readPassword()
+{
+    temp = "";
+    return  _getPassWord();
+}
     private String _getPhoneNumber() {
         try {
             return getPhoneNumber();

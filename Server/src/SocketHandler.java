@@ -1,6 +1,8 @@
 import Model.Request.Account.*;
+import Model.Request.Chats.DownloadFileRequest;
 import Model.Request.Chats.GetPersonPrivateChatsRequest;
 import Model.Request.Chats.SendMessagePrivateChatRequest;
+import Model.Request.Chats.UploadFileRequest;
 import Model.Request.Friend.*;
 import Model.Request.IRequest;
 import Model.Request.SC.*;
@@ -45,7 +47,7 @@ public class SocketHandler extends Thread {
             res.setAvailability(people.isUserNameAvailable(res.getUserName()));
             return res;
         } else if (request instanceof LoginRequest res) {
-            res.setP(people.loginPerson(res.getUserName(), res.getPassWord()).cloneWithoutList());
+            res.setP(people.loginPerson(res.getUserName(), res.getPassWord()));
             return res;
         } else if (request instanceof SignUpRequest res) {
             if (!people.addPerson(res.getP())) {
@@ -136,6 +138,21 @@ public class SocketHandler extends Thread {
             return res;
         } else if (request instanceof GetServerRolesRequest res) {
             res.setRoles(people.getServerRoles(res.getServerID()));
+            return res;
+        }else if (request instanceof ChangeServerNameRequest res) {
+            people.changeServerName(res.getName(),res.getServerUniqueID());
+            return res;
+        }else if (request instanceof CheckIsPersonExistInServerRequest res) {
+            res.setResult(people.isPersonExistInServer(res.getUserName(),res.getServerID()));
+            return res;
+        }else if (request instanceof ChangePasswordRequest res) {
+            res.setResult(people.changePersonPassword(res.getUsername(),res.getCurrentPassword(),res.getNewPassword()));
+            return res;
+        } else if (request instanceof UploadFileRequest res) {
+            res.setFileID(people.uploadFile(res.getFile().getBytes(),res.getFile().getExtension()));
+            return res;
+        }else if (request instanceof DownloadFileRequest res) {
+            res.setFile(people.downloadFile(res.getId()));
             return res;
         } else {
             return null;

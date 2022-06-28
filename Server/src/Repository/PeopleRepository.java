@@ -1,9 +1,9 @@
 package Repository;
 
 import Model.Request.*;
+import Model.Request.Chats.DownloadFileRequest;
 import Model.Request.Friend.AddFriendRequest;
-import Model.Request.SC.AddRoleToServerRequest;
-import Model.Request.SC.RemovePersonFromServerRequest;
+import Model.Request.SC.ChatFile;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -43,6 +43,8 @@ public class PeopleRepository {
     public final HashMap<String, Person> people = new HashMap<>();
     public final HashMap<Integer, ServerChat> servers = new HashMap<>();
 
+    public final HashMap<Integer, ChatFile> files = new HashMap<>();
+
     public final Random random = new Random();
 
     /**
@@ -79,7 +81,7 @@ public class PeopleRepository {
     public Person loginPerson(String userName, String passWord) {
         Person p;
         if ((p = people.get(userName)) != null && p.getPassWord().equals(passWord)) {
-            return p;
+            return p.cloneWithoutList();
         } else {
             return null;
         }
@@ -312,10 +314,15 @@ public class PeopleRepository {
      * @param serverName name
      */
     public void createServer(String creator, String serverName) {
-        ServerChat serverChat = new ServerChat(serverName, creator, random.nextInt(0, 20000));
+        Integer id = 0;
+        do {
+            id = random.nextInt(0, 20000);
+        }
+        while (servers.get(id) != null);
+        ServerChat serverChat = new ServerChat(serverName, creator, id);
         serverChat.getMembers().add(creator);
-        servers.put(serverChat.getUniqueID(), serverChat);
-        people.get(creator).addServerChat(serverChat.getUniqueID());
+        servers.put(id, serverChat);
+        people.get(creator).addServerChat(id);
     }
 
     /**
@@ -324,10 +331,10 @@ public class PeopleRepository {
      * @param userName person who want server list
      * @return server list name and uniqueID
      */
-    public HashMap<String, Integer> getPersonServerChats(String userName) {
-        HashMap<String, Integer> list = new HashMap<>();
+    public HashMap<Integer, String> getPersonServerChats(String userName) {
+        HashMap<Integer, String> list = new HashMap<>();
         for (var item : people.get(userName).getServerChatsList()) {
-            list.put(servers.get(item).getName(), item);
+            list.put(item, servers.get(item).getName());
         }
         return list;
     }
@@ -406,6 +413,10 @@ public class PeopleRepository {
     public void addPersonToServer(String userName, Integer serverUniqueID) {
         servers.get(serverUniqueID).getMembers().add(userName);
         people.get(userName).addServerChat(serverUniqueID);
+        var pc = new PrivateChat(userName, servers.get(serverUniqueID).getName());
+        pc.addMessage(new PrivateChatMessage(servers.get(serverUniqueID).getName(), "Welcome to server!!!"));
+        people.get(userName).addPrivateChat(pc);
+
     }
 
     /**
@@ -448,11 +459,71 @@ public class PeopleRepository {
 
     /**
      * return all roles
+     *
      * @param serverID serverID
      * @return list of roles name
      */
-    public HashSet<String> getServerRoles(Integer serverID)
-    {
+    public HashSet<String> getServerRoles(Integer serverID) {
         return new HashSet<String>(servers.get(serverID).getRoles().keySet());
+    }
+
+    /**
+     * changes server name
+     *
+     * @param name           new name
+     * @param serverUniqueID server id
+     */
+    public void changeServerName(String name, Integer serverUniqueID) {
+        servers.get(serverUniqueID).setName(name);
+    }
+
+    /**
+     * checks if a person exist in server or no
+     *
+     * @param personUserName person username
+     * @param serverID       server id
+     * @return result
+     */
+    public boolean isPersonExistInServer(String personUserName, Integer serverID) {
+        return servers.get(serverID).getMembers().contains(personUserName);
+    }
+
+    /**
+     * changes user password
+     *
+     * @param username    person username
+     * @param currentPass current password
+     * @param newPass     new password
+     * @return chnging result
+     */
+    public boolean changePersonPassword(String username, String currentPass, String newPass) {
+        if (people.get(username).getPassWord().equals(currentPass)) {
+            people.get(username).setPassWord(newPass);
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * upload a file in server
+     * @param bytes file bytes
+     * @return
+     */
+    public Integer uploadFile(byte[] bytes,String extension) {
+        Integer id = 0;
+        do {
+            id = random.nextInt(0, 20000);
+        }
+        while (files.get(id) != null);
+        files.put(id,new ChatFile(bytes,extension));
+        return  id;
+    }
+    /**
+     * downloads a file from server
+     * @param id file id
+     * @return ChatFile
+     */
+    public ChatFile downloadFile(Integer id) {
+        return files.get(id);
     }
 }

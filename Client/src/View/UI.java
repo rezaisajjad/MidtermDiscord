@@ -3,6 +3,7 @@ package View;
 import ClientController.Server;
 import Model.Request.Account.LoginRequest;
 import Model.Request.*;
+import Model.Request.SC.ChatFile;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -165,18 +166,18 @@ public class UI {
     private void serverMenuHandler() {
         switch (scn.readNumber()) {
             case 1 -> {
-                HashMap<String, Integer> list = server.getPersonServerChats(person.getUserName());
-                for (int i = 1; i <= list.size(); i++) {
-                    System.out.println(i + ") " + list.keySet().toArray()[i - 1]);
+                HashMap<Integer, String> list = server.getPersonServerChats(person.getUserName());
+                int index = 0;
+                for (var item : list.keySet().toArray()) {
+                    System.out.println((++index) + ") " + list.get(item));
                 }
-                int index;
+
                 System.out.println("0) back");
-                if ((index=scn.readIndex())==-1)
-                {
+                if ((index = scn.readIndex()) == -1) {
                     doServerMenu();
                     return;
                 }
-                serverHandler(list.get(list.keySet().toArray()[index]));
+                serverHandler((Integer) list.keySet().toArray()[index]);
             }
             case 2 -> {
                 System.out.println("Enter channel name: ");
@@ -257,10 +258,12 @@ public class UI {
                         String uName = "";
                         System.out.println("Enter person userName:");
                         do {
-                            if (!uName.equals(""))
-                                System.out.println("user not found!!!");
+                            if (!uName.equals("")) {
+                                System.out.println("user not found or already exist!!!");
+                                System.out.println("Enter person userName:");
+                            }
                             uName = scn.readText().trim();
-                        } while (server.checkUserNameAvailability(uName));
+                        } while (server.checkUserNameAvailability(uName) || server.isPersonExistInServer(uName, serverUniqueID));
                         server.addPersonToServer(uName, serverUniqueID);
                         System.out.println("added");
                         serverHandler(serverUniqueID);
@@ -275,10 +278,12 @@ public class UI {
                         String uName="";
                         System.out.println("Enter person userName");
                         do {
-                            if (!uName.equals(""))
+                            if (!uName.equals("")) {
                                 System.out.println("user not found!!!");
+                                System.out.println("Enter person userName:");
+                            }
                             uName = scn.readText().trim();
-                        } while (server.checkUserNameAvailability(uName));
+                        } while (!server.isPersonExistInServer(uName, serverUniqueID));
                         server.removePersonFromServer(uName, serverUniqueID);
                         System.out.println("removed");
                         serverHandler(serverUniqueID);
@@ -292,17 +297,53 @@ public class UI {
                 printList("list of roles", "add role", "back");
                 switch (scn.readNumber()) {
                     case 1 -> {
-                        var roles= server.getServerRoles(serverUniqueID);
-                        int temp=0;
-                        for (var item:roles) {
-                            System.out.println((++temp)+") "+item);
+                        var roles = server.getServerRoles(serverUniqueID).toArray();
+                        int temp = 0;
+                        for (var item : roles) {
+                            System.out.println((++temp) + ") " + item);
                         }
                         System.out.println("0) back");
                         if ((temp = scn.readIndex()) == -1) {
                             serverHandler(serverUniqueID);
                             return;
                         }
-                        printList("persons","add person","remove Person");
+                        printList("persons", "add person", "remove Person");
+
+
+                        switch (scn.readNumber()) {
+                            case 1 -> {
+                            }
+                            case 2 -> {
+                                String uName = "";
+                                System.out.println("Enter person userName:");
+                                do {
+                                    if (!uName.equals("")) {
+                                        System.out.println("user not found!!!");
+                                        System.out.println("Enter person userName:");
+                                    }
+                                    uName = scn.readText().trim();
+                                } while (!server.isPersonExistInServer(uName, serverUniqueID));
+                                server.addPersonToServer(uName, serverUniqueID);
+                                System.out.println("added");
+                                serverHandler(serverUniqueID);
+                            }
+                            case 3 -> {
+                                String uName = "";
+                                System.out.println("Enter person userName:");
+                                do {
+                                    if (!uName.equals("")) {
+                                        System.out.println("user not found!!!");
+                                        System.out.println("Enter person userName:");
+                                    }
+                                    uName = scn.readText().trim();
+                                } while (!server.isPersonExistInServer(uName, serverUniqueID));
+                                server.addPersonToServer(uName, serverUniqueID);
+                                System.out.println("added");
+                                serverHandler(serverUniqueID);
+                            }
+                        }
+
+
                         serverHandler(serverUniqueID);
                     }
                     case 2 -> {
@@ -328,6 +369,14 @@ public class UI {
                 }
             }
             case 4 -> {
+                if (!allPersonRolls.isChangeServerName()) {
+                    System.out.println("access blocked");
+                    serverHandler(serverUniqueID);
+                    return;
+                }
+                System.out.println("Enter new name:");
+                server.changeServerName(scn.readText(), serverUniqueID);
+                System.out.println("changed");
                 doServerMenu();
             }
             case 5 -> {
@@ -460,7 +509,7 @@ public class UI {
         }
         boolean isBreak = false;
         do {
-            printList("Send text", "Send file", "Back");
+            printList("Send text", "Send file", "DownloadFile", "Back");
             switch (scn.readNumber()) {
                 case 1 -> {
                     System.out.println("Enter your message: ");
@@ -469,10 +518,35 @@ public class UI {
                     server.sendPrivateChatMessage(chat, chatMessage);
                 }
                 case 2 -> {
-
-                    System.out.println("Sorry isn't complete !!!");
+                    System.out.println("enter your file address:");
+                    String path = scn.readLine();
+                    Path _path = Paths.get(path);
+                    if (!Files.exists(_path)) {
+                        System.out.println("File not found !!!");
+                        privateChatHandler(chat);
+                        return;
+                    }
+                    try {
+                        int fid = server.uploadFile(Files.readAllBytes(_path), path.substring(path.lastIndexOf('.') + 1));
+                        server.sendPrivateChatMessage(chat, new PrivateChatMessage(person.getUserName(), "File(you can download it with its id)   id:" + fid));
+                    } catch (IOException e) {
+                        System.out.println("error");
+                    }
+                    System.out.println("Saved");
                 }
                 case 3 -> {
+                    System.out.println("Enter file code: ");
+                    ChatFile file = server.downloadFile(scn.readNumber());
+                    System.out.println("downloaded");
+                    System.out.println("Where do you want to save?(folder)");
+                    try {
+                        Files.write(Path.of(scn.readText()+"file."+file.getExtension()),file.getBytes());
+                    } catch (IOException e) {
+                        System.out.println("error");
+                    }
+                    System.out.println("saved");
+                }
+                case 4 -> {
                     isBreak = true;
                 }
             }
@@ -639,7 +713,7 @@ public class UI {
                     return;
                 }
                 try {
-                    server.setPersonProfilePicture(person.getUserName(),Files.readAllBytes(_path), path.substring(path.lastIndexOf('.')+1));
+                    server.setPersonProfilePicture(person.getUserName(), Files.readAllBytes(_path), path.substring(path.lastIndexOf('.') + 1));
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
@@ -647,14 +721,23 @@ public class UI {
                 doSettingMenu();
             }
             case 3 -> {
+                System.out.println("current password: ");
+                String currentPass = scn.readText().trim();
+                String newPass = scn.readPassword();
+                if (server.changePersonPassword(person.getUserName(), currentPass, newPass))
+                    System.out.println("Changed");
+                else
+                    System.out.println("not changed!!!");
+                doSettingMenu();
+            }
+            case 4 -> {
                 doMainMenu();
             }
         }
     }
 
     public void showSettingMenu() {
-        printList("change status", "change picture", "Back");
+        printList("change status", "change picture", "Change password", "Back");
     }
     //endregion
-
 }

@@ -2,8 +2,10 @@ package ClientController;
 
 import Model.Request.Account.*;
 import Model.Request.*;
+import Model.Request.Chats.DownloadFileRequest;
 import Model.Request.Chats.GetPersonPrivateChatsRequest;
 import Model.Request.Chats.SendMessagePrivateChatRequest;
+import Model.Request.Chats.UploadFileRequest;
 import Model.Request.Friend.*;
 import Model.Request.SC.*;
 
@@ -11,6 +13,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -236,7 +239,7 @@ public class Server {
      * @param userName person who want server list
      * @return server list name and uniqueID
      */
-    public HashMap<String, Integer> getPersonServerChats(String userName) {
+    public HashMap<Integer, String> getPersonServerChats(String userName) {
         GetPersonServersRequest request = new GetPersonServersRequest(userName);
         return ((GetPersonServersRequest) sendRequest(request)).getList();
     }
@@ -350,5 +353,58 @@ public class Server {
     public HashSet<String> getServerRoles(Integer serverID) {
         GetServerRolesRequest request = new GetServerRolesRequest(serverID);
         return ((GetServerRolesRequest) sendRequest(request)).getRoles();
+    }
+
+    /**
+     * changes server name
+     *
+     * @param name           new name
+     * @param serverUniqueID server id
+     */
+    public void changeServerName(String name, Integer serverUniqueID) {
+        ChangeServerNameRequest request = new ChangeServerNameRequest(serverUniqueID, name);
+        sendRequest(request);
+    }
+
+    /**
+     * checks if a person exist in server or no
+     * @param personUserName person username
+     * @param serverID server id
+     * @return result
+     */
+    public boolean isPersonExistInServer(String personUserName,Integer serverID)
+    {
+        CheckIsPersonExistInServerRequest request = new CheckIsPersonExistInServerRequest(personUserName, serverID);
+        return ((CheckIsPersonExistInServerRequest)sendRequest(request)).isExist();
+    }
+    /**
+     * changes user password
+     * @param username person username
+     * @param currentPass current password
+     * @param newPass new password
+     * @return chnging result
+     */
+    public boolean changePersonPassword(String username,String currentPass,String newPass)
+    {
+        ChangePasswordRequest request = new ChangePasswordRequest(username,currentPass,newPass);
+        return ((ChangePasswordRequest)sendRequest(request)).isResult();
+    }
+    /**
+     * upload a file in server
+     * @param bytes file bytes
+     * @return
+     */
+    public Integer uploadFile(byte[] bytes,String extension) {
+        UploadFileRequest request = new UploadFileRequest(new ChatFile(bytes,extension));
+        return ((UploadFileRequest)sendRequest(request)).getFileID();
+    }
+    /**
+     * downloads a file from server
+     * @param id file id
+     * @return ChatFile
+     */
+    public ChatFile downloadFile(Integer id) {
+        DownloadFileRequest request = new DownloadFileRequest(id);
+        return ((DownloadFileRequest)sendRequest(request)).getFile();
     }
 }
