@@ -7,9 +7,14 @@ public class ServerChat {
     HashMap<String, Role> roles = new HashMap<>();
     HashMap<String, ServerChannel> channels = new HashMap<>();
 
+    HashMap<String, HashSet<String>> restrictBut = new HashMap<>();
     HashSet<String> members = new HashSet<>();
     String name;
     Integer uniqueID;
+
+    public HashMap<String, HashSet<String>> getRestrictBut() {
+        return restrictBut;
+    }
 
     public ServerChat(String name, String creator, Integer uniqueID) {
         this.name = name;

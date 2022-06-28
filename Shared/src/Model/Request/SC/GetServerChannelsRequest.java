@@ -9,8 +9,11 @@ public class GetServerChannelsRequest implements Serializable, IRequest {
     Integer serverUniqueID;
     HashSet<String> channelsName;
 
-    public GetServerChannelsRequest(Integer serverUniqueID) {
+    String userName;
+
+    public GetServerChannelsRequest(Integer serverUniqueID, String userName) {
         this.serverUniqueID = serverUniqueID;
+        this.userName = userName;
     }
 
     public Integer getServerUniqueID() {
@@ -23,5 +26,9 @@ public class GetServerChannelsRequest implements Serializable, IRequest {
 
     public void setChannelsName(HashSet<String> channelsName) {
         this.channelsName = channelsName;
+    }
+
+    public String getUserName() {
+        return userName;
     }
 }
