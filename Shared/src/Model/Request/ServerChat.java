@@ -1,16 +1,27 @@
 package Model.Request;
 
+import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.HashSet;
 
-public class ServerChat {
+public class ServerChat implements Serializable {
     HashMap<String, Role> roles = new HashMap<>();
-    HashMap<String, ServerChannel> channels = new HashMap<>();
-
+    HashMap<String, ServerTextChannel> channels = new HashMap<>();
+    HashMap<String, LocalDateTime> registerDates = new HashMap<>();
     HashMap<String, HashSet<String>> restrictBut = new HashMap<>();
     HashSet<String> members = new HashSet<>();
+
     String name;
     Integer uniqueID;
+
+    public HashMap<String, LocalDateTime> getRegisterDates() {
+        return registerDates;
+    }
+
+    public void setRegisterDates(HashMap<String, LocalDateTime> registerDates) {
+        this.registerDates = registerDates;
+    }
 
     public HashMap<String, HashSet<String>> getRestrictBut() {
         return restrictBut;
@@ -31,7 +42,7 @@ public class ServerChat {
         return roles;
     }
 
-    public HashMap<String, ServerChannel> getChannels() {
+    public HashMap<String, ServerTextChannel> getChannels() {
         return channels;
     }
 

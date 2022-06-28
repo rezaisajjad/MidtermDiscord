@@ -4,12 +4,12 @@ import Model.Request.IRequest;
 
 import java.io.Serializable;
 
-public class RestrictPersonsFromAChannelRequest implements Serializable, IRequest {
+public class RestrictPersonFromAChannelRequest implements Serializable, IRequest {
     Integer serverUniqueID;
     String userName;
     String channelName;
 
-    public RestrictPersonsFromAChannelRequest(Integer serverUniqueID, String userName, String channelName) {
+    public RestrictPersonFromAChannelRequest(Integer serverUniqueID, String userName, String channelName) {
         this.serverUniqueID = serverUniqueID;
         this.userName = userName;
         this.channelName = channelName;

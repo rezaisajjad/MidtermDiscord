@@ -166,7 +166,7 @@ public class SocketHandler extends Thread {
         } else if (request instanceof RestrictPersonFromAllServerRequest res) {
             people.restrictPersonFromAllServer(res.getUserName(), res.getServerUniqueID());
             return res;
-        } else if (request instanceof RestrictPersonsFromAChannelRequest res) {
+        } else if (request instanceof RestrictPersonFromAChannelRequest res) {
             people.restrictPersonFromAChannel(res.getUserName(), res.getServerUniqueID(), res.getChannelName());
             return res;
         } else if (request instanceof RemoveRestrictPersonFromAllServerRequest res) {
@@ -175,7 +175,7 @@ public class SocketHandler extends Thread {
         } else if (request instanceof RemoveRestrictPersonFromAChannelRequest res) {
             people.removeRestrictPersonFromAChannel(res.getUserName(), res.getServerUniqueID(), res.getChannelName());
             return res;
-        }else if (request instanceof GetRestrictPersonsFromAllServerRequest res) {
+        } else if (request instanceof GetRestrictPersonsFromAllServerRequest res) {
             res.setList(people.getRestrictPersonsFromAllServer(res.getServerUniqueID()));
             return res;
         } else if (request instanceof GetRestrictPersonsFromAChannelRequest res) {
@@ -185,7 +185,16 @@ public class SocketHandler extends Thread {
             people.unRestrictAllRestrictPersonFromAChannel(res.getUserName(), res.getServerUniqueID(), res.getChannelName());
             return res;
         } else if (request instanceof GetPersonFreedomRequest res) {
-           res.setChannels(people.getPersonFreemon(res.getUserName(), res.getServerID()));
+            res.setChannels(people.getPersonFreemon(res.getUserName(), res.getServerID()));
+            return res;
+        } else if (request instanceof GetChannelMessagesRequest res) {
+            res.setMessages(people.getChannelMessages(res.getChannelName(), res.getServerID(), res.getPersonID()));
+            return res;
+        } else if (request instanceof PinMessageToChannelRequest res) {
+            people.pinMessageToChannel(res.getChannelName(), res.getServerID(), res.getMessage());
+            return res;
+        }else if (request instanceof GetPinedMessagesRequest res) {
+            res.setMessages(people.getPinMessages(res.getChannelName(), res.getServerID()));
             return res;
         } else {
             return null;

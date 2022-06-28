@@ -5,7 +5,7 @@ public class _SocketHandler extends Thread{
     @Override
     public void run() {
         try {
-            ServerSocket server = new ServerSocket(11223);
+            ServerSocket server = new ServerSocket(20302);
             while (true) SocketHandler.New(server.accept());
         } catch (IOException e) {
             throw new RuntimeException(e);

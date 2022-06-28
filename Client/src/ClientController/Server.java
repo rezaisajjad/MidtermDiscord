@@ -30,7 +30,7 @@ public class Server {
     private IRequest sendRequest(IRequest request) {
         Socket socket = null;
         try {
-            socket = new Socket("localhost", 11223);
+            socket = new Socket("localhost", 20302);
             ObjectOutputStream outputStream = new ObjectOutputStream(socket.getOutputStream());
             outputStream.writeObject(request);
             ObjectInputStream inputStream = new ObjectInputStream(socket.getInputStream());
@@ -292,32 +292,33 @@ public class Server {
 
     /**
      * removes server
+     *
      * @param serverID serverID
      */
-    public void removeServer(Integer serverID)
-    {
-        RemoveServerRequest request= new RemoveServerRequest(serverID);
+    public void removeServer(Integer serverID) {
+        RemoveServerRequest request = new RemoveServerRequest(serverID);
         sendRequest(request);
     }
 
     /**
      * adds a person to server
-     * @param userName person username
+     *
+     * @param userName       person username
      * @param serverUniqueID server id
      */
-    public void addPersonToServer(String userName,Integer serverUniqueID)
-    {
-        AddPersonToServerRequest request = new AddPersonToServerRequest(userName,serverUniqueID);
+    public void addPersonToServer(String userName, Integer serverUniqueID) {
+        AddPersonToServerRequest request = new AddPersonToServerRequest(userName, serverUniqueID);
         sendRequest(request);
     }
+
     /**
      * removes a person from server
-     * @param userName person username
+     *
+     * @param userName       person username
      * @param serverUniqueID server id
      */
-    public void removePersonFromServer(String userName, Integer serverUniqueID)
-    {
-        RemovePersonFromServerRequest request = new RemovePersonFromServerRequest(userName,serverUniqueID);
+    public void removePersonFromServer(String userName, Integer serverUniqueID) {
+        RemovePersonFromServerRequest request = new RemovePersonFromServerRequest(userName, serverUniqueID);
         sendRequest(request);
     }
 
@@ -367,35 +368,38 @@ public class Server {
 
     /**
      * checks if a person exist in server or no
+     *
      * @param personUserName person username
-     * @param serverID server id
+     * @param serverID       server id
      * @return result
      */
-    public boolean isPersonExistInServer(String personUserName,Integer serverID)
-    {
+    public boolean isPersonExistInServer(String personUserName, Integer serverID) {
         CheckIsPersonExistInServerRequest request = new CheckIsPersonExistInServerRequest(personUserName, serverID);
-        return ((CheckIsPersonExistInServerRequest)sendRequest(request)).isExist();
+        return ((CheckIsPersonExistInServerRequest) sendRequest(request)).isExist();
     }
+
     /**
      * changes user password
-     * @param username person username
+     *
+     * @param username    person username
      * @param currentPass current password
-     * @param newPass new password
-     * @return chnging result
+     * @param newPass     new password
+     * @return changing result
      */
-    public boolean changePersonPassword(String username,String currentPass,String newPass)
-    {
-        ChangePasswordRequest request = new ChangePasswordRequest(username,currentPass,newPass);
-        return ((ChangePasswordRequest)sendRequest(request)).isResult();
+    public boolean changePersonPassword(String username, String currentPass, String newPass) {
+        ChangePasswordRequest request = new ChangePasswordRequest(username, currentPass, newPass);
+        return ((ChangePasswordRequest) sendRequest(request)).isResult();
     }
+
     /**
      * upload a file in server
+     *
      * @param bytes file bytes
-     * @return
+     * @return file id
      */
-    public Integer uploadFile(byte[] bytes,String extension) {
-        UploadFileRequest request = new UploadFileRequest(new ChatFile(bytes,extension));
-        return ((UploadFileRequest)sendRequest(request)).getFileID();
+    public Integer uploadFile(byte[] bytes, String extension) {
+        UploadFileRequest request = new UploadFileRequest(new ChatFile(bytes, extension));
+        return ((UploadFileRequest) sendRequest(request)).getFileID();
     }
 
     /**
@@ -452,7 +456,8 @@ public class Server {
      * @param serverUniqueID server id
      */
     public void restrictPersonFromAllServer(String userName, Integer serverUniqueID) {
-
+        RestrictPersonFromAllServerRequest request = new RestrictPersonFromAllServerRequest(serverUniqueID, userName);
+        sendRequest(request);
     }
 
     /**
@@ -462,7 +467,8 @@ public class Server {
      * @param serverUniqueID server id
      */
     public void restrictPersonFromAChannel(String userName, Integer serverUniqueID, String channelName) {
-
+        RestrictPersonFromAChannelRequest request = new RestrictPersonFromAChannelRequest(serverUniqueID, userName, channelName);
+        sendRequest(request);
     }
 
     /**
@@ -472,7 +478,8 @@ public class Server {
      * @param serverUniqueID server id
      */
     public void removeRestrictPersonFromAllServer(String userName, Integer serverUniqueID) {
-
+        RemoveRestrictPersonFromAllServerRequest request = new RemoveRestrictPersonFromAllServerRequest(serverUniqueID, userName);
+        sendRequest(request);
     }
 
     /**
@@ -482,7 +489,8 @@ public class Server {
      * @param serverUniqueID server id
      */
     public void removeRestrictPersonFromAChannel(String userName, Integer serverUniqueID, String channelName) {
-
+        RemoveRestrictPersonFromAChannelRequest request = new RemoveRestrictPersonFromAChannelRequest(serverUniqueID, userName, channelName);
+        sendRequest(request);
     }
 
     /**
@@ -493,8 +501,8 @@ public class Server {
      * @return list of person id
      */
     public HashSet<String> getRestrictPersonsFromAChannel(Integer serverUniqueID, String channelName) {
-        return null;
-
+        GetRestrictPersonsFromAChannelRequest request = new GetRestrictPersonsFromAChannelRequest(serverUniqueID, channelName);
+        return ((GetRestrictPersonsFromAChannelRequest) sendRequest(request)).getList();
     }
 
     /**
@@ -504,27 +512,67 @@ public class Server {
      * @return list of person id
      */
     public HashSet<String> getRestrictPersonsFromAllServer(Integer serverUniqueID) {
-        return null;
-
+        GetRestrictPersonsFromAllServerRequest request = new GetRestrictPersonsFromAllServerRequest(serverUniqueID);
+        return ((GetRestrictPersonsFromAllServerRequest) sendRequest(request)).getList();
     }
 
     /**
-     * unrestict a person just from a channel
+     * unRestrict a person just from a channel
      * @param userName person username
      * @param serverUniqueID server id
      * @param channelName channelName
      */
     public void unRestrictAllRestrictPersonFromAChannel(String userName, Integer serverUniqueID, String channelName) {
-
+        UnRestrictAllRestrictPersonFromAChannelRequest request = new UnRestrictAllRestrictPersonFromAChannelRequest(serverUniqueID, userName, channelName);
+        sendRequest(request);
     }
+
     /**
      * returns a list of channels that person can see
-     * @param userName person userName
+     *
+     * @param userName       person userName
      * @param serverUniqueID serverID
      * @return list of channels that person can see
      */
-    public HashSet<String> getPersonFreemon(String userName, Integer serverUniqueID)
-    {
+    public HashSet<String> getPersonFreemon(String userName, Integer serverUniqueID) {
+        GetPersonFreedomRequest request = new GetPersonFreedomRequest(userName, serverUniqueID);
+        return ((GetPersonFreedomRequest) sendRequest(request)).getChannels();
+    }
 
+    /**
+     * return messages of a channel
+     *
+     * @param channelName channel name
+     * @param serverID    server id
+     * @param userName    person username
+     * @return list of messages
+     */
+    public ArrayList<TextChannelMessage> getChannelMessages(String channelName, Integer serverID, String userName) {
+        GetChannelMessagesRequest request = new GetChannelMessagesRequest(channelName, serverID, userName);
+        return ((GetChannelMessagesRequest) sendRequest(request)).getMessages();
+    }
+
+    /**
+     * pins a message to chat
+     *
+     * @param channelName channel name
+     * @param serverID    server unique id
+     * @param message     message
+     */
+    public void pinMessageToChannel(String channelName, Integer serverID, TextChannelMessage message) {
+        PinMessageToChannelRequest request = new PinMessageToChannelRequest(message, channelName, serverID);
+        sendRequest(request);
+    }
+
+    /**
+     * return pins messages
+     *
+     * @param channelName channel name
+     * @param serverID    server id
+     * @return list of messages
+     */
+    public ArrayList<TextChannelMessage> getPinMessages(String channelName, Integer serverID) {
+        GetPinedMessagesRequest request = new GetPinedMessagesRequest(channelName, serverID);
+        return ((GetPinedMessagesRequest) sendRequest(request)).getMessages();
     }
 }

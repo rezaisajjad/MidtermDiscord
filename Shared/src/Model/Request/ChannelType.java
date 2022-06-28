@@ -1,6 +1,8 @@
 package Model.Request;
 
-public enum ChannelType {
+import java.io.Serializable;
+
+public enum ChannelType implements Serializable {
     textChannel,
     voiceChannel
 }

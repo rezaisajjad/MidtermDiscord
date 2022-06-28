@@ -3,7 +3,9 @@ package Repository;
 import Model.Request.*;
 import Model.Request.Friend.AddFriendRequest;
 import Model.Request.SC.ChatFile;
+import Model.Request.SC.PinMessageToChannelRequest;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -346,7 +348,7 @@ public class PeopleRepository {
      * @param serverUniqueID channel server
      */
     public void createServerChannel(String name, ChannelType type, Integer serverUniqueID) {
-        servers.get(serverUniqueID).getChannels().put(name, new ServerChannel(name, type));
+        servers.get(serverUniqueID).getChannels().put(name, new ServerTextChannel(name, type));
     }
 
     /**
@@ -420,6 +422,7 @@ public class PeopleRepository {
      */
     public void addPersonToServer(String userName, Integer serverUniqueID) {
         servers.get(serverUniqueID).getMembers().add(userName);
+        servers.get(serverUniqueID).getRegisterDates().put(userName,LocalDateTime.now());
         people.get(userName).addServerChat(serverUniqueID);
         var pc = new PrivateChat(userName, servers.get(serverUniqueID).getName());
         pc.addMessage(new PrivateChatMessage(servers.get(serverUniqueID).getName(), "Welcome to server!!!"));
@@ -449,6 +452,7 @@ public class PeopleRepository {
     {
         people.get(userName).removeServerChat(serverUniqueID);
         servers.get(serverUniqueID).getMembers().remove(userName);
+        servers.get(serverUniqueID).getRegisterDates().remove(userName);
         for (var item:servers.get(serverUniqueID).getRoles().values()
              ) {
             item.getMembers().remove(userName);
@@ -634,7 +638,7 @@ public class PeopleRepository {
      * @return list of person id
      */
     public HashSet<String> getRestrictPersonsFromAllServer(Integer serverUniqueID) {
-        return (HashSet<String>) servers.get(serverUniqueID).getRestrictBut().keySet();
+        return new HashSet<String>(servers.get(serverUniqueID).getRestrictBut().keySet());
     }
 
     /**
@@ -657,5 +661,38 @@ public class PeopleRepository {
     public HashSet<String> getPersonFreemon(String userName, Integer serverUniqueID)
     {
         return servers.get(serverUniqueID).getRestrictBut().get(userName);
+    }
+    /**
+     * return messages of a channel
+     * @param channelName channel name
+     * @param serverID server id
+     * @param userName person username
+     * @return list of messages
+     */
+    public ArrayList<TextChannelMessage> getChannelMessages(String channelName, Integer serverID, String userName) {
+        if (Role.integrateRolls(getPersonRoles(userName,serverID)).isObserveChatHistory())
+            return servers.get(serverID).getChannels().get(channelName).getMessages(LocalDateTime.of(2000,1,1,00,00));
+        return servers.get(serverID).getChannels().get(channelName).getMessages(servers.get(serverID).getRegisterDates().get(userName));
+    }
+    /**
+     * pins a message to chat
+     * @param channelName channel name
+     * @param serverID server unique id
+     * @param message message
+     */
+    public void pinMessageToChannel(String channelName,Integer serverID,TextChannelMessage message)
+    {
+        servers.get(serverID).getChannels().get(channelName).getPins().add(message);
+    }
+
+    /**
+     * return pins messages
+     * @param channelName channel name
+     * @param serverID server id
+     * @return list of messages
+     */
+    public ArrayList<TextChannelMessage> getPinMessages(String channelName,Integer serverID )
+    {
+       return servers.get(serverID).getChannels().get(channelName).getPins();
     }
 }

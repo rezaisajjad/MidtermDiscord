@@ -1,6 +1,6 @@
 package Model.Request;
 
-public enum reaction {
+public enum Reaction {
     like,
     disLike,
     laugh

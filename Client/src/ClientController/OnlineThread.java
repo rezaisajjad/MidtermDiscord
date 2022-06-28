@@ -23,7 +23,7 @@ public class OnlineThread extends Thread {
         }
         while (true) {
             try {
-                socket = new Socket("localhost", 15151);
+                socket = new Socket("localhost", 11121);
                 PrintWriter pw = new PrintWriter(socket.getOutputStream());
                 if (!(userName = UI.get().getPersonUserName()).equals("")) {
                     pw.println(userName);
