@@ -14,6 +14,7 @@ public class ServerChat {
     public ServerChat(String name, String creator, Integer uniqueID) {
         this.name = name;
         this.uniqueID = uniqueID;
+        members.add(creator);
         Role owner = new Role("owner",true, true, true,
                 true, true, true, true,
                 true);

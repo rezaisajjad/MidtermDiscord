@@ -318,14 +318,37 @@ public class Server {
         RemovePersonFromServerRequest request = new RemovePersonFromServerRequest(userName,serverUniqueID);
         sendRequest(request);
     }
+
     /**
      * returns list of server members
+     *
      * @param serverUniqueID server id
      * @return Hashset <#UserName, #Status>
      */
-    public HashMap<String,String> getServerMembers(Integer serverUniqueID)
-    {
+    public HashMap<String, String> getServerMembers(Integer serverUniqueID) {
         GetMemberServerListRequest request = new GetMemberServerListRequest(serverUniqueID);
-        return ((GetMemberServerListRequest)sendRequest(request)).getUsers();
+        return ((GetMemberServerListRequest) sendRequest(request)).getUsers();
+    }
+
+    /**
+     * adds a role to server
+     *
+     * @param role     role
+     * @param uniqueID server id
+     */
+    public void addRoleToServer(Role role, Integer uniqueID) {
+        AddRoleToServerRequest request = new AddRoleToServerRequest(role, uniqueID);
+        sendRequest(request);
+    }
+
+    /**
+     * return all roles
+     *
+     * @param serverID serverID
+     * @return list of roles name
+     */
+    public HashSet<String> getServerRoles(Integer serverID) {
+        GetServerRolesRequest request = new GetServerRolesRequest(serverID);
+        return ((GetServerRolesRequest) sendRequest(request)).getRoles();
     }
 }

@@ -1,9 +1,10 @@
 package Model.Request;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
 
-public class Role {
+public class Role implements Serializable {
     HashSet<String> members = new HashSet<>();
     String name;
     private boolean createChannel = false;

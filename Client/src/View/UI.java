@@ -196,7 +196,7 @@ public class UI {
     private void serverHandler(Integer serverUniqueID) {
         var personRoles = server.getPersonRoles(person.getUserName(), serverUniqueID);
         Role allPersonRolls = Role.integrateRolls(personRoles);
-        printList("channels", "members", "roles", "remove server", "back");
+        printList("channels", "members", "roles","change server Name", "remove server", "back");
         switch (scn.readNumber()) {
             case 1 -> {
                 printList("list of channels", "add channel", "back");
@@ -254,15 +254,16 @@ public class UI {
                         serverHandler(serverUniqueID);
                     }
                     case 2 -> {
-                        String uName="";
-                        System.out.println("Enter person userName");
+                        String uName = "";
+                        System.out.println("Enter person userName:");
                         do {
                             if (!uName.equals(""))
                                 System.out.println("user not found!!!");
                             uName = scn.readText().trim();
-                        }while (!server.checkUserNameAvailability(uName));
+                        } while (server.checkUserNameAvailability(uName));
                         server.addPersonToServer(uName, serverUniqueID);
-                        System.out.println("removed");
+                        System.out.println("added");
+                        serverHandler(serverUniqueID);
                     }
                     case 3 -> {
                         if (!allPersonRolls.isRemovePerson())
@@ -277,9 +278,10 @@ public class UI {
                             if (!uName.equals(""))
                                 System.out.println("user not found!!!");
                             uName = scn.readText().trim();
-                        }while (!server.checkUserNameAvailability(uName));
+                        } while (server.checkUserNameAvailability(uName));
                         server.removePersonFromServer(uName, serverUniqueID);
                         System.out.println("removed");
+                        serverHandler(serverUniqueID);
                     }
                     case 4 -> {
                         serverHandler(serverUniqueID);
@@ -288,9 +290,47 @@ public class UI {
             }
             case 3 -> {
                 printList("list of roles", "add role", "back");
-
+                switch (scn.readNumber()) {
+                    case 1 -> {
+                        var roles= server.getServerRoles(serverUniqueID);
+                        int temp=0;
+                        for (var item:roles) {
+                            System.out.println((++temp)+") "+item);
+                        }
+                        System.out.println("0) back");
+                        if ((temp = scn.readIndex()) == -1) {
+                            serverHandler(serverUniqueID);
+                            return;
+                        }
+                        printList("persons","add person","remove Person");
+                        serverHandler(serverUniqueID);
+                    }
+                    case 2 -> {
+                        boolean isAdmin = false;
+                        for (var role : personRoles) {
+                            if (role.getName().trim().equals("owner")) {
+                                isAdmin = true;
+                                break;
+                            }
+                        }
+                        if (!isAdmin) {
+                            System.out.println("access blocked");
+                            serverHandler(serverUniqueID);
+                            return;
+                        }
+                        server.addRoleToServer(scn.readRole(),serverUniqueID);
+                        System.out.println("added");
+                        serverHandler(serverUniqueID);
+                    }
+                    case 3 -> {
+                        serverHandler(serverUniqueID);
+                    }
+                }
             }
             case 4 -> {
+                doServerMenu();
+            }
+            case 5 -> {
                 boolean isAdmin = false;
                 for (var role : personRoles) {
                     if (role.getName().trim().equals("owner")) {
@@ -308,9 +348,9 @@ public class UI {
                     server.removeServer(serverUniqueID);
                     System.out.println("removed");
                 }
-                serverHandler(serverUniqueID);
+                doServerMenu();
             }
-            case 5 -> {
+            case 6 -> {
                 doServerMenu();
             }
         }

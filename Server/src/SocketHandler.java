@@ -131,6 +131,12 @@ public class SocketHandler extends Thread {
         }else if (request instanceof RemovePersonFromServerRequest res) {
             people.removePersonFromServer(res.getUserName(),res.getServerUniqueID());
             return res;
+        } else if (request instanceof AddRoleToServerRequest res) {
+            people.addRoleToServer(res.getRole(),res.getServerUniqueID());
+            return res;
+        } else if (request instanceof GetServerRolesRequest res) {
+            res.setRoles(people.getServerRoles(res.getServerID()));
+            return res;
         } else {
             return null;
         }

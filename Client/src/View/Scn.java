@@ -2,9 +2,10 @@ package View;
 
 import ClientController.InputValidator;
 import ClientController.Server;
+import Model.Request.Account.LoginRequest;
 import Model.Request.FormatErrorException;
 import Model.Request.Person;
-import Model.Request.Account.LoginRequest;
+import Model.Request.Role;
 
 import java.util.Scanner;
 
@@ -15,6 +16,28 @@ public class Scn {
 
     public static Scn getScanner() {
         return _scn;
+    }
+
+    public boolean readYesOrNo(String text) {
+        System.out.println(text);
+        System.out.println("1)Yes   2)No");
+        return readText().toLowerCase().trim().equals("yes");
+    }
+
+    public Role readRole() {
+        String name;
+        System.out.println("Name: ");
+        name = readText().toLowerCase().trim();
+        boolean createChannel = readYesOrNo("createChannel");
+        boolean removeChannel = readYesOrNo("removeChannel");
+        boolean removePerson = readYesOrNo("removePerson");
+        boolean restrictAccessChannel = readYesOrNo("restrictAccessChannel");
+        boolean restrictPersonAccess = readYesOrNo("restrictPersonAccess");
+        boolean changeServerName = readYesOrNo("changeServerName");
+        boolean observeChatHistory = readYesOrNo("observeChatHistory");
+        boolean pinTextMessage = readYesOrNo("pinTextMessage");
+        return new Role(name, createChannel, removeChannel, removePerson, restrictAccessChannel, restrictPersonAccess,
+                changeServerName, observeChatHistory, pinTextMessage);
     }
 
     public int readNumber() {

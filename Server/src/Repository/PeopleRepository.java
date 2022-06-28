@@ -2,6 +2,7 @@ package Repository;
 
 import Model.Request.*;
 import Model.Request.Friend.AddFriendRequest;
+import Model.Request.SC.AddRoleToServerRequest;
 import Model.Request.SC.RemovePersonFromServerRequest;
 
 import java.util.ArrayList;
@@ -312,6 +313,7 @@ public class PeopleRepository {
      */
     public void createServer(String creator, String serverName) {
         ServerChat serverChat = new ServerChat(serverName, creator, random.nextInt(0, 20000));
+        serverChat.getMembers().add(creator);
         servers.put(serverChat.getUniqueID(), serverChat);
         people.get(creator).addServerChat(serverChat.getUniqueID());
     }
@@ -432,5 +434,25 @@ public class PeopleRepository {
              ) {
             item.getMembers().remove(userName);
         }
+    }
+
+    /**
+     * adds a role to server
+     * @param role role
+     * @param uniqueID server id
+     */
+    public void addRoleToServer(Role role,Integer uniqueID)
+    {
+        servers.get(uniqueID).getRoles().put(role.getName(),role);
+    }
+
+    /**
+     * return all roles
+     * @param serverID serverID
+     * @return list of roles name
+     */
+    public HashSet<String> getServerRoles(Integer serverID)
+    {
+        return new HashSet<String>(servers.get(serverID).getRoles().keySet());
     }
 }
