@@ -1,7 +1,6 @@
 package Repository;
 
 import Model.Request.*;
-import Model.Request.Chats.DownloadFileRequest;
 import Model.Request.Friend.AddFriendRequest;
 import Model.Request.SC.ChatFile;
 
@@ -367,8 +366,17 @@ public class PeopleRepository {
      * @param uniqueID serverID
      * @return list of names
      */
-    public HashSet<String> getServerChannels(Integer uniqueID) {
-        var res = new HashSet<>(servers.get(uniqueID).getChannels().keySet());
+    public HashSet<String> getServerChannels(Integer uniqueID, String userName) {
+        HashSet<String> res;
+        if (servers.get(uniqueID).getRestrictBut().containsKey(userName)) {
+            res = servers.get(uniqueID).getRestrictBut().get(userName);
+        } else {
+            res = new HashSet<>(servers.get(uniqueID).getChannels().keySet());
+            for (var channel : servers.get(uniqueID).getChannels().values()) {
+                if (channel.getRestrictPersons().contains(userName))
+                    res.remove(channel.getName());
+            }
+        }
         return res;
     }
 
@@ -516,14 +524,138 @@ public class PeopleRepository {
         }
         while (files.get(id) != null);
         files.put(id,new ChatFile(bytes,extension));
-        return  id;
+        return id;
     }
+
     /**
      * downloads a file from server
+     *
      * @param id file id
      * @return ChatFile
      */
     public ChatFile downloadFile(Integer id) {
         return files.get(id);
+    }
+
+    /**
+     * removes a role from person
+     *
+     * @param userName       person username
+     * @param roleName       name of role
+     * @param serverUniqueID server id
+     */
+    public void removeRoleFromPerson(String userName, String roleName, Integer serverUniqueID) {
+        servers.get(serverUniqueID).getRoles().get(roleName).getMembers().remove(userName);
+    }
+
+    /**
+     * adds a role to person
+     *
+     * @param userName       person username
+     * @param roleName       name of role
+     * @param serverUniqueID server id
+     */
+    public void addRoleToPerson(String userName, String roleName, Integer serverUniqueID) {
+        servers.get(serverUniqueID).getRoles().get(roleName).getMembers().add(userName);
+    }
+
+    /**
+     * returns member list of a server role
+     *
+     * @param roleName       role name
+     * @param serverUniqueID server id
+     * @return HashMap<# username, # status }>
+     */
+    public HashMap<String, String> getServerRoleMembers(String roleName, Integer serverUniqueID) {
+        HashMap<String, String> result = new HashMap<>();
+        for (var item : servers.get(serverUniqueID).getRoles().get(roleName).getMembers()) {
+            result.put(item, getStatus(item));
+        }
+        return result;
+    }
+
+    /**
+     * restrict person from whole server
+     *
+     * @param userName       person userName
+     * @param serverUniqueID server id
+     */
+    public void restrictPersonFromAllServer(String userName, Integer serverUniqueID) {
+        if (!servers.get(serverUniqueID).getRestrictBut().containsKey(userName)) {
+            servers.get(serverUniqueID).getRestrictBut().put(userName, new HashSet<>());
+        }
+    }
+
+    /**
+     * restrict person from a channel
+     *
+     * @param userName       person userName
+     * @param serverUniqueID server id
+     */
+    public void restrictPersonFromAChannel(String userName, Integer serverUniqueID, String channelName) {
+        servers.get(serverUniqueID).getChannels().get(channelName).getRestrictPersons().add(userName);
+    }
+
+    /**
+     * remove restrict person from whole server
+     *
+     * @param userName       person userName
+     * @param serverUniqueID server id
+     */
+    public void removeRestrictPersonFromAllServer(String userName, Integer serverUniqueID) {
+        servers.get(serverUniqueID).getRestrictBut().remove(userName);
+    }
+
+    /**
+     * remove restrict person from a channel
+     *
+     * @param userName       person userName
+     * @param serverUniqueID server id
+     */
+    public void removeRestrictPersonFromAChannel(String userName, Integer serverUniqueID, String channelName) {
+        servers.get(serverUniqueID).getChannels().get(channelName).getRestrictPersons().remove(userName);
+    }
+
+    /**
+     * returns list of person id
+     *
+     * @param serverUniqueID server id
+     * @param channelName    channel name
+     * @return list of person id
+     */
+    public HashSet<String> getRestrictPersonsFromAChannel(Integer serverUniqueID, String channelName) {
+        return  servers.get(serverUniqueID).getChannels().get(channelName).getRestrictPersons();
+    }
+
+    /**
+     * returns whole restrict persons
+     *
+     * @param serverUniqueID server id
+     * @return list of person id
+     */
+    public HashSet<String> getRestrictPersonsFromAllServer(Integer serverUniqueID) {
+        return (HashSet<String>) servers.get(serverUniqueID).getRestrictBut().keySet();
+    }
+
+    /**
+     * unrestict a person just from a channel
+     *
+     * @param userName       person username
+     * @param serverUniqueID server id
+     * @param channelName    channelName
+     */
+    public void unRestrictAllRestrictPersonFromAChannel(String userName, Integer serverUniqueID, String channelName) {
+        servers.get(serverUniqueID).getRestrictBut().get(userName).add(channelName);
+    }
+
+    /**
+     * returns a list of channels that person can see
+     * @param userName person userName
+     * @param serverUniqueID serverID
+     * @return list of channels that person can see
+     */
+    public HashSet<String> getPersonFreemon(String userName, Integer serverUniqueID)
+    {
+        return servers.get(serverUniqueID).getRestrictBut().get(userName);
     }
 }

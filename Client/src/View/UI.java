@@ -203,7 +203,7 @@ public class UI {
                 printList("list of channels", "add channel", "back");
                 switch (scn.readNumber()) {
                     case 1 -> {
-                        var names = server.getServerChannels(serverUniqueID);
+                        var names = server.getServerChannels(serverUniqueID,person.getUserName());
                         int temp = 0;
                         String channelName;
                         for (var item : names.toArray()) {
@@ -215,7 +215,7 @@ public class UI {
                             return;
                         }
                         channelName = (String) names.toArray()[scn.readIndex()];
-                        printList("messages", "rename", "remove");
+                        printList("messages", "restricted persons","restrict person","unRestrict person", "remove channel");
                     }
                     case 2 -> {
                         if (!allPersonRolls.isCreateChannel()) {
@@ -308,10 +308,13 @@ public class UI {
                             return;
                         }
                         printList("persons", "add person", "remove Person");
-
-
                         switch (scn.readNumber()) {
                             case 1 -> {
+                                var members = server.getServerRoleMembers((String) roles[temp], serverUniqueID);
+                                for (var item : members.keySet()) {
+                                    System.out.println(item + " [" + members.get(item) + "]");
+                                }
+                                serverHandler(serverUniqueID);
                             }
                             case 2 -> {
                                 String uName = "";
@@ -323,7 +326,7 @@ public class UI {
                                     }
                                     uName = scn.readText().trim();
                                 } while (!server.isPersonExistInServer(uName, serverUniqueID));
-                                server.addPersonToServer(uName, serverUniqueID);
+                                server.addRoleToPerson(uName,(String) roles[temp], serverUniqueID);
                                 System.out.println("added");
                                 serverHandler(serverUniqueID);
                             }
@@ -337,8 +340,8 @@ public class UI {
                                     }
                                     uName = scn.readText().trim();
                                 } while (!server.isPersonExistInServer(uName, serverUniqueID));
-                                server.addPersonToServer(uName, serverUniqueID);
-                                System.out.println("added");
+                                server.removeRoleFromPerson(uName,(String) roles[temp], serverUniqueID);
+                                System.out.println("removed");
                                 serverHandler(serverUniqueID);
                             }
                         }

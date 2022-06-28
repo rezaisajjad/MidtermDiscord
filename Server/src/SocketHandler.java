@@ -116,7 +116,7 @@ public class SocketHandler extends Thread {
             res.setResult(people.checkChannelNameAvailability(res.getServerUniqueID(),res.getChannelName()));
             return res;
         } else if (request instanceof GetServerChannelsRequest res) {
-            res.setChannelsName(people.getServerChannels(res.getServerUniqueID()));
+            res.setChannelsName(people.getServerChannels(res.getServerUniqueID(), res.getUserName()));
             return res;
         }  else if (request instanceof GetPersonRolesRequest res) {
             res.setRoles(people.getPersonRoles(res.getUserName(),res.getUniqueID()));
@@ -153,6 +153,39 @@ public class SocketHandler extends Thread {
             return res;
         }else if (request instanceof DownloadFileRequest res) {
             res.setFile(people.downloadFile(res.getId()));
+            return res;
+        } else if (request instanceof AddRoleToPersonServerRequest res) {
+            people.addRoleToPerson(res.getPersonUserName(), res.getRoleName(), res.getServerUniqueID());
+            return res;
+        } else if (request instanceof RemoveRoleFromPersonServerRequest res) {
+            people.removeRoleFromPerson(res.getPersonUserName(), res.getRoleName(), res.getServerUniqueID());
+            return res;
+        } else if (request instanceof GetRoleMembersRequest res) {
+            res.setUsers(people.getServerRoleMembers(res.getRoleName(), res.getServerUniqueID()));
+            return res;
+        } else if (request instanceof RestrictPersonFromAllServerRequest res) {
+            people.restrictPersonFromAllServer(res.getUserName(), res.getServerUniqueID());
+            return res;
+        } else if (request instanceof RestrictPersonsFromAChannelRequest res) {
+            people.restrictPersonFromAChannel(res.getUserName(), res.getServerUniqueID(), res.getChannelName());
+            return res;
+        } else if (request instanceof RemoveRestrictPersonFromAllServerRequest res) {
+            people.removeRestrictPersonFromAllServer(res.getUserName(), res.getServerUniqueID());
+            return res;
+        } else if (request instanceof RemoveRestrictPersonFromAChannelRequest res) {
+            people.removeRestrictPersonFromAChannel(res.getUserName(), res.getServerUniqueID(), res.getChannelName());
+            return res;
+        }else if (request instanceof GetRestrictPersonsFromAllServerRequest res) {
+            res.setList(people.getRestrictPersonsFromAllServer(res.getServerUniqueID()));
+            return res;
+        } else if (request instanceof GetRestrictPersonsFromAChannelRequest res) {
+            res.setList(people.getRestrictPersonsFromAChannel(res.getServerUniqueID(), res.getChannelName()));
+            return res;
+        } else if (request instanceof UnRestrictAllRestrictPersonFromAChannelRequest res) {
+            people.unRestrictAllRestrictPersonFromAChannel(res.getUserName(), res.getServerUniqueID(), res.getChannelName());
+            return res;
+        } else if (request instanceof GetPersonFreedomRequest res) {
+           res.setChannels(people.getPersonFreemon(res.getUserName(), res.getServerID()));
             return res;
         } else {
             return null;

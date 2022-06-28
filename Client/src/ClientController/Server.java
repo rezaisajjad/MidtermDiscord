@@ -13,7 +13,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -274,8 +273,8 @@ public class Server {
      * @param uniqueID serverID
      * @return list of names
      */
-    public HashSet<String> getServerChannels(Integer uniqueID) {
-        GetServerChannelsRequest request = new GetServerChannelsRequest(uniqueID);
+    public HashSet<String> getServerChannels(Integer uniqueID,String userName) {
+        GetServerChannelsRequest request = new GetServerChannelsRequest(uniqueID,userName);
         return ((GetServerChannelsRequest) sendRequest(request)).getChannelsName();
     }
 
@@ -398,13 +397,134 @@ public class Server {
         UploadFileRequest request = new UploadFileRequest(new ChatFile(bytes,extension));
         return ((UploadFileRequest)sendRequest(request)).getFileID();
     }
+
     /**
      * downloads a file from server
+     *
      * @param id file id
      * @return ChatFile
      */
     public ChatFile downloadFile(Integer id) {
         DownloadFileRequest request = new DownloadFileRequest(id);
-        return ((DownloadFileRequest)sendRequest(request)).getFile();
+        return ((DownloadFileRequest) sendRequest(request)).getFile();
+    }
+
+    /**
+     * removes a role from person
+     *
+     * @param userName       person username
+     * @param roleName       name of role
+     * @param serverUniqueID server id
+     */
+    public void removeRoleFromPerson(String userName, String roleName, Integer serverUniqueID) {
+        RemoveRoleFromPersonServerRequest request = new RemoveRoleFromPersonServerRequest(serverUniqueID, roleName, userName);
+        sendRequest(request);
+    }
+
+    /**
+     * adds a role to person
+     *
+     * @param userName       person username
+     * @param roleName       name of role
+     * @param serverUniqueID server id
+     */
+    public void addRoleToPerson(String userName, String roleName, Integer serverUniqueID) {
+        AddRoleToPersonServerRequest request = new AddRoleToPersonServerRequest(serverUniqueID, roleName, userName);
+        sendRequest(request);
+    }
+
+    /**
+     * returns member list of a server role
+     *
+     * @param roleName       role name
+     * @param serverUniqueID server id
+     * @return HashMap<# username, # status }>
+     */
+    public HashMap<String, String> getServerRoleMembers(String roleName, Integer serverUniqueID) {
+        GetRoleMembersRequest request = new GetRoleMembersRequest(serverUniqueID, roleName);
+        return ((GetRoleMembersRequest) sendRequest(request)).getUsers();
+    }
+
+    /**
+     * restrict person from whole server
+     *
+     * @param userName       person userName
+     * @param serverUniqueID server id
+     */
+    public void restrictPersonFromAllServer(String userName, Integer serverUniqueID) {
+
+    }
+
+    /**
+     * restrict person from a channel
+     *
+     * @param userName       person userName
+     * @param serverUniqueID server id
+     */
+    public void restrictPersonFromAChannel(String userName, Integer serverUniqueID, String channelName) {
+
+    }
+
+    /**
+     * remove restrict person from whole server
+     *
+     * @param userName       person userName
+     * @param serverUniqueID server id
+     */
+    public void removeRestrictPersonFromAllServer(String userName, Integer serverUniqueID) {
+
+    }
+
+    /**
+     * remove restrict person from a channel
+     *
+     * @param userName       person userName
+     * @param serverUniqueID server id
+     */
+    public void removeRestrictPersonFromAChannel(String userName, Integer serverUniqueID, String channelName) {
+
+    }
+
+    /**
+     * returns list of person id
+     *
+     * @param serverUniqueID server id
+     * @param channelName    channel name
+     * @return list of person id
+     */
+    public HashSet<String> getRestrictPersonsFromAChannel(Integer serverUniqueID, String channelName) {
+        return null;
+
+    }
+
+    /**
+     * returns whole restrict persons
+     *
+     * @param serverUniqueID server id
+     * @return list of person id
+     */
+    public HashSet<String> getRestrictPersonsFromAllServer(Integer serverUniqueID) {
+        return null;
+
+    }
+
+    /**
+     * unrestict a person just from a channel
+     * @param userName person username
+     * @param serverUniqueID server id
+     * @param channelName channelName
+     */
+    public void unRestrictAllRestrictPersonFromAChannel(String userName, Integer serverUniqueID, String channelName) {
+
+    }
+    /**
+     * returns a list of channels that person can see
+     * @param userName person userName
+     * @param serverUniqueID serverID
+     * @return list of channels that person can see
+     */
+    public HashSet<String> getPersonFreemon(String userName, Integer serverUniqueID)
+    {
+
     }
 }
