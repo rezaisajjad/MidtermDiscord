@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 
 public class ServerTextChannel implements Serializable {
@@ -41,6 +42,9 @@ public class ServerTextChannel implements Serializable {
             if (!Duration.between(from,item.getDateTime()).isNegative())
                 messages.add(item);
         }
+        return messages;
+    }
+    public ArrayList<TextChannelMessage> getMessages() {
         return messages;
     }
 }

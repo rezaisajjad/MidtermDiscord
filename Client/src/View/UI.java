@@ -166,18 +166,7 @@ public class UI {
     private void serverMenuHandler() {
         switch (scn.readNumber()) {
             case 1 -> {
-                HashMap<Integer, String> list = server.getPersonServerChats(person.getUserName());
-                int index = 0;
-                for (var item : list.keySet().toArray()) {
-                    System.out.println((++index) + ") " + list.get(item));
-                }
-
-                System.out.println("0) back");
-                if ((index = scn.readIndex()) == -1) {
-                    doServerMenu();
-                    return;
-                }
-                serverHandler((Integer) list.keySet().toArray()[index]);
+                serversListHandler_();
             }
             case 2 -> {
                 System.out.println("Enter channel name: ");
@@ -194,284 +183,46 @@ public class UI {
     private void showServerMenu() {
         printList("Server list", "new Server", "back");
     }
-    private void serverHandler(Integer serverUniqueID) {
+
+    private void serversListHandler_() {
+        HashMap<Integer, String> list = server.getPersonServerChats(person.getUserName());
+        int index = 0;
+        for (var item : list.keySet().toArray()) {
+            System.out.println((++index) + ") " + list.get(item));
+        }
+
+        System.out.println("0) back");
+        if ((index = scn.readIndex()) == -1) {
+            doServerMenu();
+            return;
+        }
+        serversHandler((Integer) list.keySet().toArray()[index]);
+    }
+
+    private void serversHandler(Integer serverUniqueID) {
         var personRoles = server.getPersonRoles(person.getUserName(), serverUniqueID);
         Role allPersonRolls = Role.integrateRolls(personRoles);
         printList("channels", "members", "roles", "change server Name", "remove server", "restrict persons", "back");
         switch (scn.readNumber()) {
             case 1 -> {
-                boolean isEnd = false;
-                while (!isEnd) {
-                    printList("list of channels", "add channel", "back");
-                    switch (scn.readNumber()) {
-                        case 1 -> {
-                            var names = server.getServerChannels(serverUniqueID, person.getUserName());
-                            int temp = 0;
-                            String channelName;
-                            for (var item : names.toArray()) {
-                                System.out.println((++temp) + ") " + item);
-                            }
-                            System.out.println("0) back");
-                            if ((temp = scn.readIndex()) == -1) {
-                                serverHandler(serverUniqueID);
-                                return;
-                            }
-                            channelName = (String) names.toArray()[temp];
-                            boolean _isEnd = false;
-                            while (!_isEnd) {
-                                printList("messages", "send message", "send file", "pin messages", "restricted persons", "restrict person", "unRestrict person", "back");
-                                switch (scn.readNumber()) {
-                                    case 1 -> {
-                                        ArrayList<TextChannelMessage> messages = server.getChannelMessages(channelName, serverUniqueID, person.getUserName());
-                                        temp = 0;
-                                        for (var item : names.toArray()) {
-                                            System.out.println((++temp) + ") " + item);
-                                        }
-                                        System.out.println("------------------");
-                                        System.out.println("0) back");
-                                        if ((temp = scn.readIndex()) == -1) {
-                                            serverHandler(serverUniqueID);
-                                            return;
-                                        }
-                                        printList("pin message", "back");
-                                        if (scn.readNumber() == 2) {
-                                            serverHandler(serverUniqueID);
-                                            return;
-                                        }
-                                        if (!allPersonRolls.isPinTextMessage()) {
-                                            System.out.println("access blocked");
-                                            serverHandler(serverUniqueID);
-                                            return;
-                                        }
-                                        server.pinMessageToChannel(channelName, serverUniqueID, messages.get(temp));
-                                        System.out.println("pined");
-
-                                    }
-                                    case 2 -> {
-
-                                    }
-                                    case 3 -> {
-
-                                    }
-                                    case 4 -> {
-                                        for (var item : server.getPinMessages(channelName, serverUniqueID)) {
-                                            System.out.println("pined:\t" + item);
-                                        }
-                                    }
-                                    case 5 -> {
-                                        var list = server.getRestrictPersonsFromAChannel(serverUniqueID, channelName);
-                                        for (var item : list) {
-                                            System.out.println(item);
-                                        }
-                                    }
-                                    case 6 -> {
-                                        if (!allPersonRolls.isRestrictAccessChannel()) {
-                                            System.out.println("access blocked");
-                                            serverHandler(serverUniqueID);
-                                            return;
-                                        }
-                                        String uName = "";
-                                        System.out.println("Enter person userName:");
-                                        do {
-                                            if (!uName.equals("")) {
-                                                System.out.println("user not found !!!");
-                                                System.out.println("Enter person userName:");
-                                            }
-                                            uName = scn.readText().trim();
-                                        } while (!server.isPersonExistInServer(uName, serverUniqueID));
-                                        server.restrictPersonFromAChannel(uName, serverUniqueID, channelName);
-                                        System.out.println("Restricted");
-                                    }
-                                    case 7 -> {
-                                        if (!allPersonRolls.isRestrictAccessChannel()) {
-                                            System.out.println("access blocked");
-                                            serverHandler(serverUniqueID);
-                                            return;
-                                        }
-                                        String uName = "";
-                                        System.out.println("Enter person userName:");
-                                        do {
-                                            if (!uName.equals("")) {
-                                                System.out.println("user not found !!!");
-                                                System.out.println("Enter person userName:");
-                                            }
-                                            uName = scn.readText().trim();
-                                        } while (!server.isPersonExistInServer(uName, serverUniqueID));
-                                        server.removeRestrictPersonFromAChannel(uName, serverUniqueID, channelName);
-                                        System.out.println("unRestricted");
-                                    }
-                                    case 8 -> {
-                                        _isEnd = true;
-                                    }
-                                }
-                            }
-                        }
-                        case 2 -> {
-                            if (!allPersonRolls.isCreateChannel()) {
-                                System.out.println("access blocked");
-                                serverHandler(serverUniqueID);
-                                return;
-                            }
-                            System.out.println("Enter Channel Name");
-                            String name = scn.readLine().trim();
-                            while (!server.checkChannelNameAvailability(serverUniqueID, name)) {
-                                System.out.println("name isn't available \n enter Again:");
-                                name = scn.readLine().trim();
-                            }
-                            int temp = 0;
-                            System.out.println("Enter Channel Type");
-                            for (var item : ChannelType.values()) {
-                                System.out.println((++temp) + ") " + item);
-                            }
-                            temp = scn.readIndex();
-                            server.createServerChannel(name, ChannelType.values()[temp], serverUniqueID);
-                            System.out.println("Created");
-                            serverHandler(serverUniqueID);
-                        }
-                        case 3 -> {
-                            isEnd = true;
-                        }
-                    }
-                }
-                serverMenuHandler();
+                channelsMenuHandler(serverUniqueID, allPersonRolls);
             }
             case 2 -> {
-                printList("list of members", "add member", "remove member", "back");
-                switch (scn.readNumber()) {
-                    case 1 -> {
-                        var members = server.getServerMembers(serverUniqueID);
-                        for (var item : members.keySet()) {
-                            System.out.println(item + " [" + members.get(item) + "]");
-                        }
-                        serverHandler(serverUniqueID);
-                    }
-                    case 2 -> {
-                        String uName = "";
-                        System.out.println("Enter person userName:");
-                        do {
-                            if (!uName.equals("")) {
-                                System.out.println("user not found or already exist!!!");
-                                System.out.println("Enter person userName:");
-                            }
-                            uName = scn.readText().trim();
-                        } while (server.checkUserNameAvailability(uName) || server.isPersonExistInServer(uName, serverUniqueID));
-                        server.addPersonToServer(uName, serverUniqueID);
-                        System.out.println("added");
-                        serverHandler(serverUniqueID);
-                    }
-                    case 3 -> {
-                        if (!allPersonRolls.isRemovePerson())
-                        {
-                            System.out.println("access blocked");
-                            serverHandler(serverUniqueID);
-                            return;
-                        }
-                        String uName="";
-                        System.out.println("Enter person userName");
-                        do {
-                            if (!uName.equals("")) {
-                                System.out.println("user not found!!!");
-                                System.out.println("Enter person userName:");
-                            }
-                            uName = scn.readText().trim();
-                        } while (!server.isPersonExistInServer(uName, serverUniqueID));
-                        server.removePersonFromServer(uName, serverUniqueID);
-                        System.out.println("removed");
-                        serverHandler(serverUniqueID);
-                    }
-                    case 4 -> {
-                        serverHandler(serverUniqueID);
-                    }
-                }
+                channelMemberHandler(serverUniqueID, allPersonRolls);
             }
             case 3 -> {
-                printList("list of roles", "add role", "back");
-                switch (scn.readNumber()) {
-                    case 1 -> {
-                        var roles = server.getServerRoles(serverUniqueID).toArray();
-                        int temp = 0;
-                        for (var item : roles) {
-                            System.out.println((++temp) + ") " + item);
-                        }
-                        System.out.println("0) back");
-                        if ((temp = scn.readIndex()) == -1) {
-                            serverHandler(serverUniqueID);
-                            return;
-                        }
-                        printList("persons", "add person", "remove Person");
-                        switch (scn.readNumber()) {
-                            case 1 -> {
-                                var members = server.getServerRoleMembers((String) roles[temp], serverUniqueID);
-                                for (var item : members.keySet()) {
-                                    System.out.println(item + " [" + members.get(item) + "]");
-                                }
-                                serverHandler(serverUniqueID);
-                            }
-                            case 2 -> {
-                                String uName = "";
-                                System.out.println("Enter person userName:");
-                                do {
-                                    if (!uName.equals("")) {
-                                        System.out.println("user not found!!!");
-                                        System.out.println("Enter person userName:");
-                                    }
-                                    uName = scn.readText().trim();
-                                } while (!server.isPersonExistInServer(uName, serverUniqueID));
-                                server.addRoleToPerson(uName,(String) roles[temp], serverUniqueID);
-                                System.out.println("added");
-                                serverHandler(serverUniqueID);
-                            }
-                            case 3 -> {
-                                String uName = "";
-                                System.out.println("Enter person userName:");
-                                do {
-                                    if (!uName.equals("")) {
-                                        System.out.println("user not found!!!");
-                                        System.out.println("Enter person userName:");
-                                    }
-                                    uName = scn.readText().trim();
-                                } while (!server.isPersonExistInServer(uName, serverUniqueID));
-                                server.removeRoleFromPerson(uName,(String) roles[temp], serverUniqueID);
-                                System.out.println("removed");
-                                serverHandler(serverUniqueID);
-                            }
-                        }
-
-
-                        serverHandler(serverUniqueID);
-                    }
-                    case 2 -> {
-                        boolean isAdmin = false;
-                        for (var role : personRoles) {
-                            if (role.getName().trim().equals("owner")) {
-                                isAdmin = true;
-                                break;
-                            }
-                        }
-                        if (!isAdmin) {
-                            System.out.println("access blocked");
-                            serverHandler(serverUniqueID);
-                            return;
-                        }
-                        server.addRoleToServer(scn.readRole(),serverUniqueID);
-                        System.out.println("added");
-                        serverHandler(serverUniqueID);
-                    }
-                    case 3 -> {
-                        serverHandler(serverUniqueID);
-                    }
-                }
+                channelRolesHandler(serverUniqueID, personRoles);
             }
             case 4 -> {
                 if (!allPersonRolls.isChangeServerName()) {
                     System.out.println("access blocked");
-                    serverHandler(serverUniqueID);
+                    serversHandler(serverUniqueID);
                     return;
                 }
                 System.out.println("Enter new name:");
                 server.changeServerName(scn.readText(), serverUniqueID);
                 System.out.println("changed");
-                doServerMenu();
+                serversHandler(serverUniqueID);
             }
             case 5 -> {
                 boolean isAdmin = false;
@@ -483,118 +234,461 @@ public class UI {
                 }
                 if (!isAdmin) {
                     System.out.println("access blocked");
-                    serverHandler(serverUniqueID);
+                    serversHandler(serverUniqueID);
                     return;
                 }
                 System.out.println("Are you sure?\nPlease types yes or no");
                 if (scn.readText().trim().equals("yes")) {
                     server.removeServer(serverUniqueID);
                     System.out.println("removed");
+                    serversListHandler_();
+                }else
+                {
+                    serversHandler(serverUniqueID);
                 }
-                doServerMenu();
+
             }
             case 6 -> {
-                printList("list of persons", "see person allowed channels",
-                        "add person", "remove person", "add channel to person", "back");
-                switch (scn.readNumber()) {
-                    case 1 -> {
-                        var list = server.getRestrictPersonsFromAllServer(serverUniqueID);
-                        for (var item : list) {
-                            System.out.println(item);
-                        }
-                    }
-                    case 2 -> {
-                        String uName = "";
-                        System.out.println("Enter person userName:");
-                        do {
-                            if (!uName.equals("")) {
-                                System.out.println("user not found !!!");
-                                System.out.println("Enter person userName:");
-                            }
-                            uName = scn.readText().trim();
-                        } while (!server.isPersonExistInServer(uName, serverUniqueID));
-
-                        var list = server.getPersonFreemon(uName, serverUniqueID);
-                        if (list != null)
-                            for (var item : list) {
-                                System.out.println(item);
-                            }
-                        serverHandler(serverUniqueID);
-                    }
-                    case 3 -> {
-                        if (!allPersonRolls.isRestrictPersonAccess()) {
-                            System.out.println("access blocked");
-                            serverHandler(serverUniqueID);
-                            return;
-                        }
-                        String uName = "";
-                        System.out.println("Enter person userName:");
-                        do {
-                            if (!uName.equals("")) {
-                                System.out.println("user not found !!!");
-                                System.out.println("Enter person userName:");
-                            }
-                            uName = scn.readText().trim();
-                        } while (!server.isPersonExistInServer(uName, serverUniqueID));
-                        server.restrictPersonFromAllServer(uName, serverUniqueID);
-                        System.out.println("added");
-                        serverHandler(serverUniqueID);
-                    }
-                    case 4 -> {
-                        if (!allPersonRolls.isRestrictPersonAccess()) {
-                            System.out.println("access blocked");
-                            serverHandler(serverUniqueID);
-                            return;
-                        }
-                        String uName = "";
-                        System.out.println("Enter person userName:");
-                        do {
-                            if (!uName.equals("")) {
-                                System.out.println("user not found !!!");
-                                System.out.println("Enter person userName:");
-                            }
-                            uName = scn.readText().trim();
-                        } while (!server.isPersonExistInServer(uName, serverUniqueID));
-                        server.removeRestrictPersonFromAllServer(uName, serverUniqueID);
-                        System.out.println("added");
-                        serverHandler(serverUniqueID);
-                    }
-                    case 5 -> {
-                        if (!allPersonRolls.isRestrictPersonAccess()) {
-                            System.out.println("access blocked");
-                            serverHandler(serverUniqueID);
-                            return;
-                        }
-                        String uName = "";
-                        System.out.println("Enter person userName:");
-                        do {
-                            if (!uName.equals("")) {
-                                System.out.println("user not found !!!");
-                                System.out.println("Enter person userName:");
-                            }
-                            uName = scn.readText().trim();
-                        } while (!server.isPersonExistInServer(uName, serverUniqueID));
-                        String cName = "";
-                        System.out.println("Enter channel Name:");
-                        do {
-                            if (!cName.equals("")) {
-                                System.out.println("channel not found !!!");
-                                System.out.println("Enter channel Name:");
-                            }
-                            cName = scn.readText().trim();
-                        } while (server.checkChannelNameAvailability(serverUniqueID, cName));
-                        server.unRestrictAllRestrictPersonFromAChannel(uName, serverUniqueID, cName);
-                        System.out.println("added");
-                        serverHandler(serverUniqueID);
-                    }
-                }
-                serverHandler(serverUniqueID);
+                restrictMenuHandler(serverUniqueID, allPersonRolls);
             }
             case 7 -> {
-                doServerMenu();
+                serversListHandler_();
             }
         }
     }
+
+    private void restrictMenuHandler(Integer serverUniqueID, Role allPersonRolls) {
+        printList("list of persons", "see person allowed channels",
+                "add person", "remove person", "add channel to person", "back");
+        switch (scn.readNumber()) {
+            case 1 -> {
+                var list = server.getRestrictPersonsFromAllServer(serverUniqueID);
+                for (var item : list) {
+                    System.out.println(item);
+                }
+                restrictMenuHandler(serverUniqueID,allPersonRolls);
+            }
+            case 2 -> {
+                String uName = "";
+                System.out.println("Enter person userName:");
+                do {
+                    if (!uName.equals("")) {
+                        System.out.println("user not found !!!");
+                        System.out.println("Enter person userName:");
+                    }
+                    uName = scn.readText().trim();
+                } while (!server.isPersonExistInServer(uName, serverUniqueID));
+
+                var list = server.getPersonFreemon(uName, serverUniqueID);
+                if (list != null)
+                    for (var item : list) {
+                        System.out.println(item);
+                    }
+                restrictMenuHandler(serverUniqueID,allPersonRolls);
+            }
+            case 3 -> {
+                if (!allPersonRolls.isRestrictPersonAccess()) {
+                    System.out.println("access blocked");
+                    restrictMenuHandler(serverUniqueID,allPersonRolls);
+                    return;
+                }
+                String uName = "";
+                System.out.println("Enter person userName:");
+                do {
+                    if (!uName.equals("")) {
+                        System.out.println("user not found !!!");
+                        System.out.println("Enter person userName:");
+                    }
+                    uName = scn.readText().trim();
+                } while (!server.isPersonExistInServer(uName, serverUniqueID));
+                server.restrictPersonFromAllServer(uName, serverUniqueID);
+                System.out.println("added");
+                restrictMenuHandler(serverUniqueID,allPersonRolls);
+            }
+            case 4 -> {
+                if (!allPersonRolls.isRestrictPersonAccess()) {
+                    System.out.println("access blocked");
+                    restrictMenuHandler(serverUniqueID,allPersonRolls);
+                    return;
+                }
+                String uName = "";
+                System.out.println("Enter person userName:");
+                do {
+                    if (!uName.equals("")) {
+                        System.out.println("user not found !!!");
+                        System.out.println("Enter person userName:");
+                    }
+                    uName = scn.readText().trim();
+                } while (!server.isPersonExistInServer(uName, serverUniqueID));
+                server.removeRestrictPersonFromAllServer(uName, serverUniqueID);
+                System.out.println("added");
+                restrictMenuHandler(serverUniqueID,allPersonRolls);
+            }
+            case 5 -> {
+                if (!allPersonRolls.isRestrictPersonAccess()) {
+                    System.out.println("access blocked");
+                    restrictMenuHandler(serverUniqueID,allPersonRolls);
+                    return;
+                }
+                String uName = "";
+                System.out.println("Enter person userName:");
+                do {
+                    if (!uName.equals("")) {
+                        System.out.println("user not found !!!");
+                        System.out.println("Enter person userName:");
+                    }
+                    uName = scn.readText().trim();
+                } while (!server.isPersonExistInServer(uName, serverUniqueID));
+                String cName = "";
+                System.out.println("Enter channel Name:");
+                do {
+                    if (!cName.equals("")) {
+                        System.out.println("channel not found !!!");
+                        System.out.println("Enter channel Name:");
+                    }
+                    cName = scn.readText().trim();
+                } while (server.checkChannelNameAvailability(serverUniqueID, cName));
+                server.unRestrictAllRestrictPersonFromAChannel(uName, serverUniqueID, cName);
+                System.out.println("added");
+                restrictMenuHandler(serverUniqueID,allPersonRolls);
+            }
+            case 6->{
+                serversHandler(serverUniqueID);
+            }
+        }
+    }
+
+    private void channelRolesHandler(Integer serverUniqueID, ArrayList<Role> personRoles) {
+        printList("list of roles", "add role", "back");
+        switch (scn.readNumber()) {
+            case 1 -> {
+                listOfRolesHandler(serverUniqueID, personRoles);
+            }
+            case 2 -> {
+                boolean isAdmin = false;
+                for (var role : personRoles) {
+                    if (role.getName().trim().equals("owner")) {
+                        isAdmin = true;
+                        break;
+                    }
+                }
+                if (!isAdmin) {
+                    System.out.println("access blocked");
+                    serversHandler(serverUniqueID);
+                    return;
+                }
+                server.addRoleToServer(scn.readRole(), serverUniqueID);
+                System.out.println("added");
+                channelRolesHandler(serverUniqueID, personRoles);
+            }
+            case 3 -> {
+                serversHandler(serverUniqueID);
+            }
+        }
+    }
+
+    private void listOfRolesHandler(Integer serverUniqueID, ArrayList<Role> personRoles) {
+        var roles = server.getServerRoles(serverUniqueID).toArray();
+        int temp = 0;
+        for (var item : roles) {
+            System.out.println((++temp) + ") " + item);
+        }
+        System.out.println("0) back");
+        if ((temp = scn.readIndex()) == -1) {
+            serversHandler(serverUniqueID);
+            return;
+        }
+        roleOptionsHandler(serverUniqueID, personRoles, roles, temp);
+    }
+
+    private void roleOptionsHandler(Integer serverUniqueID, ArrayList<Role> personRoles, Object[] roles, int temp) {
+        printList("persons", "add person", "remove Person", "back");
+        switch (scn.readNumber()) {
+            case 1 -> {
+                showMemberPersons(serverUniqueID, roles[temp]);
+                roleOptionsHandler(serverUniqueID, personRoles,roles,temp);
+            }
+            case 2 -> {
+                String uName = "";
+                System.out.println("Enter person userName:");
+                do {
+                    if (!uName.equals("")) {
+                        System.out.println("user not found!!!");
+                        System.out.println("Enter person userName:");
+                    }
+                    uName = scn.readText().trim();
+                } while (!server.isPersonExistInServer(uName, serverUniqueID));
+                server.addRoleToPerson(uName, (String) roles[temp], serverUniqueID);
+                System.out.println("added");
+                roleOptionsHandler(serverUniqueID, personRoles,roles,temp);
+            }
+            case 3 -> {
+                String uName = "";
+                System.out.println("Enter person userName:");
+                do {
+                    if (!uName.equals("")) {
+                        System.out.println("user not found!!!");
+                        System.out.println("Enter person userName:");
+                    }
+                    uName = scn.readText().trim();
+                } while (!server.isPersonExistInServer(uName, serverUniqueID));
+                server.removeRoleFromPerson(uName, (String) roles[temp], serverUniqueID);
+                System.out.println("removed");
+                roleOptionsHandler(serverUniqueID, personRoles,roles,temp);
+            }
+            case 4 -> {
+                listOfRolesHandler(serverUniqueID, personRoles);
+            }
+        }
+    }
+
+    private void showMemberPersons(Integer serverUniqueID, Object roles) {
+        var members = server.getServerRoleMembers((String) roles, serverUniqueID);
+        for (var item : members.keySet()) {
+            System.out.println(item + " [" + members.get(item) + "]");
+        }
+    }
+
+    private void channelMemberHandler(Integer serverUniqueID, Role allPersonRolls) {
+        printList("list of members", "add member", "remove member", "back");
+        switch (scn.readNumber()) {
+            case 1 -> {
+                var members = server.getServerMembers(serverUniqueID);
+                for (var item : members.keySet()) {
+                    System.out.println(item + " [" + members.get(item) + "]");
+                }
+                channelMemberHandler(serverUniqueID, allPersonRolls);
+            }
+            case 2 -> {
+                String uName = "";
+                System.out.println("Enter person userName:");
+                do {
+                    if (!uName.equals("")) {
+                        System.out.println("user not found or already exist!!!");
+                        System.out.println("Enter person userName:");
+                    }
+                    uName = scn.readText().trim();
+                } while (server.checkUserNameAvailability(uName) || server.isPersonExistInServer(uName, serverUniqueID));
+                server.addPersonToServer(uName, serverUniqueID);
+                System.out.println("added");
+                channelMemberHandler(serverUniqueID, allPersonRolls);
+            }
+            case 3 -> {
+                if (!allPersonRolls.isRemovePerson()) {
+                    System.out.println("access blocked");
+                    channelMemberHandler(serverUniqueID, allPersonRolls);
+                    return;
+                }
+                String uName = "";
+                System.out.println("Enter person userName");
+                do {
+                    if (!uName.equals("")) {
+                        System.out.println("user not found!!!");
+                        System.out.println("Enter person userName:");
+                    }
+                    uName = scn.readText().trim();
+                } while (!server.isPersonExistInServer(uName, serverUniqueID));
+                server.removePersonFromServer(uName, serverUniqueID);
+                System.out.println("removed");
+                channelMemberHandler(serverUniqueID, allPersonRolls);
+            }
+            case 4 -> {
+                serversHandler(serverUniqueID);
+            }
+        }
+    }
+
+    private void channelsMenuHandler(Integer serverUniqueID, Role allPersonRolls) {
+        printList("list of channels", "add channel", "back");
+        switch (scn.readNumber()) {
+            case 1 -> {
+                _ChannelsHandler(serverUniqueID, allPersonRolls);
+            }
+            case 2 -> {
+                _ChannelsAddChannelHandler(serverUniqueID, allPersonRolls);
+            }
+            case 3 -> {
+                serversHandler(serverUniqueID);
+            }
+        }
+    }
+
+    private void _ChannelsAddChannelHandler(Integer serverUniqueID, Role allPersonRolls) {
+        if (!allPersonRolls.isCreateChannel()) {
+            System.out.println("access blocked");
+            channelsMenuHandler(serverUniqueID, allPersonRolls);
+            return;
+        }
+        System.out.println("Enter Channel Name");
+        String name = scn.readLine().trim();
+        while (!server.checkChannelNameAvailability(serverUniqueID, name)) {
+            System.out.println("name isn't available \n enter Again:");
+            name = scn.readLine().trim();
+        }
+        int temp = 0;
+        System.out.println("Enter Channel Type");
+        for (var item : ChannelType.values()) {
+            System.out.println((++temp) + ") " + item);
+        }
+        temp = scn.readIndex();
+        server.createServerChannel(name, ChannelType.values()[temp], serverUniqueID);
+        System.out.println("Created");
+        channelsMenuHandler(serverUniqueID, allPersonRolls);
+    }
+
+    private void _ChannelsHandler(Integer serverUniqueID, Role allPersonRolls) {
+        var names = server.getServerChannels(serverUniqueID, person.getUserName());
+        int temp = 0;
+        String channelName;
+        for (var item : names.toArray()) {
+            System.out.println((++temp) + ") " + item);
+        }
+        System.out.println("0) back");
+        if ((temp = scn.readIndex()) == -1) {
+            channelsMenuHandler(serverUniqueID, allPersonRolls);
+            return;
+        }
+        channelName = (String) names.toArray()[temp];
+        _InChannelHandler(serverUniqueID, allPersonRolls, channelName);
+    }
+
+    private void _InChannelHandler(Integer serverUniqueID, Role allPersonRolls, String channelName) {
+        int temp;
+        printList("messages", "send message", "send file", "pin messages", "restricted persons", "restrict person", "unRestrict person", "back");
+        switch (scn.readNumber()) {
+            case 1 -> {
+                showChannelMessagesHandler(serverUniqueID, allPersonRolls, channelName);
+            }
+            case 2 -> {
+                System.out.println("Enter your message: ");
+                String messageText = scn.readLine();
+                server.sendChannelMessage(channelName, serverUniqueID, messageText, person.getUserName());
+                System.out.println("sent :)");
+                _InChannelHandler(serverUniqueID, allPersonRolls, channelName);
+            }
+            case 3 -> {
+                System.out.println("enter your file address:");
+                String path = scn.readLine();
+                Path _path = Paths.get(path);
+                if (!Files.exists(_path)) {
+                    System.out.println("File not found !!!");
+                    serversHandler(serverUniqueID);
+                    _InChannelHandler(serverUniqueID, allPersonRolls, channelName);
+                    return;
+                }
+                try {
+                    int fid = server.uploadFile(Files.readAllBytes(_path), path.substring(path.lastIndexOf('.') + 1));
+                    server.sendChannelMessage(channelName, serverUniqueID, "File(you can download it with its id)   id:" + fid, person.getUserName());
+                } catch (IOException e) {
+                    System.out.println("error");
+                }
+                System.out.println("Saved");
+                _InChannelHandler(serverUniqueID, allPersonRolls, channelName);
+            }
+            case 4 -> {
+                for (var item : server.getPinMessages(channelName, serverUniqueID)) {
+                    System.out.println("pined:\t" + item);
+                }
+                _InChannelHandler(serverUniqueID, allPersonRolls, channelName);
+            }
+            case 5 -> {
+                var list = server.getRestrictPersonsFromAChannel(serverUniqueID, channelName);
+                for (var item : list) {
+                    System.out.println(item);
+                }
+                _InChannelHandler(serverUniqueID, allPersonRolls, channelName);
+            }
+            case 6 -> {
+                if (!allPersonRolls.isRestrictAccessChannel()) {
+                    System.out.println("access blocked");
+                    serversHandler(serverUniqueID);
+                    _InChannelHandler(serverUniqueID, allPersonRolls, channelName);
+                    return;
+                }
+                String uName = "";
+                System.out.println("Enter person userName:");
+                do {
+                    if (!uName.equals("")) {
+                        System.out.println("user not found !!!");
+                        System.out.println("Enter person userName:");
+                    }
+                    uName = scn.readText().trim();
+                } while (!server.isPersonExistInServer(uName, serverUniqueID));
+                server.restrictPersonFromAChannel(uName, serverUniqueID, channelName);
+                System.out.println("Restricted");
+                _InChannelHandler(serverUniqueID, allPersonRolls, channelName);
+            }
+            case 7 -> {
+                if (!allPersonRolls.isRestrictAccessChannel()) {
+                    System.out.println("access blocked");
+                    serversHandler(serverUniqueID);
+                    _InChannelHandler(serverUniqueID, allPersonRolls, channelName);
+                    return;
+                }
+                String uName = "";
+                System.out.println("Enter person userName:");
+                do {
+                    if (!uName.equals("")) {
+                        System.out.println("user not found !!!");
+                        System.out.println("Enter person userName:");
+                    }
+                    uName = scn.readText().trim();
+                } while (!server.isPersonExistInServer(uName, serverUniqueID));
+                server.removeRestrictPersonFromAChannel(uName, serverUniqueID, channelName);
+                System.out.println("unRestricted");
+                _InChannelHandler(serverUniqueID, allPersonRolls, channelName);
+            }
+            case 8 -> {
+                _ChannelsHandler(serverUniqueID, allPersonRolls);
+            }
+        }
+    }
+
+    private void showChannelMessagesHandler(Integer serverUniqueID, Role allPersonRolls, String channelName) {
+        int temp;
+        ArrayList<TextChannelMessage> messages = server.getChannelMessages(channelName, serverUniqueID, person.getUserName());
+        temp = 0;
+        for (var item : messages) {
+            System.out.println((++temp) + ") " + item);
+        }
+        System.out.println("0) back");
+        if ((temp = scn.readIndex()) == -1) {
+            serversHandler(serverUniqueID);
+            channelsMenuHandler(serverUniqueID, allPersonRolls);
+            return;
+        }
+        TextChannelMessage msg = messages.get(temp);
+        _InChannelMessageHandler(serverUniqueID, allPersonRolls, channelName, messages, msg);
+    }
+
+    private void _InChannelMessageHandler(Integer serverUniqueID, Role allPersonRolls, String channelName, ArrayList<TextChannelMessage> messages, TextChannelMessage msg) {
+        int temp;
+        printList("pin message", "like", "dislike", "laugh", "back");
+        if ((temp = scn.readNumber()) == 5) {
+            showChannelMessagesHandler(serverUniqueID, allPersonRolls, channelName);
+            return;
+        } else if (temp == 4) {
+            server.reactionToChannelMessage(channelName, serverUniqueID, msg, Reaction.laugh);
+            System.out.println("laughed");
+        } else if (temp == 3) {
+            server.reactionToChannelMessage(channelName, serverUniqueID, msg, Reaction.disLike);
+            System.out.println("disLiked");
+        } else if (temp == 2) {
+            server.reactionToChannelMessage(channelName, serverUniqueID, msg, Reaction.like);
+            System.out.println("liked");
+        } else if (temp == 1) {
+            if (!allPersonRolls.isPinTextMessage()) {
+                System.out.println("access blocked");
+                serversHandler(serverUniqueID);
+                _ChannelsHandler(serverUniqueID, allPersonRolls);
+                return;
+            }
+            server.pinMessageToChannel(channelName, serverUniqueID, messages.get(temp - 1));
+            System.out.println("pined");
+        }
+        _InChannelMessageHandler(serverUniqueID, allPersonRolls, channelName, messages, msg);
+    }
+
 
     //endregion
 
@@ -816,6 +910,7 @@ public class UI {
         showSettingMenu();
         settingMenuHandler();
     }
+
     void settingMenuHandler() {
         switch (scn.readNumber()) {
             case 1 -> {
@@ -832,8 +927,7 @@ public class UI {
                 System.out.println("enter your image address:");
                 String path = scn.readLine();
                 Path _path = Paths.get(path);
-                if (!Files.exists(_path))
-                {
+                if (!Files.exists(_path)) {
                     System.out.println("File not found !!!");
                     doSettingMenu();
                     return;

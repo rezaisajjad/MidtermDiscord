@@ -3,41 +3,35 @@ package Repository;
 import Model.Request.*;
 import Model.Request.Friend.AddFriendRequest;
 import Model.Request.SC.ChatFile;
-import Model.Request.SC.PinMessageToChannelRequest;
 
+import java.io.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Random;
 
-public class PeopleRepository {
+public class PeopleRepository implements Serializable {
 
     private static PeopleRepository pr = new PeopleRepository();
 
     public static PeopleRepository getInstance() {
+        if (pr==null)
+        {
+        try {
+            FileInputStream inputStream = new FileInputStream("save.save");
+            ObjectInputStream in =  new ObjectInputStream(inputStream);
+            pr = (PeopleRepository) in.readObject();
+
+        } catch (Exception e) {
+            pr = new PeopleRepository();
+        }
+        }
         return pr;
     }
 
     private PeopleRepository() {
-        Person p1 = new Person();
-        p1.setUserName("sajjadre");
-        p1.setPassWord("Sajjadre1");
-        p1.setEmail("srsjd@yahoo.com");
-        Person p11 = new Person();
-        p11.setUserName("alireza");
-        p11.setPassWord("Alireza1");
-        p11.setEmail("srsjd@yahoo.com");
-        p1.addFriend(p11.getUserName());
-        p11.addFriend(p1.getUserName());
-        people.put(p1.getUserName(), p1);
-        people.put(p11.getUserName(), p11);
-        servers.put(1414, new ServerChat("SSSSS1", "sajjadre", 1414));
-        servers.put(1416, new ServerChat("AAA2", "sajjadre", 1416));
-        servers.put(1418, new ServerChat("asddsaadsdsa3", "sajjadre", 1418));
-        p1.addServerChat(1414);
-        p1.addServerChat(1416);
-        p1.addServerChat(1418);
+
     }
 
     private final HashMap<String, HashSet<String>> friendRequests = new HashMap<>();
@@ -671,7 +665,7 @@ public class PeopleRepository {
      */
     public ArrayList<TextChannelMessage> getChannelMessages(String channelName, Integer serverID, String userName) {
         if (Role.integrateRolls(getPersonRoles(userName,serverID)).isObserveChatHistory())
-            return servers.get(serverID).getChannels().get(channelName).getMessages(LocalDateTime.of(2000,1,1,00,00));
+            return servers.get(serverID).getChannels().get(channelName).getMessages();
         return servers.get(serverID).getChannels().get(channelName).getMessages(servers.get(serverID).getRegisterDates().get(userName));
     }
     /**
@@ -687,12 +681,41 @@ public class PeopleRepository {
 
     /**
      * return pins messages
+     *
      * @param channelName channel name
-     * @param serverID server id
+     * @param serverID    server id
      * @return list of messages
      */
-    public ArrayList<TextChannelMessage> getPinMessages(String channelName,Integer serverID )
-    {
-       return servers.get(serverID).getChannels().get(channelName).getPins();
+    public ArrayList<TextChannelMessage> getPinMessages(String channelName, Integer serverID) {
+        return new ArrayList<>(servers.get(serverID).getChannels().get(channelName).getPins());
+    }
+
+    /**
+     * add reaction to message
+     *
+     * @param channelName channelName
+     * @param serverID    serverID
+     * @param message     message
+     * @param reaction    reaction
+     */
+    public void reactionToChannelMessage(String channelName, Integer serverID, TextChannelMessage message, Reaction reaction) {
+        for (var item : servers.get(serverID).getChannels().get(channelName).getMessages()) {
+            if (item.equals(message)) {
+                item.getReactions().put(reaction, item.getReactions().get(reaction) + 1);
+                break;
+            }
+        }
+    }
+
+    /**
+     * add message to channel
+     *
+     * @param channel channelName
+     * @param serverID    serverID
+     * @param text     message
+     * @param sender    sender
+     */
+    public void sendChannelMessage(String channel, Integer serverID, String text, String sender) {
+        servers.get(serverID).getChannels().get(channel).getMessages().add(new TextChannelMessage(LocalDateTime.now(), text, sender));
     }
 }

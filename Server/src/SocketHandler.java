@@ -8,9 +8,7 @@ import Model.Request.IRequest;
 import Model.Request.SC.*;
 import Repository.PeopleRepository;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.net.Socket;
 
 public class SocketHandler extends Thread {
@@ -38,6 +36,14 @@ public class SocketHandler extends Thread {
             socket.close();
         } catch (ClassNotFoundException | IOException e) {
             System.out.println(e.getMessage());
+        }finally {
+            try {
+                FileOutputStream outputStream = new FileOutputStream("save.save");
+                ObjectOutputStream out = new ObjectOutputStream(outputStream);
+                out.writeObject(people);
+            } catch (Exception e) {
+
+            }
         }
     }
 
@@ -195,6 +201,12 @@ public class SocketHandler extends Thread {
             return res;
         }else if (request instanceof GetPinedMessagesRequest res) {
             res.setMessages(people.getPinMessages(res.getChannelName(), res.getServerID()));
+            return res;
+        } else if (request instanceof ReactionToChannelMessageRequest res) {
+            people.reactionToChannelMessage(res.getChannelName(), res.getServerID(), res.getMessage(),res.getReaction());
+            return res;
+        } else if (request instanceof SendChannelServerMessageRequest res) {
+            people.sendChannelMessage(res.getChannel(), res.getServerID(), res.getText(), res.getSender());
             return res;
         } else {
             return null;

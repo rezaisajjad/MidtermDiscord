@@ -575,4 +575,30 @@ public class Server {
         GetPinedMessagesRequest request = new GetPinedMessagesRequest(channelName, serverID);
         return ((GetPinedMessagesRequest) sendRequest(request)).getMessages();
     }
+
+    /**
+     * add reaction to message
+     *
+     * @param channelName channelName
+     * @param serverID    serverID
+     * @param message     message
+     * @param reaction    reaction
+     */
+    public void reactionToChannelMessage(String channelName, Integer serverID, TextChannelMessage message, Reaction reaction) {
+        ReactionToChannelMessageRequest request = new ReactionToChannelMessageRequest(message, reaction, channelName, serverID);
+        sendRequest(request);
+    }
+
+    /**
+     * add message to channel
+     *
+     * @param channel  channelName
+     * @param serverID serverID
+     * @param text     message
+     * @param sender   sender
+     */
+    public void sendChannelMessage(String channel, Integer serverID, String text, String sender) {
+        SendChannelServerMessageRequest request = new SendChannelServerMessageRequest(text, sender, channel, serverID);
+        sendRequest(request);
+    }
 }
