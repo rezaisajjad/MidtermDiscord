@@ -4,7 +4,7 @@ import Model.Request.*;
 import Model.Request.Friend.AddFriendRequest;
 import Model.Request.SC.ChatFile;
 
-import java.io.*;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,34 +13,45 @@ import java.util.Random;
 
 public class PeopleRepository implements Serializable {
 
-    private static PeopleRepository pr = new PeopleRepository();
+    public static PeopleRepository pr;
 
     public static PeopleRepository getInstance() {
         if (pr==null)
-        {
-        try {
-            FileInputStream inputStream = new FileInputStream("save.save");
-            ObjectInputStream in =  new ObjectInputStream(inputStream);
-            pr = (PeopleRepository) in.readObject();
-
-        } catch (Exception e) {
-            pr = new PeopleRepository();
-        }
-        }
+            pr= new PeopleRepository();
         return pr;
     }
 
-    private PeopleRepository() {
+    private PeopleRepository()
+    {}
 
+    private void addUpdateMessage(String userName, String message) {
+        if (updates.containsKey(userName))
+            updates.put(userName, updates.get(userName) + "\n" + message);
+        else
+            updates.put(userName, message);
     }
 
-    private final HashMap<String, HashSet<String>> friendRequests = new HashMap<>();
-    public final HashMap<String, Person> people = new HashMap<>();
-    public final HashMap<Integer, ServerChat> servers = new HashMap<>();
+    public HashMap<String, String> updates = new HashMap<>();
+    public HashMap<String, HashSet<String>> friendRequests = new HashMap<>();
+    public HashMap<String, Person> people = new HashMap<>();
+    public HashMap<Integer, ServerChat> servers = new HashMap<>();
+    public HashMap<Integer, ChatFile> files = new HashMap<>();
+    public Random random = new Random();
 
-    public final HashMap<Integer, ChatFile> files = new HashMap<>();
-
-    public final Random random = new Random();
+    /**
+     * returns new notifications
+     *
+     * @param userName username
+     * @return string notifications
+     */
+    public String getUpdates(String userName) {
+        if (updates.containsKey(userName)) {
+            String ups = updates.get(userName);
+            updates.put(userName, "");
+            return ups;
+        }
+        return "";
+    }
 
     /**
      * adds a person to person list
@@ -133,6 +144,14 @@ public class PeopleRepository implements Serializable {
             people.get(privateChat.getP1()).addPrivateChat(privateChat);
             people.get(privateChat.getP2()).addPrivateChat(privateChat);
         }
+        String userName = privateChat.getP1().equals(message.getSenderUserName()) ? privateChat.getP2() : privateChat.getP1();
+        String _message = "";
+        if (message.getText().length() > 10) {
+            _message = "New message from " + userName + " :   " + message.getText().substring(0, 4) + ". . .";
+        } else {
+            _message = "New message from " + userName + " :   " + message.getText();
+        }
+        addUpdateMessage(userName, _message);
     }
 
     /**
@@ -172,9 +191,10 @@ public class PeopleRepository implements Serializable {
      * @param senderUserName   person one
      * @param receiverUserName person two
      */
-    private void _addFriend(String senderUserName, String receiverUserName) {
+    private void _addFriend(String receiverUserName, String senderUserName) {
         people.get(senderUserName).addFriend(people.get(receiverUserName).getUserName());
         people.get(receiverUserName).addFriend(people.get(senderUserName).getUserName());
+        addUpdateMessage(senderUserName, receiverUserName + " accepted your friend request!!!");
     }
 
     /**
@@ -195,8 +215,9 @@ public class PeopleRepository implements Serializable {
         if (!friendRequests.containsKey(receiverUserName) || friendRequests.get(receiverUserName) == null)
             friendRequests.put(receiverUserName, new HashSet<>());
         friendRequests.get(receiverUserName).add(senderUserName);
+        String _message = "you have friend request from: " + senderUserName;
+        addUpdateMessage(receiverUserName, _message);
     }
-
     /**
      * returns request of a person
      *
@@ -262,6 +283,7 @@ public class PeopleRepository implements Serializable {
      */
     public void blockAPerson(String blocker, String blocked) {
         people.get(blocker).addBlockedPerson(blocked);
+        addUpdateMessage(blocked, blocker + " blocked you!!!");
     }
 
     /**
@@ -272,6 +294,7 @@ public class PeopleRepository implements Serializable {
      */
     public void unBlockAPerson(String blocker, String blocked) {
         people.get(blocker).removeBlockedPerson(blocked);
+        addUpdateMessage(blocked, blocker + " unBlocked you!!!");
     }
 
     /**
@@ -416,12 +439,14 @@ public class PeopleRepository implements Serializable {
      */
     public void addPersonToServer(String userName, Integer serverUniqueID) {
         servers.get(serverUniqueID).getMembers().add(userName);
-        servers.get(serverUniqueID).getRegisterDates().put(userName,LocalDateTime.now());
+        servers.get(serverUniqueID).getRegisterDates().put(userName, LocalDateTime.now());
         people.get(userName).addServerChat(serverUniqueID);
         var pc = new PrivateChat(userName, servers.get(serverUniqueID).getName());
-        pc.addMessage(new PrivateChatMessage(servers.get(serverUniqueID).getName(), "Welcome to server!!!"));
-        people.get(userName).addPrivateChat(pc);
-
+        var message = new PrivateChatMessage(servers.get(serverUniqueID).getName(), "Welcome to server!!!");
+        pc.addMessage(message);
+        people.get(userName).getPrivateChatList().add(pc);
+        addUpdateMessage(userName, "you have a message from server " + servers.get(serverUniqueID).getName());
+        addUpdateMessage(userName, "you added to " + servers.get(serverUniqueID).getName());
     }
 
     /**
@@ -451,6 +476,7 @@ public class PeopleRepository implements Serializable {
              ) {
             item.getMembers().remove(userName);
         }
+        addUpdateMessage(userName, "you removed from " + servers.get(serverUniqueID).getName());
     }
 
     /**
@@ -544,6 +570,7 @@ public class PeopleRepository implements Serializable {
      */
     public void removeRoleFromPerson(String userName, String roleName, Integer serverUniqueID) {
         servers.get(serverUniqueID).getRoles().get(roleName).getMembers().remove(userName);
+        addUpdateMessage(userName, " your role deleted " + roleName);
     }
 
     /**
@@ -555,6 +582,7 @@ public class PeopleRepository implements Serializable {
      */
     public void addRoleToPerson(String userName, String roleName, Integer serverUniqueID) {
         servers.get(serverUniqueID).getRoles().get(roleName).getMembers().add(userName);
+        addUpdateMessage(userName, " you get '" + roleName + "' role");
     }
 
     /**
@@ -582,6 +610,7 @@ public class PeopleRepository implements Serializable {
         if (!servers.get(serverUniqueID).getRestrictBut().containsKey(userName)) {
             servers.get(serverUniqueID).getRestrictBut().put(userName, new HashSet<>());
         }
+        addUpdateMessage(userName, "you restricted from all server: " + servers.get(serverUniqueID).getName());
     }
 
     /**
@@ -592,6 +621,7 @@ public class PeopleRepository implements Serializable {
      */
     public void restrictPersonFromAChannel(String userName, Integer serverUniqueID, String channelName) {
         servers.get(serverUniqueID).getChannels().get(channelName).getRestrictPersons().add(userName);
+        addUpdateMessage(userName, "you restricted from channel: " + channelName + " server: " + servers.get(serverUniqueID).getName());
     }
 
     /**
@@ -602,6 +632,7 @@ public class PeopleRepository implements Serializable {
      */
     public void removeRestrictPersonFromAllServer(String userName, Integer serverUniqueID) {
         servers.get(serverUniqueID).getRestrictBut().remove(userName);
+        addUpdateMessage(userName, "your restriction from all server removed : " + servers.get(serverUniqueID).getName());
     }
 
     /**
@@ -612,6 +643,7 @@ public class PeopleRepository implements Serializable {
      */
     public void removeRestrictPersonFromAChannel(String userName, Integer serverUniqueID, String channelName) {
         servers.get(serverUniqueID).getChannels().get(channelName).getRestrictPersons().remove(userName);
+        addUpdateMessage(userName, "you restriction from channel: " + channelName + " server: " + servers.get(serverUniqueID).getName() + " removed");
     }
 
     /**
@@ -644,6 +676,7 @@ public class PeopleRepository implements Serializable {
      */
     public void unRestrictAllRestrictPersonFromAChannel(String userName, Integer serverUniqueID, String channelName) {
         servers.get(serverUniqueID).getRestrictBut().get(userName).add(channelName);
+        addUpdateMessage(userName, "your restriction decreased --> you can see : " + channelName + " server: " + servers.get(serverUniqueID).getName() + " removed");
     }
 
     /**

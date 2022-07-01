@@ -30,7 +30,7 @@ public class Server {
     private IRequest sendRequest(IRequest request) {
         Socket socket = null;
         try {
-            socket = new Socket("localhost", 20302);
+            socket = new Socket("localhost", 14142);
             ObjectOutputStream outputStream = new ObjectOutputStream(socket.getOutputStream());
             outputStream.writeObject(request);
             ObjectInputStream inputStream = new ObjectInputStream(socket.getInputStream());
@@ -600,5 +600,14 @@ public class Server {
     public void sendChannelMessage(String channel, Integer serverID, String text, String sender) {
         SendChannelServerMessageRequest request = new SendChannelServerMessageRequest(text, sender, channel, serverID);
         sendRequest(request);
+    }
+    /**
+     * returns new notifications
+     * @param userName username
+     * @return string notifications
+     */
+    public String getUpdates(String userName) {
+        GetUpdatesRequest request= new GetUpdatesRequest(userName);
+        return ((GetUpdatesRequest)sendRequest(request)).getUpdate();
     }
 }

@@ -34,16 +34,19 @@ public class SocketHandler extends Thread {
             ObjectOutputStream outputStream = new ObjectOutputStream(socket.getOutputStream());
             outputStream.writeObject(processRequest(request));
             socket.close();
+            {
+                try {
+                    FileOutputStream outputStream1 = new FileOutputStream(Main.address);
+                    ObjectOutputStream outputStream2 = new ObjectOutputStream(outputStream1);
+                    outputStream2.writeObject(PeopleRepository.pr);
+                    outputStream2.flush();
+                    outputStream1.close();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
         } catch (ClassNotFoundException | IOException e) {
             System.out.println(e.getMessage());
-        }finally {
-            try {
-                FileOutputStream outputStream = new FileOutputStream("save.save");
-                ObjectOutputStream out = new ObjectOutputStream(outputStream);
-                out.writeObject(people);
-            } catch (Exception e) {
-
-            }
         }
     }
 
@@ -207,6 +210,9 @@ public class SocketHandler extends Thread {
             return res;
         } else if (request instanceof SendChannelServerMessageRequest res) {
             people.sendChannelMessage(res.getChannel(), res.getServerID(), res.getText(), res.getSender());
+            return res;
+        } else if (request instanceof GetUpdatesRequest res) {
+            res.setUpdate(people.getUpdates(res.getUserName()));
             return res;
         } else {
             return null;
