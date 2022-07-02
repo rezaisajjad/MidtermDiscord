@@ -8,6 +8,8 @@ import Model.Request.Person;
 import Model.Request.Role;
 
 import java.util.Scanner;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class Scn {
     private static final Scanner scn = new Scanner(System.in);
@@ -16,6 +18,23 @@ public class Scn {
 
     public static Scn getScanner() {
         return _scn;
+    }
+
+    public void printTimer() {
+        Timer timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask() {
+            int counter = 0;
+            @Override
+            public void run() {
+                counter ++;
+                System.out.write('\r');
+                System.out.print("recording : ");
+                System.out.print((counter/60)+":"+(counter%60));
+            }
+        }, 10,1000);
+        scn.nextLine();
+        scn.nextLine();
+        timer.cancel();
     }
 
     public boolean readYesOrNo(String text) {

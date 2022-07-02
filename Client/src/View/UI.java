@@ -1,5 +1,6 @@
 package View;
 
+import ClientController.RecordSound;
 import ClientController.Server;
 import Model.Request.Account.LoginRequest;
 import Model.Request.*;
@@ -729,7 +730,7 @@ public class UI {
         }
         boolean isBreak = false;
         do {
-            printList("Send text", "Send file", "DownloadFile", "Back");
+            printList("Send text", "Send file", "Send voice", "DownloadFile", "play voice", "Back");
             switch (scn.readNumber()) {
                 case 1 -> {
                     System.out.println("Enter your message: ");
@@ -752,21 +753,46 @@ public class UI {
                     } catch (IOException e) {
                         System.out.println("error");
                     }
-                    System.out.println("Saved");
+                    System.out.println("sent");
                 }
                 case 3 -> {
+                    System.out.println("Press send a text to stop recording");
+                    RecordSound recordSound = new RecordSound();
+                    recordSound.start();
+                    scn.printTimer();
+                    recordSound.finish();
+                    try {
+                        int fid = server.uploadFile(Files.readAllBytes(Path.of(RecordSound.fileName)), "wav");
+                        server.sendPrivateChatMessage(chat, new PrivateChatMessage(person.getUserName(), "Sound(you can play it with its id)   id:" + fid));
+                    } catch (IOException e) {
+                        System.out.println("error");
+                    }
+                    System.out.println("sent");
+                }
+                case 4 -> {
                     System.out.println("Enter file code: ");
                     ChatFile file = server.downloadFile(scn.readNumber());
                     System.out.println("downloaded");
                     System.out.println("Where do you want to save?(folder)");
                     try {
-                        Files.write(Path.of(scn.readText()+"file."+file.getExtension()),file.getBytes());
+                        Files.write(Path.of(scn.readText() + "file." + file.getExtension()), file.getBytes());
                     } catch (IOException e) {
                         System.out.println("error");
                     }
                     System.out.println("saved");
                 }
-                case 4 -> {
+                case 5 -> {
+                    RecordSound recordSound = new RecordSound();
+                    System.out.println("Enter voice code: ");
+                    ChatFile file = server.downloadFile(scn.readNumber());
+                    try {
+                        Files.write(Path.of(RecordSound.fileName), file.getBytes());
+                    } catch (IOException e) {
+                        System.out.println("error");
+                    }
+                    recordSound.playSound();
+                }
+                case 6 -> {
                     isBreak = true;
                 }
             }
