@@ -555,7 +555,7 @@ public class UI {
 
     private void _InChannelHandler(Integer serverUniqueID, Role allPersonRolls, String channelName) {
         int temp;
-        printList("messages", "send message", "send file", "pin messages", "restricted persons", "restrict person", "unRestrict person", "back");
+        printList("messages", "send message", "send file", "send voice","download file","play voice", "pin messages", "restricted persons", "restrict person", "unRestrict person", "back");
         switch (scn.readNumber()) {
             case 1 -> {
                 showChannelMessagesHandler(serverUniqueID, allPersonRolls, channelName);
@@ -587,22 +587,61 @@ public class UI {
                 _InChannelHandler(serverUniqueID, allPersonRolls, channelName);
             }
             case 4 -> {
+                System.out.println("Press enter to stop recording");
+                RecordSound recordSound = new RecordSound();
+                recordSound.start();
+                scn.printTimer();
+                recordSound.finish();
+                try {
+                    int fid = server.uploadFile(Files.readAllBytes(Path.of(RecordSound.fileName)), "wav");
+                    server.sendChannelMessage(channelName, serverUniqueID, "Sound(you can play it with its id)   id: "+fid, person.getUserName());
+                } catch (IOException e) {
+                    System.out.println("error");
+                }
+                System.out.println("sent");
+                _InChannelHandler(serverUniqueID, allPersonRolls, channelName);
+            }
+            case 5 -> {
+                System.out.println("Enter file code: ");
+                ChatFile file = server.downloadFile(scn.readNumber());
+                System.out.println("downloaded");
+                System.out.println("Where do you want to save?(folder)");
+                try {
+                    Files.write(Path.of(scn.readText() + "file." + file.getExtension()), file.getBytes());
+                } catch (IOException e) {
+                    System.out.println("error");
+                }
+                System.out.println("saved");
+                _InChannelHandler(serverUniqueID, allPersonRolls, channelName);
+            }
+            case 6 -> {
+                RecordSound recordSound = new RecordSound();
+                System.out.println("Enter voice code: ");
+                ChatFile file = server.downloadFile(scn.readNumber());
+                try {
+                    Files.write(Path.of(RecordSound.fileName), file.getBytes());
+                } catch (IOException e) {
+                    System.out.println("error");
+                }
+                recordSound.playSound();
+                _InChannelHandler(serverUniqueID, allPersonRolls, channelName);
+            }
+            case 7 -> {
                 for (var item : server.getPinMessages(channelName, serverUniqueID)) {
                     System.out.println("pined:\t" + item);
                 }
                 _InChannelHandler(serverUniqueID, allPersonRolls, channelName);
             }
-            case 5 -> {
+            case 8 -> {
                 var list = server.getRestrictPersonsFromAChannel(serverUniqueID, channelName);
                 for (var item : list) {
                     System.out.println(item);
                 }
                 _InChannelHandler(serverUniqueID, allPersonRolls, channelName);
             }
-            case 6 -> {
+            case 9 -> {
                 if (!allPersonRolls.isRestrictAccessChannel()) {
                     System.out.println("access blocked");
-                    serversHandler(serverUniqueID);
                     _InChannelHandler(serverUniqueID, allPersonRolls, channelName);
                     return;
                 }
@@ -619,10 +658,9 @@ public class UI {
                 System.out.println("Restricted");
                 _InChannelHandler(serverUniqueID, allPersonRolls, channelName);
             }
-            case 7 -> {
+            case 10 -> {
                 if (!allPersonRolls.isRestrictAccessChannel()) {
                     System.out.println("access blocked");
-                    serversHandler(serverUniqueID);
                     _InChannelHandler(serverUniqueID, allPersonRolls, channelName);
                     return;
                 }
@@ -639,7 +677,7 @@ public class UI {
                 System.out.println("unRestricted");
                 _InChannelHandler(serverUniqueID, allPersonRolls, channelName);
             }
-            case 8 -> {
+            case 11 -> {
                 _ChannelsHandler(serverUniqueID, allPersonRolls);
             }
         }
@@ -654,8 +692,7 @@ public class UI {
         }
         System.out.println("0) back");
         if ((temp = scn.readIndex()) == -1) {
-            serversHandler(serverUniqueID);
-            channelsMenuHandler(serverUniqueID, allPersonRolls);
+            _InChannelHandler(serverUniqueID, allPersonRolls,channelName);
             return;
         }
         TextChannelMessage msg = messages.get(temp);
