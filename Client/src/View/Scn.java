@@ -40,7 +40,7 @@ public class Scn {
     public boolean readYesOrNo(String text) {
         System.out.println(text);
         System.out.println("1)Yes   2)No");
-        return readText().toLowerCase().trim().equals("yes");
+        return readNumber()==1;
     }
 
     public Role readRole() {

@@ -144,14 +144,15 @@ public class PeopleRepository implements Serializable {
             people.get(privateChat.getP1()).addPrivateChat(privateChat);
             people.get(privateChat.getP2()).addPrivateChat(privateChat);
         }
-        String userName = privateChat.getP1().equals(message.getSenderUserName()) ? privateChat.getP2() : privateChat.getP1();
+        String userName = privateChat.getP1().equals(message.getSenderUserName()) ? privateChat.getP1() : privateChat.getP2();
+        String reciever = privateChat.getP1().equals(message.getSenderUserName()) ? privateChat.getP2() : privateChat.getP1();
         String _message = "";
         if (message.getText().length() > 10) {
             _message = "New message from " + userName + " :   " + message.getText().substring(0, 4) + ". . .";
         } else {
             _message = "New message from " + userName + " :   " + message.getText();
         }
-        addUpdateMessage(userName, _message);
+        addUpdateMessage(reciever, _message);
     }
 
     /**
