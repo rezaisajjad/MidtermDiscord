@@ -1,5 +1,6 @@
 package com.example.graphiscord;
 
+import Model.Request.Account.LoginRequest;
 import javafx.fxml.FXML;
 
 import java.io.IOException;
@@ -18,10 +19,6 @@ public class HelloController {
     private Stage stage;
     private Scene scene;
     @FXML
-    private ResourceBundle resources;
-    @FXML
-    private URL location;
-    @FXML
     private TextField emailOrUsername;
     @FXML
     private TextField password;
@@ -31,10 +28,14 @@ public class HelloController {
     private TextField userName;
 
 
+    //login request here with param1:emailOrUsername and param2:password
+    //if login success, go to main page
+    //if login failed, show error message
+    // if login success, save the user info to the server
     @FXML
     void LoginButtonPressed(ActionEvent event) {
-        //login request here with param1:emailOrUsername and param2:password
-        System.out.println("Login button pressed");
+        LoginRequest loginRequest = new LoginRequest(emailOrUsername.getText(), password.getText());
+
     }
     @FXML
     void registrationButtonPressed(ActionEvent event) throws IOException {
@@ -60,7 +61,7 @@ public class HelloController {
     @FXML
     void signUpButtonPressed(ActionEvent event) {
         //sign up request here with param1:email and param2:userName and param3:password
-        System.out.println("Sign up button pressed");
+        //
     }
 
     @FXML
