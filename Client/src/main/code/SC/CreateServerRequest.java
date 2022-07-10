@@ -1,6 +1,7 @@
-package Model.Request.SC;
+package code.SC;
 
-import Model.Request.IRequest;
+
+import code.IRequest;
 
 import java.io.Serializable;
 

@@ -1,4 +1,4 @@
-package Model.Request;
+package code;
 
 public interface IRequest {
 }

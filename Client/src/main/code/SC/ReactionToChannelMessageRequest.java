@@ -1,8 +1,8 @@
-package Model.Request.SC;
+package code.SC;
 
-import Model.Request.IRequest;
-import Model.Request.Reaction;
-import Model.Request.TextChannelMessage;
+import code.IRequest;
+import code.Reaction;
+import code.TextChannelMessage;
 
 import java.io.Serializable;
 

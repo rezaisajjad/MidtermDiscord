@@ -1,5 +1,7 @@
 package com.example.graphiscord;
 
+import code.*;
+import code.ServerChat;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
@@ -18,23 +20,23 @@ public class MainViewController {
     private ListView<HBox> servers=new ListView<>();
 //    @FXML
 //    private final HBox aChat =new HBox();
-    ArrayList<Chat> contacts=new ArrayList<>();
-    ArrayList<Server> serversList=new ArrayList<>();
-    private Server currentServer=new Server();
+    ArrayList<PrivateChat> contacts=new ArrayList<>();
+    ArrayList<ServerChat> serversList=new ArrayList<>();
+    private ServerChat currentServer;
 
 
-    public void changeCurrentServer(Server server) {
+    public void changeCurrentServer(ServerChat server) {
         currentServer=server;
     }
     public void changeCurrentServer(String serverName) {
-        for (Server server:serversList) {
+        for (ServerChat server:serversList) {
             if (server.getName().equals(serverName)) {
                 currentServer=server;
             }
         }
     }
-    public void  showableServer(Server server) {
-        for (Chat chat: currentServer.getChats()) {
+    public void  showableServer(ServerChat server) {
+        for (ServerTextChannel chat: currentServer.getChannels().values()) {
             File file = new File("src/main/resources/images/user.png");
             Image image = new Image(file.getAbsolutePath());
             Circle pic = new Circle(25, 25, 25);
@@ -52,7 +54,6 @@ public class MainViewController {
     public void initialize() {
         chats=new ListView<>();
         servers=new ListView<>();
-        servers.getItems().add()
     }
 
 }

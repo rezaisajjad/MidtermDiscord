@@ -1,7 +1,7 @@
-package Model.Request.SC;
+package code.SC;
 
-import Model.Request.ChannelType;
-import Model.Request.IRequest;
+import code.ChannelType;
+import code.IRequest;
 
 import java.io.Serializable;
 

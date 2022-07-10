@@ -1,4 +1,4 @@
-package Model.Request.SC;
+package code.SC;
 
 import java.io.Serializable;
 

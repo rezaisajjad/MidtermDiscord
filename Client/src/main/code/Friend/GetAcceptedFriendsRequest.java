@@ -1,6 +1,7 @@
-package Model.Request.Friend;
+package code.Friend;
 
-import Model.Request.IRequest;
+
+import code.IRequest;
 
 import java.io.Serializable;
 import java.util.ArrayList;

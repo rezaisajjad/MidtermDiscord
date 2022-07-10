@@ -1,7 +1,8 @@
-package Model.Request.Account;
+package code.Account;
 
-import Model.Request.IRequest;
-import Model.Request.Person;
+
+import code.IRequest;
+import code.Person;
 
 import java.io.Serializable;
 

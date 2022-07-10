@@ -1,5 +1,10 @@
-package Model.Request;
+package code;
 
+import code.Friend.*;
+import code.SC.*;
+import code.Chats.*;
+import code.Account.*;
+import code.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;

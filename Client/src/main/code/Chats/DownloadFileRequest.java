@@ -1,7 +1,9 @@
-package Model.Request.Chats;
+package code.Chats;
 
-import Model.Request.IRequest;
-import Model.Request.SC.ChatFile;
+
+
+import code.IRequest;
+import code.SC.ChatFile;
 
 import java.io.File;
 import java.io.Serializable;

@@ -1,7 +1,7 @@
-package Model.Request.SC;
+package code.SC;
 
-import Model.Request.IRequest;
-import Model.Request.Role;
+import code.IRequest;
+import code.Role;
 
 import java.io.Serializable;
 import java.util.ArrayList;

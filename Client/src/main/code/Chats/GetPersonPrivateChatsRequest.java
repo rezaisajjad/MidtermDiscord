@@ -1,7 +1,7 @@
-package Model.Request.Chats;
+package code.Chats;
 
-import Model.Request.PrivateChat;
-import Model.Request.IRequest;
+import code.IRequest;
+import code.PrivateChat;
 
 import java.io.Serializable;
 import java.util.ArrayList;

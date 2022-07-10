@@ -1,8 +1,7 @@
-package Model.Request.SC;
+package code.SC;
 
-import Model.Request.IRequest;
-import Model.Request.PrivateChatMessage;
-import Model.Request.TextChannelMessage;
+import code.IRequest;
+import code.TextChannelMessage;
 
 import java.io.Serializable;
 import java.util.ArrayList;
