@@ -1,10 +1,5 @@
 package code;
 
-import code.Friend.*;
-import code.SC.*;
-import code.Chats.*;
-import code.Account.*;
-import code.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -17,18 +12,18 @@ public class Person implements Serializable {
     private String userName;
     private String email;
     private String phoneNumber;
-    private Status status = Status.Idle;
+    private code.Status status = code.Status.Idle;
     private boolean isOnline = false;
     private ArrayList<String> friends = new ArrayList<>();
     private ArrayList<String> blockList = new ArrayList<>();
-    private ArrayList<PrivateChat> privateChatList = new ArrayList<>();
+    private ArrayList<code.PrivateChat> privateChatList = new ArrayList<>();
     private HashSet<Integer> serverChatsList = new HashSet<>();
     private byte[] image;
     private String imageFormat = "";
 
 
-    public Person cloneWithoutList() {
-        var person = new Person();
+    public code.Person cloneWithoutList() {
+        var person = new code.Person();
         person.setPassWord(passWord);
         person.setUserName(userName);
         person.setEmail(email);
@@ -43,7 +38,7 @@ public class Person implements Serializable {
     }
 
     // list methods
-    public boolean addPrivateChat(PrivateChat pc) {
+    public boolean addPrivateChat(code.PrivateChat pc) {
         return privateChatList.add(pc);
     }
 
@@ -55,7 +50,7 @@ public class Person implements Serializable {
         return friends.add(userName);
     }
 
-    public boolean removePrivateChat(PrivateChat pc) {
+    public boolean removePrivateChat(code.PrivateChat pc) {
         return privateChatList.remove(pc);
     }
 
@@ -106,7 +101,7 @@ public class Person implements Serializable {
         return phoneNumber;
     }
 
-    public Status getStatus() {
+    public code.Status getStatus() {
         return status;
     }
 
@@ -118,7 +113,7 @@ public class Person implements Serializable {
         return blockList;
     }
 
-    public ArrayList<PrivateChat> getPrivateChatList() {
+    public ArrayList<code.PrivateChat> getPrivateChatList() {
         return privateChatList;
     }
 
@@ -174,9 +169,9 @@ public class Person implements Serializable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Person)) return false;
+        if (!(o instanceof code.Person)) return false;
 
-        Person person = (Person) o;
+        code.Person person = (code.Person) o;
 
         return getUserName().equals(person.getUserName());
     }

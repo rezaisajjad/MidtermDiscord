@@ -1,8 +1,9 @@
 package Repository;
 
-import Model.Request.*;
-import Model.Request.Friend.AddFriendRequest;
-import Model.Request.SC.ChatFile;
+import code.Friend.*;
+import code.*;
+import code.SC.*;
+
 
 import java.io.Serializable;
 import java.time.LocalDateTime;

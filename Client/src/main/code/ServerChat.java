@@ -6,8 +6,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 public class ServerChat implements Serializable {
-    HashMap<String, Role> roles = new HashMap<>();
-    HashMap<String, ServerTextChannel> channels = new HashMap<>();
+    HashMap<String, code.Role> roles = new HashMap<>();
+    HashMap<String, code.ServerTextChannel> channels = new HashMap<>();
     HashMap<String, LocalDateTime> registerDates = new HashMap<>();
     HashMap<String, HashSet<String>> restrictBut = new HashMap<>();
     HashSet<String> members = new HashSet<>();
@@ -31,7 +31,7 @@ public class ServerChat implements Serializable {
         this.name = name;
         this.uniqueID = uniqueID;
         members.add(creator);
-        Role owner = new Role("owner",true, true, true,
+        code.Role owner = new code.Role("owner",true, true, true,
                 true, true, true, true,
                 true);
         owner.getMembers().add(creator);

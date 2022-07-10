@@ -1,20 +1,16 @@
-import Model.Request.Account.*;
-import Model.Request.Chats.DownloadFileRequest;
-import Model.Request.Chats.GetPersonPrivateChatsRequest;
-import Model.Request.Chats.SendMessagePrivateChatRequest;
-import Model.Request.Chats.UploadFileRequest;
-import Model.Request.Friend.*;
-import Model.Request.IRequest;
-import Model.Request.SC.*;
+import code.Account.*;
+import code.Friend.*;
+import code.SC.*;
+import code.Chats.*;
 import Repository.PeopleRepository;
-
+import code.*;
 import java.io.*;
 import java.net.Socket;
 
 public class SocketHandler extends Thread {
     public static PeopleRepository people = PeopleRepository.getInstance();
 
-    private Socket socket;
+    private final Socket socket;
 
     private SocketHandler(Socket socket) {
         this.socket = socket;
@@ -30,7 +26,7 @@ public class SocketHandler extends Thread {
     public void run() {
         try {
             ObjectInputStream inputStream = new ObjectInputStream(socket.getInputStream());
-            Object request = (Object) inputStream.readObject();
+            Object request = inputStream.readObject();
             ObjectOutputStream outputStream = new ObjectOutputStream(socket.getOutputStream());
             outputStream.writeObject(processRequest(request));
             socket.close();

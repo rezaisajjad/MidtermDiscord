@@ -7,9 +7,9 @@ import code.IRequest;
 import java.io.Serializable;
 
 public class AcceptFriendRequest implements Serializable, IRequest {
-    AddFriendRequest friendRequest;
+    code.Friend.AddFriendRequest friendRequest;
 
-    public AcceptFriendRequest(AddFriendRequest friendRequest) {
+    public AcceptFriendRequest(code.Friend.AddFriendRequest friendRequest) {
         this.friendRequest = friendRequest;
     }
 

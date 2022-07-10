@@ -4,27 +4,26 @@ import java.io.Serializable;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 
 public class ServerTextChannel implements Serializable {
     String name;
     HashSet<String> restrictPersons = new HashSet<>();
-    ChannelType type;
+    code.ChannelType type;
 
-    ArrayList<TextChannelMessage> pins=  new ArrayList<>();
-    ArrayList<TextChannelMessage> messages = new ArrayList<>();
+    ArrayList<code.TextChannelMessage> pins=  new ArrayList<>();
+    ArrayList<code.TextChannelMessage> messages = new ArrayList<>();
 
     public ServerTextChannel(String name, ChannelType type) {
         this.name = name;
         this.type = type;
     }
 
-    public ArrayList<TextChannelMessage> getPins() {
+    public ArrayList<code.TextChannelMessage> getPins() {
         return pins;
     }
 
-    public void setPins(ArrayList<TextChannelMessage> pins) {
+    public void setPins(ArrayList<code.TextChannelMessage> pins) {
         this.pins = pins;
     }
 
@@ -36,8 +35,8 @@ public class ServerTextChannel implements Serializable {
         return name;
     }
 
-    public ArrayList<TextChannelMessage> getMessages(LocalDateTime from) {
-        ArrayList<TextChannelMessage> messages = new ArrayList<>();
+    public ArrayList<code.TextChannelMessage> getMessages(LocalDateTime from) {
+        ArrayList<code.TextChannelMessage> messages = new ArrayList<>();
         for (var item:this.messages) {
             if (!Duration.between(from,item.getDateTime()).isNegative())
                 messages.add(item);

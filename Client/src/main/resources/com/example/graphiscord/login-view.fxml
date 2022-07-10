@@ -8,30 +8,39 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.example.graphiscord.HelloController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.graphiscord.HelloController">
    <children>
       <ImageView fitHeight="400.0" fitWidth="600.0">
          <image>
             <Image url="@itl.cat_macbook-pro-wallpaper_51012.png" />
          </image>
       </ImageView>
-      <AnchorPane blendMode="SCREEN" layoutX="400.0" layoutY="100.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #253030;" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="100.0">
+      <AnchorPane blendMode="SCREEN" layoutX="400.0" layoutY="72.0" prefHeight="199.0" prefWidth="200.0" style="-fx-background-color: #253030;" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="72.0">
          <children>
-            <Label blendMode="HARD_LIGHT" ellipsisString="" layoutX="14.0" layoutY="11.0" prefHeight="23.0" prefWidth="129.0" text="email or username" textFill="WHITE" textOverrun="CLIP">
+            <Label blendMode="HARD_LIGHT" ellipsisString="" layoutX="9.0" layoutY="14.0" prefHeight="23.0" prefWidth="129.0" text="email or username" textFill="WHITE" textOverrun="CLIP">
                <font>
                   <Font name="Californian FB Italic" size="18.0" />
                </font>
             </Label>
-            <TextField fx:id="emailOrUsername" blendMode="HARD_LIGHT" cache="true" layoutX="8.0" layoutY="35.0" style="-fx-border-color: #000000; -fx-background-color: #999999;" AnchorPane.bottomAnchor="139.0" AnchorPane.leftAnchor="8.0" AnchorPane.rightAnchor="40.0" AnchorPane.topAnchor="35.0" />
-            <Label blendMode="HARD_LIGHT" ellipsisString="" layoutX="13.0" layoutY="72.0" prefHeight="23.0" prefWidth="79.0" text="password" textFill="WHITE" textOverrun="CLIP">
+            <TextField fx:id="emailOrUsername" blendMode="HARD_LIGHT" cache="true" layoutX="8.0" layoutY="35.0" prefHeight="27.0" prefWidth="152.0" style="-fx-border-color: #000000; -fx-background-color: #999999;" AnchorPane.bottomAnchor="201.0" AnchorPane.leftAnchor="8.0" AnchorPane.rightAnchor="40.0" AnchorPane.topAnchor="35.0" />
+            <Label blendMode="HARD_LIGHT" ellipsisString="" layoutX="13.0" layoutY="95.0" prefHeight="23.0" prefWidth="79.0" text="password" textFill="WHITE" textOverrun="CLIP">
                <font>
                   <Font name="Californian FB Italic" size="18.0" />
                </font>
             </Label>
-            <TextField fx:id="password" blendMode="HARD_LIGHT" cache="true" layoutX="8.0" layoutY="98.0" style="-fx-border-color: #000000; -fx-background-color: #999999;" />
-            <Button blendMode="ADD" layoutX="48.0" layoutY="171.0" mnemonicParsing="false" onAction="#registrationButtonPressed" style="-fx-background-color: #000000;" text="REGISTRATION" textFill="WHITE" underline="true" />
-            <Button fx:id="logonbutton" layoutX="13.0" layoutY="138.0" mnemonicParsing="false" onAction="#LoginButtonPressed" prefHeight="30.0" prefWidth="174.0" text="LOGIN" />
+            <TextField fx:id="password" blendMode="HARD_LIGHT" cache="true" layoutX="9.0" layoutY="118.0" style="-fx-border-color: #000000; -fx-background-color: #999999;" />
+            <Button blendMode="ADD" layoutX="52.0" layoutY="224.0" mnemonicParsing="false" onAction="#registrationButtonPressed" style="-fx-background-color: #000000;" text="REGISTRATION" textFill="WHITE" underline="true" />
+            <Button fx:id="logonbutton" layoutX="13.0" layoutY="186.0" mnemonicParsing="false" onAction="#LoginButtonPressed" prefHeight="30.0" prefWidth="174.0" text="LOGIN" />
+            <Label fx:id="eORValidity" blendMode="HARD_LIGHT" ellipsisString="" layoutX="8.0" layoutY="62.0" prefHeight="23.0" prefWidth="187.0" text="invalid" textFill="#ff6100" textOverrun="CLIP">
+               <font>
+                  <Font name="Californian FB Italic" size="18.0" />
+               </font>
+            </Label>
+            <Label fx:id="pValidity" blendMode="HARD_LIGHT" ellipsisString="" layoutX="8.0" layoutY="145.0" prefHeight="23.0" prefWidth="187.0" text="invalid" textFill="#ff6100" textOverrun="CLIP">
+               <font>
+                  <Font name="Californian FB Italic" size="18.0" />
+               </font>
+            </Label>
          </children>
       </AnchorPane>
    </children>

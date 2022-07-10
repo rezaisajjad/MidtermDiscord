@@ -7,13 +7,13 @@ import java.util.HashMap;
 public class TextChannelMessage implements Serializable {
     private LocalDateTime dateTime;
     private String message;
-    private HashMap<Reaction, Integer> reactions = new HashMap<>();
+    private HashMap<code.Reaction, Integer> reactions = new HashMap<>();
     private String senderUserName;
 
     public TextChannelMessage(LocalDateTime dateTime, String message, String senderUserName) {
-        reactions.put(Reaction.like, 0);
-        reactions.put(Reaction.disLike, 0);
-        reactions.put(Reaction.laugh, 0);
+        reactions.put(code.Reaction.like, 0);
+        reactions.put(code.Reaction.disLike, 0);
+        reactions.put(code.Reaction.laugh, 0);
         this.dateTime = dateTime;
         this.message = message;
         this.senderUserName = senderUserName;
@@ -27,7 +27,7 @@ public class TextChannelMessage implements Serializable {
         return message;
     }
 
-    public HashMap<Reaction, Integer> getReactions() {
+    public HashMap<code.Reaction, Integer> getReactions() {
         return reactions;
     }
 
@@ -38,9 +38,9 @@ public class TextChannelMessage implements Serializable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof TextChannelMessage)) return false;
+        if (!(o instanceof code.TextChannelMessage)) return false;
 
-        TextChannelMessage that = (TextChannelMessage) o;
+        code.TextChannelMessage that = (code.TextChannelMessage) o;
 
         if (getDateTime() != null ? !getDateTime().equals(that.getDateTime()) : that.getDateTime() != null)
             return false;
@@ -51,8 +51,8 @@ public class TextChannelMessage implements Serializable {
     @Override
     public String toString() {
         return senderUserName+
-                ": " + message + '\t' + "[like= " + reactions.get(Reaction.like)
-                        + "   dislike= " + reactions.get(Reaction.disLike)
+                ": " + message + '\t' + "[like= " + reactions.get(code.Reaction.like)
+                        + "   dislike= " + reactions.get(code.Reaction.disLike)
                         + "   laugh= " + reactions.get(Reaction.laugh)+"]";
     }
 }

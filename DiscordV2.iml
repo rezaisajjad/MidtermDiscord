@@ -5,8 +5,5 @@
     <content url="file://$MODULE_DIR$" />
     <orderEntry type="jdk" jdkName="corretto-18" jdkType="JavaSDK" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module" module-name="Shared" exported="" />
-    <orderEntry type="module" module-name="Client" exported="" />
-    <orderEntry type="module" module-name="Server" exported="" />
   </component>
 </module>

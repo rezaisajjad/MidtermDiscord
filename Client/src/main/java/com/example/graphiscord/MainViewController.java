@@ -1,7 +1,6 @@
 package com.example.graphiscord;
 
 import code.*;
-import code.ServerChat;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
@@ -17,7 +16,7 @@ public class MainViewController {
     @FXML
     private ListView<HBox> chats=new ListView<>();
     @FXML
-    private ListView<HBox> servers=new ListView<>();
+    private ListView<HBox> serversListView =new ListView<>();
 //    @FXML
 //    private final HBox aChat =new HBox();
     ArrayList<PrivateChat> contacts=new ArrayList<>();
@@ -53,7 +52,7 @@ public class MainViewController {
 
     public void initialize() {
         chats=new ListView<>();
-        servers=new ListView<>();
+        serversListView =new ListView<>();
     }
 
 }

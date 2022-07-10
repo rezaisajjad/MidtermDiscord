@@ -3,7 +3,6 @@ package code.SC;
 import code.IRequest;
 
 import java.io.Serializable;
-import java.util.HashMap;
 
 public class RemoveRoleFromPersonServerRequest implements Serializable, IRequest {
     Integer serverUniqueID;

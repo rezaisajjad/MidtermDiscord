@@ -8,13 +8,13 @@ import java.util.ArrayList;
 
 public class GetPersonRequestsRequest implements Serializable, IRequest {
     String userName;
-    ArrayList<AddFriendRequest> requests;
+    ArrayList<code.Friend.AddFriendRequest> requests;
 
     public GetPersonRequestsRequest(String userName) {
         this.userName = userName;
     }
 
-    public ArrayList<AddFriendRequest> getRequests() {
+    public ArrayList<code.Friend.AddFriendRequest> getRequests() {
         return requests;
     }
 

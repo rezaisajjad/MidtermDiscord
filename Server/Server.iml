@@ -7,8 +7,8 @@
     </content>
     <orderEntry type="jdk" jdkName="corretto-18" jdkType="JavaSDK" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module" module-name="Shared" exported="" />
-    <orderEntry type="module" module-name="Client" exported="" />
-    <orderEntry type="module" module-name="DiscordV2" exported="" />
+    <orderEntry type="module" module-name="Shared" />
+    <orderEntry type="library" name="Maven: eu.hansolo:tilesfx:11.48" level="project" />
+    <orderEntry type="module" module-name="Client" />
   </component>
 </module>

@@ -68,7 +68,7 @@ public class Role implements Serializable {
         return pinTextMessage;
     }
 
-    public static Role integrateRolls(ArrayList<Role> roles) {
+    public static code.Role integrateRolls(ArrayList<code.Role> roles) {
         boolean createChannel = false;
         boolean removeChannel = false;
         boolean removePerson = false;
@@ -95,7 +95,7 @@ public class Role implements Serializable {
             if (role.isPinTextMessage())
                 pinTextMessage = true;
         }
-        return new Role("integrated",createChannel, removeChannel, removePerson, restrictAccessChannel, restrictPersonAccess,
+        return new code.Role("integrated",createChannel, removeChannel, removePerson, restrictAccessChannel, restrictPersonAccess,
                 changeServerName, observeChatHistory, pinTextMessage);
     }
 }

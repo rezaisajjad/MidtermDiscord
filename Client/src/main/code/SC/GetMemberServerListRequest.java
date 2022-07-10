@@ -5,7 +5,6 @@ import code.IRequest;
 
 import java.io.Serializable;
 import java.util.HashMap;
-import java.util.HashSet;
 
 public class GetMemberServerListRequest implements Serializable, IRequest {
     Integer serverUniqueID;

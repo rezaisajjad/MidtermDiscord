@@ -5,7 +5,6 @@ package code.Chats;
 import code.IRequest;
 import code.SC.ChatFile;
 
-import java.io.File;
 import java.io.Serializable;
 
 public class DownloadFileRequest implements IRequest, Serializable {

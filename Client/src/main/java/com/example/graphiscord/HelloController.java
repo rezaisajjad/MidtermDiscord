@@ -1,23 +1,26 @@
 package com.example.graphiscord;
 
-import Model.Request.Account.LoginRequest;
+import ClientController.InputValidator;
+import ClientController.Server;
+import code.Person;
 import javafx.fxml.FXML;
 
 import java.io.IOException;
-import java.net.URL;
 import java.util.Objects;
-import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 public class HelloController {
-    private Stage stage;
-    private Scene scene;
+    @FXML
+    private Label eORValidity=new Label();
+    @FXML
+    private Label pValidity=new Label();
     @FXML
     private TextField emailOrUsername;
     @FXML
@@ -26,49 +29,103 @@ public class HelloController {
     private TextField email;
     @FXML
     private TextField userName;
+    private final Server server = Server.getServer();
 
 
-    //login request here with param1:emailOrUsername and param2:password
-    //if login success, go to main page
-    //if login failed, show error message
-    // if login success, save the user info to the server
+
+    /* login request here with param1:emailOrUsername and param2:password
+    if login success, go to main page
+    if login failed, show error message
+    if login success, save the user info to the server*/
     @FXML
-    void LoginButtonPressed(ActionEvent event) {
-        LoginRequest loginRequest = new LoginRequest(emailOrUsername.getText(), password.getText());
-
+    public void LoginButtonPressed(ActionEvent event) {
+        emailOrUsername.setText(emailOrUsername.getText().toLowerCase());
+        if (!InputValidator.validateUserName(emailOrUsername.getText())) {
+            eORValidity.setText("Invalid username");
+            eORValidity.setVisible(true);
+            return;
+        }else{
+            eORValidity.setVisible(false);
+        }
+        if(!InputValidator.validatePassword(password.getText())) {
+            pValidity.setText("Invalid password");
+            pValidity.setVisible(true);
+            return;
+        }else {
+            pValidity.setVisible(false);
+        }
+        HelloApplication.person = server.loginPerson(emailOrUsername.getText(), password.getText());
+        if (HelloApplication.person != null) {
+            System.out.println("login success");
+            changeView(event, "main-view.fxml");
+        }
     }
     @FXML
-    void registrationButtonPressed(ActionEvent event) throws IOException {
+    void registrationButtonPressed(ActionEvent event){
         //close current window and open signUp window
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("signup-view.fxml")));
-        stage= (Stage) ((Node)event.getSource()).getScene().getWindow();
-        scene=new Scene(root);
-        stage.setResizable(false);
-        stage.setScene(scene);
-        stage.show();
+        changeView(event, "signup-view.fxml");
     }
 
     @FXML
-    void loginPageButtonPressed(ActionEvent event) throws IOException {
+    void loginPageButtonPressed(ActionEvent event){
         //close current window and open login window
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("login-view.fxml")));
-        stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
-        scene= new Scene(root);
-        stage.setResizable(false);
-        stage.setScene(scene);
-        stage.show();
+        changeView(event, "login-view.fxml");
     }
     @FXML
     void signUpButtonPressed(ActionEvent event) {
-        //sign up request here with param1:email and param2:userName and param3:password
-        //
+        userName.setText(userName.getText().toLowerCase());
+        if (!server.checkUserNameAvailability(userName.getText()))
+        {
+            System.out.println("already exist");
+            return;
+        }
+        if (!validateFields().equals("")) {
+            System.out.println(validateFields() + " is invalid !!!");
+            return;
+        }
+        //////
+        Person p = new Person();
+        p.setUserName(userName.getText());
+        p.setPassWord(password.getText());
+        p.setEmail(email.getText());
+        //p.setPhoneNumber(phoneNumber.getText());
+        HelloApplication.person = server.signUpPerson(p);
+        System.out.println("login success");
+
+        changeView(event, "main-view.fxml");
+
+    }
+
+    private void changeView(ActionEvent event, String name) {
+        Parent root;
+        try {
+            root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(name)));
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            Scene scene = new Scene(root);
+            stage.setResizable(false);
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private String validateFields() {
+        if (!InputValidator.validateUserName(userName.getText()))
+            return "user name";
+        if (!InputValidator.validateUserName(password.getText()))
+            return "passWord";
+        if (!InputValidator.validateEmail(email.getText()))
+            return "email";
+        return "";
     }
 
     @FXML
     void initialize() {
+        eORValidity.setVisible(false);
+        pValidity.setVisible(false);
         assert emailOrUsername != null : "fx:id=\"emailOrUsername\" was not injected: check your FXML file 'login-view.fxml'.";
         assert password != null : "fx:id=\"password\" was not injected: check your FXML file 'login-view.fxml'.";
 
     }
-
 }
