@@ -12,7 +12,7 @@
     <children>
         <ImageView fitHeight="400.0" fitWidth="600.0">
             <image>
-                <Image url="@itl.cat_macbook-pro-wallpaper_51012.png" />
+                <Image url="@img.png" />
             </image>
         </ImageView>
         <AnchorPane blendMode="SCREEN" layoutX="400.0" layoutY="45.0" prefHeight="310.0" prefWidth="200.0" style="-fx-background-color: #253030;" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="45.0">
@@ -22,7 +22,7 @@
                         <Font name="Californian FB Italic" size="18.0" />
                     </font>
                 </Label>
-                <TextField fx:id="password"  onKeyReleased="#changePass" blendMode="HARD_LIGHT" cache="true" layoutX="17.0" layoutY="184.0" style="-fx-border-color: #000000; -fx-background-color: #999999;" />
+                <TextField fx:id="password"   onKeyReleased="#changePass" blendMode="HARD_LIGHT" cache="true" layoutX="17.0" layoutY="184.0" style="-fx-border-color: #000000; -fx-background-color: #999999;" />
                 <Button blendMode="ADD" layoutX="74.0" layoutY="271.0" mnemonicParsing="false" onAction="#loginPageButtonPressed" style="-fx-background-color: #000000;" text="LOGIN" textFill="WHITE" underline="true" />
                 <Button layoutX="13.0" layoutY="227.0" mnemonicParsing="false" onAction="#signUpButtonPressed" prefHeight="30.0" prefWidth="174.0" text="SIGNUP" />
                 <Label blendMode="HARD_LIGHT" ellipsisString="" layoutX="17.0" layoutY="99.0" prefHeight="23.0" prefWidth="79.0" text="email" textFill="WHITE" textOverrun="CLIP">

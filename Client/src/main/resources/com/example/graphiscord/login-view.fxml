@@ -12,7 +12,7 @@
    <children>
       <ImageView fitHeight="400.0" fitWidth="600.0">
          <image>
-            <Image url="@itl.cat_macbook-pro-wallpaper_51012.png" />
+            <Image url="@img.png" />
          </image>
       </ImageView>
       <AnchorPane blendMode="SCREEN" layoutX="400.0" layoutY="72.0" prefHeight="199.0" prefWidth="200.0" style="-fx-background-color: #253030;" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="72.0">
