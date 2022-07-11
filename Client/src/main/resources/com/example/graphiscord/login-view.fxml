@@ -17,7 +17,7 @@
       </ImageView>
       <AnchorPane blendMode="SCREEN" layoutX="400.0" layoutY="72.0" prefHeight="199.0" prefWidth="200.0" style="-fx-background-color: #253030;" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="72.0">
          <children>
-            <Label blendMode="HARD_LIGHT" ellipsisString="" layoutX="9.0" layoutY="14.0" prefHeight="23.0" prefWidth="129.0" text="email or username" textFill="WHITE" textOverrun="CLIP">
+            <Label blendMode="HARD_LIGHT" ellipsisString="" layoutX="8.0" layoutY="14.0" prefHeight="23.0" prefWidth="129.0" text="username" textFill="WHITE" textOverrun="CLIP">
                <font>
                   <Font name="Californian FB Italic" size="18.0" />
                </font>

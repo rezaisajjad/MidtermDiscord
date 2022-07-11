@@ -1,28 +1,82 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.SplitMenuButton?>
 <?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.graphiscord.MainViewController">
-   <children>
-      <BorderPane layoutY="-2.0" prefHeight="400.0" prefWidth="600.0">
-         <left>
-            <SplitPane dividerPositions="0.5" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0" BorderPane.alignment="CENTER">
-              <items>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
-                     <children>
-                        <ListView fx:id="serversListView" layoutX="-28.0" layoutY="33.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                     </children>
-                  </AnchorPane>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
-                     <children>
-                        <ListView fx:id="chats" layoutX="7.0" prefHeight="366.0" prefWidth="153.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                     </children>
-                  </AnchorPane>
-              </items>
-            </SplitPane>
-         </left></BorderPane>
-   </children>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="429.0"
+            prefWidth="621.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.example.graphiscord.MainViewController">
+    <TabPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity"
+             minWidth="-Infinity" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0"
+             AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <Tab text="servers">
+            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                <BorderPane prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0"
+                            AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                    <left>
+                        <SplitPane dividerPositions="0.5" orientation="VERTICAL" prefHeight="361.0"
+                                   prefWidth="160.0" BorderPane.alignment="CENTER">
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+                                <Button layoutX="38.0" layoutY="-12.0" mnemonicParsing="false"
+                                        onAction="#newServerButton" prefHeight="30.0" prefWidth="158.0"
+                                        text="new" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+                                        AnchorPane.topAnchor="0.0"/>
+                                <ListView fx:id="serversListView" layoutX="-28.0" layoutY="1.0"
+                                          prefHeight="156.0" prefWidth="158.0" AnchorPane.bottomAnchor="0.0"
+                                          AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+                                          AnchorPane.topAnchor="30.0"/>
+                            </AnchorPane>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+                                <Button layoutX="53.0" layoutY="2.0" mnemonicParsing="false"
+                                        onAction="#newChannelButton" text="new"
+                                        AnchorPane.leftAnchor="0.0"
+                                        AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"/>
+                                <ListView fx:id="chats" layoutX="7.0" prefHeight="366.0"
+                                          prefWidth="153.0"
+                                          AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+                                          AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="30.0"/>
+                            </AnchorPane>
+                        </SplitPane>
+                    </left>
+                    <right>
+                        <AnchorPane prefHeight="371.0" prefWidth="160.0" BorderPane.alignment="CENTER">
+                            <ListView layoutX="-40.0" layoutY="47.0" prefHeight="200.0" prefWidth="200.0"
+                                      AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+                                      AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="30.0"/>
+                            <Button layoutX="60.0" layoutY="2.0" mnemonicParsing="false"
+                                    onAction="#invitation"
+                                    prefHeight="30.0" text="invitation" AnchorPane.leftAnchor="0.0"
+                                    AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"/>
+                        </AnchorPane>
+                    </right>
+                </BorderPane>
+            </AnchorPane>
+        </Tab>
+        <Tab text="friends">
+            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="621.0">
+                <ListView layoutY="47.0" prefHeight="200.0" prefWidth="200.0"/>
+                <SplitMenuButton layoutY="1.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="200.0"
+                                 text="what friends?" AnchorPane.leftAnchor="0.0"
+                                 AnchorPane.topAnchor="0.0">
+                    <items>
+                        <MenuItem mnemonicParsing="false" onAction="#allFriends" text="All"/>
+                        <MenuItem mnemonicParsing="false" onAction="#onlineFriends" text="Onlines"/>
+                        <MenuItem mnemonicParsing="false" onAction="#pendingFriends" text="Pending"/>
+                    </items>
+                </SplitMenuButton>
+                <ListView fx:id="friendsListView" layoutY="26.0" prefHeight="200.0" prefWidth="200.0"
+                          AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+                          AnchorPane.topAnchor="26.0"/>
+            </AnchorPane>
+        </Tab>
+    </TabPane>
+    <Button minHeight="50.0" minWidth="50.0" mnemonicParsing="false" onAction="#settingsButton" prefHeight="55.0"
+            prefWidth="66.0" text="settings" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"/>
 </AnchorPane>

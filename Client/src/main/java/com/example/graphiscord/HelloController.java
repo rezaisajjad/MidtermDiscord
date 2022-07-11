@@ -58,6 +58,7 @@ public class HelloController {
         if (HelloApplication.person != null) {
             System.out.println("login success");
             changeView(event, "main-view.fxml");
+            password.setText("");
         }
     }
     @FXML
@@ -91,6 +92,7 @@ public class HelloController {
         //p.setPhoneNumber(phoneNumber.getText());
         HelloApplication.person = server.signUpPerson(p);
         System.out.println("login success");
+        password.setText("");
 
         changeView(event, "main-view.fxml");
 
