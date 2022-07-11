@@ -1,5 +1,6 @@
 package com.example.graphiscord;
 
+import ClientController.Server;
 import code.Person;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -7,6 +8,8 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 public class HelloApplication extends Application {
     public static Person person;
@@ -20,8 +23,21 @@ public class HelloApplication extends Application {
         stage.setScene(scene);
         stage.show();
     }
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
+//        String uName= "sajjadmahdi";
+//        var person = new Person();
+//        person.setEmail("a@b.com");
+//        person.setUserName(uName);
+//        person.setPassWord("Sajjadmahdi1");
+//        Server.getServer().signUpPerson(person);
+//        Server.getServer().createServer(uName,"Test1");
+//        Server.getServer().createServer(uName,"Test2");
+//        Server.getServer().createServer(uName,"Test3");
+//        for (var item:Server.getServer().getPersonServerChats(uName).keySet()) {
+//            Server.getServer().setServerImage(item,Server.getServer().uploadFile(
+//                    Files.readAllBytes(Path.of("C:\\Users\\Sajjad\\IdeaProjects\\MidtermDiscordssssssssssssssssssssss\\Client\\src\\main\\resources\\com\\example\\graphiscord\\itl.cat_macbook-pro-wallpaper_51012.png")),"png"
+//            ));
+//        }
         launch();
-
     }
 }

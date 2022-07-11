@@ -607,4 +607,25 @@ public class Server {
         GetUpdatesRequest request= new GetUpdatesRequest(userName);
         return ((GetUpdatesRequest)sendRequest(request)).getUpdate();
     }
+
+    /**
+     * returns file of server Image
+     * @param serverID server id
+     * @return file
+     */
+    public Integer getServerImageID(Integer serverID)
+    {
+        GetServerImageRequest request=new GetServerImageRequest(serverID);
+        return ((GetServerImageRequest)sendRequest(request)).getServerImage();
+    }
+    /**
+     * sets image of a server
+     * @param serverID server id
+     * @param fileID fileId of image
+     */
+    public void setServerImage(Integer serverID,Integer fileID)
+    {
+        SetServerImageRequest request = new SetServerImageRequest(serverID,fileID);
+        sendRequest(request);
+    }
 }

@@ -34,12 +34,13 @@ public class HelloController {
     private TextField userName;
     private final Server server = Server.getServer();
 
-
+    public HelloController() {
+    }
 
     /* login request here with param1:emailOrUsername and param2:password
-    if login success, go to main page
-    if login failed, show error message
-    if login success, save the user info to the server*/
+        if login success, go to main page
+        if login failed, show error message
+        if login success, save the user info to the server*/
     @FXML
     public void LoginButtonPressed(ActionEvent event) {
         emailOrUsername.setText(emailOrUsername.getText().toLowerCase());
@@ -117,7 +118,7 @@ public class HelloController {
     private String validateFields() {
         if (!InputValidator.validateUserName(userName.getText()))
             return "user name";
-        if (!InputValidator.validateUserName(password.getText()))
+        if (!InputValidator.validatePassword(password.getText()))
             return "passWord";
         if (!InputValidator.validateEmail(email.getText()))
             return "email";

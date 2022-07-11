@@ -1,6 +1,6 @@
 package ClientController;
 
 public class Statics {
-    public static Integer MainPort = 11223;
-    public static Integer SecondPort = 15154;
+    public static Integer MainPort = 32332;
+    public static Integer SecondPort = 43423;
 }
