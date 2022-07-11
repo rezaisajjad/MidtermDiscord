@@ -43,7 +43,7 @@
             </Label>
          </children>
       </AnchorPane>
-      <Label fx:id="loginResult" blendMode="HARD_LIGHT" ellipsisString="" layoutX="406.0" layoutY="335.0" prefHeight="23.0" prefWidth="187.0" text="Login Failed" textFill="RED" textOverrun="CLIP">
+      <Label fx:id="loginResult" visible="false" blendMode="HARD_LIGHT" ellipsisString="" layoutX="406.0" layoutY="335.0" prefHeight="23.0" prefWidth="187.0" text="Login Failed" textFill="RED" textOverrun="CLIP">
          <font>
             <Font name="Californian FB Italic" size="31.0" />
          </font>
