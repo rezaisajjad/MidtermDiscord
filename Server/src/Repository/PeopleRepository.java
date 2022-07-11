@@ -753,4 +753,23 @@ public class PeopleRepository implements Serializable {
     public void sendChannelMessage(String channel, Integer serverID, String text, String sender) {
         servers.get(serverID).getChannels().get(channel).getMessages().add(new TextChannelMessage(LocalDateTime.now(), text, sender));
     }
+    /**
+     * returns file of server Image
+     * @param serverID server id
+     * @return file
+     */
+    public Integer getServerImageID(Integer serverID)
+    {
+           return servers.get(serverID).getImageID();
+    }
+
+    /**
+     * sets image of a server
+     * @param serverID server id
+     * @param fileID fileId of image
+     */
+    public void setServerImage(Integer serverID,Integer fileID)
+    {
+        servers.get(serverID).setImageID(fileID);
+    }
 }

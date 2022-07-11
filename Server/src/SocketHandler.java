@@ -1,10 +1,17 @@
-import code.Account.*;
-import code.Friend.*;
-import code.SC.*;
-import code.Chats.*;
 import Repository.PeopleRepository;
-import code.*;
-import java.io.*;
+import code.Account.*;
+import code.Chats.DownloadFileRequest;
+import code.Chats.GetPersonPrivateChatsRequest;
+import code.Chats.SendMessagePrivateChatRequest;
+import code.Chats.UploadFileRequest;
+import code.Friend.*;
+import code.IRequest;
+import code.SC.*;
+
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 public class SocketHandler extends Thread {
@@ -61,23 +68,16 @@ public class SocketHandler extends Thread {
             if (res.getP() != null)
                 res.setP(res.getP().cloneWithoutList());
             return res;
-        }
-        //endregion
-        //region Chats
-        else if (request instanceof GetPersonPrivateChatsRequest res) {
+        } else if (request instanceof GetPersonPrivateChatsRequest res) {
             res.setPrivateChats(people.getPersonPrivateChats(res.getUserName()));
             return res;
         } else if (request instanceof SendMessagePrivateChatRequest res) {
             people.sendPrivateChatMessage(res.getPrivateChat(), res.getMessage());
             return res;
-        }
-        //endregion
-        //region Friends
-        else if (request instanceof GetStatusRequest res) {
+        } else if (request instanceof GetStatusRequest res) {
             res.setStatus(people.getStatus(res.getUserName()));
             return res;
-        }
-        else if (request instanceof RemoveFriendRequest res) {
+        } else if (request instanceof RemoveFriendRequest res) {
             people.removeFriend(res.getSenderUserName(), res.getReceiverUserName());
             return res;
         } else if (request instanceof GetPersonRequestsRequest res) {
@@ -209,6 +209,12 @@ public class SocketHandler extends Thread {
             return res;
         } else if (request instanceof GetUpdatesRequest res) {
             res.setUpdate(people.getUpdates(res.getUserName()));
+            return res;
+        } else if (request instanceof GetServerImageRequest res) {
+            res.setServerImage(people.getServerImageID(res.getServerID()));
+            return res;
+        } else if (request instanceof SetServerImageRequest res) {
+            people.setServerImage(res.getServerID(), res.getImageID());
             return res;
         } else {
             return null;

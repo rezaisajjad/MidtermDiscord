@@ -22,13 +22,13 @@
                   <Font name="Californian FB Italic" size="18.0" />
                </font>
             </Label>
-            <TextField fx:id="emailOrUsername" blendMode="HARD_LIGHT" cache="true" layoutX="8.0" layoutY="35.0" prefHeight="27.0" prefWidth="152.0" style="-fx-border-color: #000000; -fx-background-color: #999999;" AnchorPane.bottomAnchor="201.0" AnchorPane.leftAnchor="8.0" AnchorPane.rightAnchor="40.0" AnchorPane.topAnchor="35.0" />
+            <TextField fx:id="emailOrUsername" text="sajjadmahdi" blendMode="HARD_LIGHT" cache="true" layoutX="8.0" layoutY="35.0" prefHeight="27.0" prefWidth="152.0" style="-fx-border-color: #000000; -fx-background-color: #999999;" AnchorPane.bottomAnchor="201.0" AnchorPane.leftAnchor="8.0" AnchorPane.rightAnchor="40.0" AnchorPane.topAnchor="35.0" />
             <Label blendMode="HARD_LIGHT" ellipsisString="" layoutX="13.0" layoutY="95.0" prefHeight="23.0" prefWidth="79.0" text="password" textFill="WHITE" textOverrun="CLIP">
                <font>
                   <Font name="Californian FB Italic" size="18.0" />
                </font>
             </Label>
-            <TextField fx:id="password" blendMode="HARD_LIGHT" cache="true" layoutX="9.0" layoutY="118.0" style="-fx-border-color: #000000; -fx-background-color: #999999;" />
+            <TextField fx:id="password" text="Sajjadmahdi1" blendMode="HARD_LIGHT" cache="true" layoutX="9.0" layoutY="118.0" style="-fx-border-color: #000000; -fx-background-color: #999999;" />
             <Button blendMode="ADD" layoutX="52.0" layoutY="224.0" mnemonicParsing="false" onAction="#registrationButtonPressed" style="-fx-background-color: #000000;" text="REGISTRATION" textFill="WHITE" underline="true" />
             <Button fx:id="logonbutton" layoutX="13.0" layoutY="186.0" mnemonicParsing="false" onAction="#LoginButtonPressed" prefHeight="30.0" prefWidth="174.0" text="LOGIN" />
             <Label fx:id="eORValidity" visible="false" blendMode="HARD_LIGHT" ellipsisString="" layoutX="8.0" layoutY="62.0" prefHeight="23.0" prefWidth="187.0" text="Invalid username" textFill="#ff6100" textOverrun="CLIP">

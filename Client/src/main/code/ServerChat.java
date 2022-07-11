@@ -12,8 +12,17 @@ public class ServerChat implements Serializable {
     HashMap<String, HashSet<String>> restrictBut = new HashMap<>();
     HashSet<String> members = new HashSet<>();
 
+    Integer imageID;
     String name;
     Integer uniqueID;
+
+    public Integer getImageID() {
+        return imageID;
+    }
+
+    public void setImageID(Integer imageID) {
+        this.imageID = imageID;
+    }
 
     public HashMap<String, LocalDateTime> getRegisterDates() {
         return registerDates;
