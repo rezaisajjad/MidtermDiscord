@@ -31,17 +31,22 @@
             <TextField fx:id="password" blendMode="HARD_LIGHT" cache="true" layoutX="9.0" layoutY="118.0" style="-fx-border-color: #000000; -fx-background-color: #999999;" />
             <Button blendMode="ADD" layoutX="52.0" layoutY="224.0" mnemonicParsing="false" onAction="#registrationButtonPressed" style="-fx-background-color: #000000;" text="REGISTRATION" textFill="WHITE" underline="true" />
             <Button fx:id="logonbutton" layoutX="13.0" layoutY="186.0" mnemonicParsing="false" onAction="#LoginButtonPressed" prefHeight="30.0" prefWidth="174.0" text="LOGIN" />
-            <Label fx:id="eORValidity" blendMode="HARD_LIGHT" ellipsisString="" layoutX="8.0" layoutY="62.0" prefHeight="23.0" prefWidth="187.0" text="invalid" textFill="#ff6100" textOverrun="CLIP">
+            <Label fx:id="eORValidity" visible="false" blendMode="HARD_LIGHT" ellipsisString="" layoutX="8.0" layoutY="62.0" prefHeight="23.0" prefWidth="187.0" text="Invalid username" textFill="#ff6100" textOverrun="CLIP">
                <font>
                   <Font name="Californian FB Italic" size="18.0" />
                </font>
             </Label>
-            <Label fx:id="pValidity" blendMode="HARD_LIGHT" ellipsisString="" layoutX="8.0" layoutY="145.0" prefHeight="23.0" prefWidth="187.0" text="invalid" textFill="#ff6100" textOverrun="CLIP">
+            <Label fx:id="pValidity" visible="false" blendMode="HARD_LIGHT" ellipsisString="" layoutX="8.0" layoutY="145.0" prefHeight="23.0" prefWidth="187.0" text="Invalid password" textFill="#ff6100" textOverrun="CLIP">
                <font>
                   <Font name="Californian FB Italic" size="18.0" />
                </font>
             </Label>
          </children>
       </AnchorPane>
+      <Label fx:id="loginResult" blendMode="HARD_LIGHT" ellipsisString="" layoutX="406.0" layoutY="335.0" prefHeight="23.0" prefWidth="187.0" text="Login Failed" textFill="RED" textOverrun="CLIP">
+         <font>
+            <Font name="Californian FB Italic" size="31.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>

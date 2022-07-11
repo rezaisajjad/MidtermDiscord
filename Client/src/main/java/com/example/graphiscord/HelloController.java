@@ -3,11 +3,8 @@ package com.example.graphiscord;
 import ClientController.InputValidator;
 import ClientController.Server;
 import code.Person;
-import javafx.fxml.FXML;
-
-import java.io.IOException;
-import java.util.Objects;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -16,9 +13,13 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
+import java.io.IOException;
+import java.util.Objects;
+
 public class HelloController {
+    public Label loginResult;
     @FXML
-    private Label eORValidity=new Label();
+    private Label eORValidity = new Label();
     @FXML
     private Label pValidity=new Label();
     @FXML
@@ -41,14 +42,12 @@ public class HelloController {
     public void LoginButtonPressed(ActionEvent event) {
         emailOrUsername.setText(emailOrUsername.getText().toLowerCase());
         if (!InputValidator.validateUserName(emailOrUsername.getText())) {
-            eORValidity.setText("Invalid username");
             eORValidity.setVisible(true);
             return;
         }else{
             eORValidity.setVisible(false);
         }
         if(!InputValidator.validatePassword(password.getText())) {
-            pValidity.setText("Invalid password");
             pValidity.setVisible(true);
             return;
         }else {
@@ -58,6 +57,8 @@ public class HelloController {
         if (HelloApplication.person != null) {
             System.out.println("login success");
             changeView(event, "main-view.fxml");
+        } else {
+            loginResult.setVisible(true);
             password.setText("");
         }
     }
