@@ -1,9 +1,12 @@
 package com.example.graphiscord;
 
 import ClientController.Server;
-import code.ChannelType;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
@@ -12,10 +15,13 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
+import javafx.stage.Stage;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Objects;
 
 public class MainViewController {
     Server server = Server.getServer();
@@ -78,10 +84,26 @@ public class MainViewController {
     void newServerButton(ActionEvent event) {
 
     }
+
+    private void changeView(ActionEvent event, String name) {
+        Parent root;
+        try {
+            root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(name)));
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            Scene scene = new Scene(root);
+            stage.setResizable(false);
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     @FXML
     void settingsButton(ActionEvent event) {
-
+        changeView(event, "setting-view.fxml");
     }
+
     @FXML
     void allFriends(ActionEvent event) {
 
