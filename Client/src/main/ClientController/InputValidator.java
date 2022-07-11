@@ -16,7 +16,7 @@ public class InputValidator {
     }
 
     public static boolean validateEmail(String email) {
-        String pattern = "^(.+)@(.+)$";
+        String pattern = "[a-z0-9]+@[a-z]+\\.[a-z]{2,3}";
         return isValidate(pattern,email);
     }
     public static boolean validatePhoneNumber(String phoneNumber) {

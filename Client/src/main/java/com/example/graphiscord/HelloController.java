@@ -11,6 +11,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -77,12 +78,12 @@ public class HelloController {
     @FXML
     void signUpButtonPressed(ActionEvent event) {
         userName.setText(userName.getText().toLowerCase());
-        if (!validateFields().equals("")) {
-            signUpResult.setText(validateFields() + "isn't validate");
-            return;
-        }
         if (!server.checkUserNameAvailability(userName.getText())) {
             signUpResult.setText("Username already exist");
+            return;
+        }
+        if (!validateFields().equals("")) {
+            signUpResult.setText("invalid " + validateFields());
             return;
         }
         //////
@@ -127,5 +128,31 @@ public class HelloController {
     void initialize() {
         assert emailOrUsername != null : "fx:id=\"emailOrUsername\" was not injected: check your FXML file 'login-view.fxml'.";
         assert password != null : "fx:id=\"password\" was not injected: check your FXML file 'login-view.fxml'.";
+    }
+
+    public void changePass(KeyEvent event) {
+        if (!InputValidator.validatePassword(password.getText())) {
+            signUpResult.setText("invalid passWord");
+        } else {
+            signUpResult.setText("");
+        }
+    }
+
+    public void changeEmail(KeyEvent event) {
+        if (!InputValidator.validateEmail(email.getText())) {
+            signUpResult.setText("invalid email");
+        } else {
+            signUpResult.setText("");
+        }
+    }
+
+    public void changeUName(KeyEvent event) {
+        if (!server.checkUserNameAvailability(userName.getText())) {
+            signUpResult.setText("Username already exist");
+        } else if (!InputValidator.validateUserName(userName.getText())) {
+            signUpResult.setText("invalid username");
+        } else {
+            signUpResult.setText("");
+        }
     }
 }
