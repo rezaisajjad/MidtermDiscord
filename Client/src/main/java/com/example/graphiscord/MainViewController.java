@@ -1,7 +1,7 @@
 package com.example.graphiscord;
 
 import ClientController.Server;
-import code.ServerChat;
+import code.ChannelType;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -10,56 +10,45 @@ import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 
 import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 
 public class MainViewController {
     Server server = Server.getServer();
     @FXML
-    private ListView<HBox> chats;
+    private final ListView<HBox> chats = new ListView<>();
     @FXML
-    private TextArea sendingMessageText;
+    private TextArea sendingMessageText = new TextArea();
     @FXML
-    private ListView<HBox> serversListView;
+    private ListView<HBox> serversListView = new ListView<>();
     @FXML
-    private ListView<HBox> friendsListView;
+    private ListView<HBox> friendsListView = new ListView<>();
     @FXML
-    private ListView<HBox> membersListView;
+    private ListView<HBox> membersListView = new ListView<>();
     @FXML
-    private ListView<HBox> serverTextChannelsListView;
+    private ListView<HBox> serverTextChannelsListView = new ListView<>();
     @FXML
-    private ListView<?> friendsList;
+    private ListView<?> friendsList = new ListView<>();
     @FXML
-    private AnchorPane membersPane;
+    private AnchorPane membersPane = new AnchorPane();
     @FXML
-    private AnchorPane messagesPane;
-    private final ArrayList<ServerChat> serversList = new ArrayList<>();
-    private final ArrayList<String> currentServersTextChannels = new ArrayList<>();
-    private ServerChat currentServer;
-
-    public MainViewController() {
-        refresh();
-    }
+    private AnchorPane messagesPane = new AnchorPane();
+    private HashMap<Integer, String> serversList;
+    private HashSet<String> currentServersTextChannels;
+    private Integer currentServer;
 
     public void refresh() {
-        //chats = new ListView<>();
-        var serverChats = server.getPersonServerChats(HelloApplication.person.getUserName());
-        serversListView = new ListView<>();
-        for (var item : serverChats.keySet()) {
-            serversListView.getItems().add(serverTitle(item,serverChats.get(item)));
+        // add servers to list
+        serversList = server.getPersonServerChats(HelloApplication.person.getUserName());
+        serversListView.getItems().clear();
+        for (var item : serversList.keySet()) {
+            serversListView.getItems().add(serverTitle(item, serversList.get(item)));
         }
         serversListView.refresh();
-        /*add servers title to serversListView
-        //for (ServerChat server : serversList) {
-        //serversListView.getItems().add(serverTitle(server));
-        //}
-        //messagesPane.setVisible(false);
-        //membersPane.setVisible(false);*/
     }
 
     public HBox serverTitle(Integer serverID,String name) {
@@ -70,7 +59,7 @@ public class MainViewController {
         pic.setFill(new ImagePattern(image));
         HBox HServer = new HBox();
         HServer.getChildren().add(pic);
-        javafx.scene.control.Label label = new javafx.scene.control.Label(Color.rgb(10, 50, 50) + name);
+        javafx.scene.control.Label label = new javafx.scene.control.Label(name);
         HServer.getChildren().add(label);
         return HServer;
     }
@@ -109,51 +98,36 @@ public class MainViewController {
 
     @FXML
     void aServerSelected() {
-//        currentServer = serversList.get(serversListView.getSelectionModel().getSelectedIndex());
-//        membersListView.getItems().clear();
-//        serverTextChannelsListView.getItems().clear();
-//        for (ServerTextChannel c : currentServer.getChannels().values()) {
-//            serverTextChannelsListView.getItems().add(new HBox(new Label(c.getName())));
-//            currentServersTextChannels.add(c.getName());
-//        }
-//        for (String u : currentServer.getMembers()) {
-//            //TODO: add member profile picture to the new HBox
-//            membersListView.getItems().add(new HBox(new Label(u)));
-//        }
-//        membersPane.setVisible(true);
+        currentServer = (Integer) serversList.keySet().toArray()[serversListView.getSelectionModel().getSelectedIndex()];
+        serverTextChannelsListView.getItems().clear();
+        currentServersTextChannels = server.getServerChannels(currentServer, HelloApplication.person.getUserName());
+        for (var item : currentServersTextChannels) {
+            serverTextChannelsListView.getItems().add(new HBox(new Label(item)));
+        }
+        var members = server.getServerMembers(currentServer);
+        membersListView.getItems().clear();
+        for (var item : members.keySet()) {
+            membersListView.getItems().add(new HBox(new Label(item + "  " + members.get(item))));
+        }
+        membersPane.setVisible(true);
     }
 
     @FXML
     void aServerTextChannelSelected() {
-        membersListView.getItems().clear();
-        for (String u : currentServer.getMembers()) {
-            membersListView.getItems().add(new HBox(new Label(u)));
-        }
-        messagesPane.setVisible(true);
-    }
-
-
-    private HBox getHBox(ServerChat server, File file) {
-        Image image = new Image(file.getAbsolutePath());
-        Circle pic = new Circle(25, 25, 25);
-        pic.setFill(new ImagePattern(image));
-        HBox HServer = new HBox();
-        HServer.getChildren().add(pic);
-        javafx.scene.control.Label label = new javafx.scene.control.Label(Color.rgb(10, 50, 50) + server.getName());
-        HServer.getChildren().add(label);
-        return HServer;
-    }
-
-    private HBox getHBox(ServerChat server) {
-        HBox HServer = new HBox();
-        javafx.scene.control.Label label = new javafx.scene.control.Label(Color.rgb(10, 50, 50) + server.getName());
-        HServer.getChildren().add(label);
-        return HServer;
+//        membersListView.getItems().clear();
+//        for (String u : currentServer.getMembers()) {
+//            membersListView.getItems().add(new HBox(new Label(u)));
+//        }
+//        messagesPane.setVisible(true);
     }
 
     public void sendMessageButton(ActionEvent actionEvent) {
         //String message = sendingMessageText.getText();
         //sendingMessageText.setText("");
         //currentServersTextChannels.sendMessage(message);
+    }
+
+    public void initialize() {
+        refresh();
     }
 }
