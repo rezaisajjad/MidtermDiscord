@@ -43,7 +43,6 @@ public class MainViewController {
     private ServerChat currentServer;
 
     public MainViewController() {
-
         refresh();
     }
 
