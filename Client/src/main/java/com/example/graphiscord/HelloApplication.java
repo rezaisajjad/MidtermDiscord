@@ -14,7 +14,7 @@ public class HelloApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         stage.setResizable(false);
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("signup-view.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("login-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 600, 400);
         System.err.println(scene);
         stage.setScene(scene);

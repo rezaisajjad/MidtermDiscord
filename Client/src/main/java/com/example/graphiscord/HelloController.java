@@ -18,6 +18,7 @@ import java.util.Objects;
 
 public class HelloController {
     public Label loginResult;
+    public Label signUpResult;
     @FXML
     private Label eORValidity = new Label();
     @FXML
@@ -76,13 +77,12 @@ public class HelloController {
     @FXML
     void signUpButtonPressed(ActionEvent event) {
         userName.setText(userName.getText().toLowerCase());
-        if (!server.checkUserNameAvailability(userName.getText()))
-        {
-            System.out.println("already exist");
+        if (!validateFields().equals("")) {
+            signUpResult.setText(validateFields() + "isn't validate");
             return;
         }
-        if (!validateFields().equals("")) {
-            System.out.println(validateFields() + " is invalid !!!");
+        if (!server.checkUserNameAvailability(userName.getText())) {
+            signUpResult.setText("Username already exist");
             return;
         }
         //////
@@ -125,10 +125,7 @@ public class HelloController {
 
     @FXML
     void initialize() {
-        eORValidity.setVisible(false);
-        pValidity.setVisible(false);
         assert emailOrUsername != null : "fx:id=\"emailOrUsername\" was not injected: check your FXML file 'login-view.fxml'.";
         assert password != null : "fx:id=\"password\" was not injected: check your FXML file 'login-view.fxml'.";
-
     }
 }

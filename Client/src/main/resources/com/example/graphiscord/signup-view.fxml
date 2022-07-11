@@ -25,19 +25,24 @@
                 <TextField fx:id="password" blendMode="HARD_LIGHT" cache="true" layoutX="17.0" layoutY="184.0" style="-fx-border-color: #000000; -fx-background-color: #999999;" />
                 <Button blendMode="ADD" layoutX="74.0" layoutY="271.0" mnemonicParsing="false" onAction="#loginPageButtonPressed" style="-fx-background-color: #000000;" text="LOGIN" textFill="WHITE" underline="true" />
                 <Button layoutX="13.0" layoutY="227.0" mnemonicParsing="false" onAction="#signUpButtonPressed" prefHeight="30.0" prefWidth="174.0" text="SIGNUP" />
-            <Label blendMode="HARD_LIGHT" ellipsisString="" layoutX="17.0" layoutY="99.0" prefHeight="23.0" prefWidth="79.0" text="email" textFill="WHITE" textOverrun="CLIP">
-               <font>
-                  <Font name="Californian FB Italic" size="18.0" />
-               </font>
-            </Label>
-            <TextField fx:id="email" blendMode="HARD_LIGHT" cache="true" layoutX="17.0" layoutY="128.0" style="-fx-border-color: #000000; -fx-background-color: #999999;" />
-            <Label blendMode="HARD_LIGHT" ellipsisString="" layoutX="17.0" layoutY="43.0" prefHeight="23.0" prefWidth="79.0" text="username" textFill="WHITE" textOverrun="CLIP">
-               <font>
-                  <Font name="Californian FB Italic" size="18.0" />
-               </font>
-            </Label>
-            <TextField fx:id="userName" blendMode="HARD_LIGHT" cache="true" layoutX="17.0" layoutY="72.0" style="-fx-border-color: #000000; -fx-background-color: #999999;" />
+                <Label blendMode="HARD_LIGHT" ellipsisString="" layoutX="17.0" layoutY="99.0" prefHeight="23.0" prefWidth="79.0" text="email" textFill="WHITE" textOverrun="CLIP">
+                    <font>
+                        <Font name="Californian FB Italic" size="18.0" />
+                    </font>
+                </Label>
+                <TextField fx:id="email" blendMode="HARD_LIGHT" cache="true" layoutX="17.0" layoutY="128.0" style="-fx-border-color: #000000; -fx-background-color: #999999;" />
+                <Label blendMode="HARD_LIGHT" ellipsisString="" layoutX="17.0" layoutY="43.0" prefHeight="23.0" prefWidth="79.0" text="username" textFill="WHITE" textOverrun="CLIP">
+                    <font>
+                        <Font name="Californian FB Italic" size="18.0" />
+                    </font>
+                </Label>
+                <TextField fx:id="userName" blendMode="HARD_LIGHT" cache="true" layoutX="17.0" layoutY="72.0" style="-fx-border-color: #000000; -fx-background-color: #999999;" />
             </children>
         </AnchorPane>
+        <Label fx:id="signUpResult" blendMode="HARD_LIGHT" ellipsisString="" layoutX="406.0" layoutY="355.0" prefHeight="23.0" prefWidth="187.0" textFill="RED" textOverrun="CLIP">
+            <font>
+                <Font name="Californian FB Italic" size="31.0" />
+            </font>
+        </Label>
     </children>
 </AnchorPane>
