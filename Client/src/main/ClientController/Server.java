@@ -653,4 +653,14 @@ public class Server {
         ChangeEmailRequest request = new ChangeEmailRequest(username, newMail);
         sendRequest(request);
     }
+    /**
+     * changes user phone number
+     *
+     * @param username person username
+     * @param newPhoneNumber  newEmail
+     */
+    public void changePhoneNumber(String username, String newPhoneNumber) {
+        ChangePhoneNumberRequest request = new ChangePhoneNumberRequest(username, newPhoneNumber);
+        sendRequest(request);
+    }
 }
