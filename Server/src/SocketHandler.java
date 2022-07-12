@@ -105,8 +105,7 @@ public class SocketHandler extends Thread {
             people.setStatus(res.getUserName(),res.getStatus());
             return res;
         }else if (request instanceof ChangeProfilePictureRequest res) {
-            people.setPersonProfilePicture(res.getUserName(), res.getImage(), res.getSuffix());
-            res = new ChangeProfilePictureRequest("", null, "");
+            people.setPersonProfilePicture(res.getUserName(), res.getImageID());
             return res;
         } else if (request instanceof CreateServerRequest res) {
             people.createServer(res.getCreatorUserName(), res.getName());
@@ -215,6 +214,9 @@ public class SocketHandler extends Thread {
             return res;
         } else if (request instanceof SetServerImageRequest res) {
             people.setServerImage(res.getServerID(), res.getImageID());
+            return res;
+        } else if (request instanceof CheckEmailAvailabilityRequest res) {
+            res.setAvailable(people.checkEmailAvailability(res.getEmail()));
             return res;
         } else {
             return null;

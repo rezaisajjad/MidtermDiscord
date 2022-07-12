@@ -7,22 +7,17 @@ import java.io.Serializable;
 
 public class ChangeProfilePictureRequest implements IRequest, Serializable {
     String userName;
-    byte[] image;
-    String suffix;
+    String fileID;
 
-    public ChangeProfilePictureRequest(String userName, byte[] image, String suffix) {
+    public ChangeProfilePictureRequest(String userName,String fileID) {
         this.userName = userName;
-        this.image = image;
-        this.suffix = suffix;
+        this.fileID = fileID;
     }
 
-    public byte[] getImage() {
-        return image;
+    public String getImageID() {
+        return fileID;
     }
 
-    public String getSuffix() {
-        return suffix;
-    }
 
     public String getUserName() {
         return userName;

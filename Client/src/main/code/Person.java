@@ -18,9 +18,7 @@ public class Person implements Serializable {
     private ArrayList<String> blockList = new ArrayList<>();
     private ArrayList<code.PrivateChat> privateChatList = new ArrayList<>();
     private HashSet<Integer> serverChatsList = new HashSet<>();
-    private byte[] image;
-    private String imageFormat = "";
-
+    private String imageID;
 
     public code.Person cloneWithoutList() {
         var person = new code.Person();
@@ -33,7 +31,7 @@ public class Person implements Serializable {
         person.setFriends(null);
         person.setBlockList(null);
         person.setPrivateChatList(null);
-        person.setImage(image);
+        person.setImageID(imageID);
         return person;
     }
 
@@ -77,9 +75,6 @@ public class Person implements Serializable {
         return serverChatsList;
     }
 
-    public String getImageFormat() {
-        return imageFormat;
-    }
 
     public boolean getIsOnline() {
         return isOnline;
@@ -117,14 +112,11 @@ public class Person implements Serializable {
         return privateChatList;
     }
 
-    public byte[] getImage() {
-        return image;
+    public String getImageID() {
+        return imageID;
     }
     //setters
 
-    public void setImageFormat(String imageFormat) {
-        this.imageFormat = imageFormat;
-    }
 
     public void setPassWord(String passWord) {
         this.passWord = passWord;
@@ -162,8 +154,8 @@ public class Person implements Serializable {
         this.privateChatList = privateChatList;
     }
 
-    public void setImage(byte[] image) {
-        this.image = image;
+    public void setImageID(String imageID) {
+        this.imageID = imageID;
     }
 
     @Override
