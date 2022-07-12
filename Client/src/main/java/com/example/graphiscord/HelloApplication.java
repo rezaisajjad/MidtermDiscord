@@ -3,7 +3,9 @@ package com.example.graphiscord;
 import ClientController.Server;
 import code.Person;
 import javafx.application.Application;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
@@ -17,9 +19,18 @@ public class HelloApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         stage.setResizable(false);
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("login-view.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("setting-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 600, 400);
         System.err.println(scene);
+        stage.setScene(scene);
+        stage.show();
+    }
+    public static void changeScene(ActionEvent event, String name) throws IOException {
+
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource(name));
+        Scene scene = new Scene(fxmlLoader.load(), 600, 400);
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
         stage.setScene(scene);
         stage.show();
     }
