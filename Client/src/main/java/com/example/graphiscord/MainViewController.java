@@ -1,6 +1,9 @@
 package com.example.graphiscord;
 
 import ClientController.Server;
+import code.Person;
+import code.PrivateChat;
+import code.PrivateChatMessage;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -18,6 +21,8 @@ import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 
 import java.io.ByteArrayInputStream;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -51,13 +56,31 @@ public class MainViewController {
         // add servers to list
         serversList = server.getPersonServerChats(HelloApplication.person.getUserName());
         serversListView.getItems().clear();
+        serversListView.getItems().add(serverViewChats());
         for (var item : serversList.keySet()) {
             serversListView.getItems().add(serverTitle(item, serversList.get(item)));
         }
         serversListView.refresh();
     }
 
-    public HBox serverTitle(Integer serverID,String name) {
+    public HBox serverViewChats() {
+        FileInputStream stream = null;
+        try {
+            stream = new FileInputStream("Client/src/main/resources/com/example/graphiscord/chat-2389223_640.png");
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        Image image = new Image(stream);
+        Circle pic = new Circle(25, 25, 25);
+        pic.setFill(new ImagePattern(image));
+        HBox HServer = new HBox();
+        HServer.getChildren().add(pic);
+        javafx.scene.control.Label label = new javafx.scene.control.Label("Chats");
+        HServer.getChildren().add(label);
+        return HServer;
+    }
+
+    public HBox serverTitle(Integer serverID, String name) {
         var file = this.server.downloadFile(server.getServerImageID(serverID));
         ByteArrayInputStream stream = new ByteArrayInputStream(file.getBytes());
         Image image = new Image(stream);
@@ -118,9 +141,21 @@ public class MainViewController {
     void pendingFriends(ActionEvent event) {
     }
 
+    String chatContact(PrivateChat privateChat) {
+        return privateChat.getP1().trim().equals(HelloApplication.person.getUserName()) ? privateChat.getP2() : privateChat.getP1();
+    }
+
     @FXML
     void aServerSelected() {
-        currentServer = (Integer) serversList.keySet().toArray()[serversListView.getSelectionModel().getSelectedIndex()];
+        int index = serversListView.getSelectionModel().getSelectedIndex();
+        if (index == 0) {
+            serverTextChannelsListView.getItems().clear();
+            for (var item : server.getPersonPrivateChats(HelloApplication.person.getUserName())) {
+                serverTextChannelsListView.getItems().add(new HBox(new Label(chatContact(item))));
+            }
+        }
+        index--;
+        currentServer = (Integer) serversList.keySet().toArray()[index];
         serverTextChannelsListView.getItems().clear();
         currentServersTextChannels = server.getServerChannels(currentServer, HelloApplication.person.getUserName());
         for (var item : currentServersTextChannels) {
