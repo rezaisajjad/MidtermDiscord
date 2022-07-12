@@ -2,6 +2,7 @@ package com.example.graphiscord;
 
 import ClientController.Server;
 import code.PrivateChat;
+import code.SC.ChatFile;
 import code.TextChannelMessage;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -11,10 +12,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.ContentDisplay;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -24,12 +22,13 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.TextAlignment;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
-import java.io.ByteArrayInputStream;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -44,7 +43,6 @@ public class MainViewController {
     private TextArea serverTextArea = new TextArea();
     @FXML
     private final ListView friendMessageListView=new ListView();
-
     private ListView<HBox> currentListView=new ListView<>();
     Server server = Server.getServer();
     @FXML
@@ -125,8 +123,6 @@ public class MainViewController {
     void newServerButton(ActionEvent event) {
 
     }
-
-
 
     private void changeView(ActionEvent event, String name) {
         Parent root;
@@ -326,9 +322,47 @@ public class MainViewController {
     @FXML
     private void sendVoiceButton(ActionEvent actionEvent) {
     }
-
     @FXML
-    public void sendFileButton(ActionEvent actionEvent) {
+    public void sendFileButton(ActionEvent actionEvent) throws IOException {
+        //open a file chooser
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Select File");
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("All Files", "*.*"),
+                new FileChooser.ExtensionFilter("Text Files", "*.txt"),
+                new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.gif"),
+                new FileChooser.ExtensionFilter("Audio Files", "*.wav", "*.mp3", "*.aac"),
+                new FileChooser.ExtensionFilter("All Files", "*.*")
+        );
+        File selectedFile = fileChooser.showOpenDialog(null);
+        Integer fileMessage=server.uploadFile(Files.readAllBytes(selectedFile.getAbsoluteFile().toPath()),selectedFile.getAbsolutePath().substring(selectedFile.getAbsolutePath().lastIndexOf('.') + 1));
+        var file = server.downloadFile(HelloApplication.person.getImageID());
+        Button button = new Button();
+        button.setText("Download");
+        button.setOnAction(event -> {
+            ChatFile file1 = server.downloadFile(fileMessage);
+            FileChooser fileChooser1 = new FileChooser();
+            fileChooser1.setTitle("Save File");
+            fileChooser1.getExtensionFilters().addAll(
+                    new FileChooser.ExtensionFilter("All Files", "*.*"),
+                    new FileChooser.ExtensionFilter("Text Files", "*.txt"),
+                    new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.gif"),
+                    new FileChooser.ExtensionFilter("Audio Files", "*.wav", "*.mp3", "*.aac"),
+                    new FileChooser.ExtensionFilter("All Files", "*.*")
+            );
+            File selectedFile1 = fileChooser1.showSaveDialog(null);
+            try {
+                Files.write(Path.of(selectedFile1.getAbsolutePath()),file1.getBytes());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
+        });
+        ByteArrayInputStream stream = new ByteArrayInputStream(file.getBytes());
+        Image image = new Image(stream);
+        HBox messageHBox = getMessageHBox(image,selectedFile.getAbsolutePath(),0,0,0);
+        messageHBox.getChildren().add(button);
+        currentListView.getItems().add(messageHBox);
     }
 
     public void pinnedMessageButton(ActionEvent actionEvent) {
