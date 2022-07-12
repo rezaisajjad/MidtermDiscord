@@ -1,6 +1,7 @@
 package Repository;
 
 import code.*;
+import code.Account.ChangePhoneNumberRequest;
 import code.Friend.AddFriendRequest;
 import code.SC.ChatFile;
 
@@ -318,7 +319,7 @@ public class PeopleRepository implements Serializable {
      * @param userName person username
      * @param fileID fileID
      */
-    public void setPersonProfilePicture(String userName, String fileID) {
+    public void setPersonProfilePicture(String userName, Integer fileID) {
         people.get(userName).setImageID(fileID);
     }
 
@@ -789,5 +790,15 @@ public class PeopleRepository implements Serializable {
      */
     public void changePersonEmail(String username, String newMail) {
         people.get(username).setEmail(newMail);
+    }
+
+    /**
+     * changes user phone number
+     *
+     * @param username person username
+     * @param newPhoneNumber  newEmail
+     */
+    public void changePhoneNumber(String username, String newPhoneNumber) {
+        people.get(username).setPhoneNumber(newPhoneNumber);
     }
 }

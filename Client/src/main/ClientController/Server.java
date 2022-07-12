@@ -215,7 +215,7 @@ public class Server {
      * @param fileID    fileID
      * @param userName person userName
      */
-    public void setPersonProfilePicture(String userName, String fileID) {
+    public void setPersonProfilePicture(String userName, Integer fileID) {
         ChangeProfilePictureRequest request = new ChangeProfilePictureRequest(userName, fileID);
         sendRequest(request);
     }
@@ -651,6 +651,16 @@ public class Server {
      */
     public void changePersonEmail(String username, String newMail) {
         ChangeEmailRequest request = new ChangeEmailRequest(username, newMail);
+        sendRequest(request);
+    }
+    /**
+     * changes user phone number
+     *
+     * @param username person username
+     * @param newPhoneNumber  newEmail
+     */
+    public void changePhoneNumber(String username, String newPhoneNumber) {
+        ChangePhoneNumberRequest request = new ChangePhoneNumberRequest(username, newPhoneNumber);
         sendRequest(request);
     }
 }

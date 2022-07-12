@@ -1,5 +1,6 @@
 package com.example.graphiscord;
 
+import ClientController.OnlineThread;
 import ClientController.Server;
 import code.Person;
 import javafx.application.Application;
@@ -51,6 +52,7 @@ public class HelloApplication extends Application {
 //                    Files.readAllBytes(Path.of("C:\\Users\\Sajjad\\IdeaProjects\\MidtermDiscordssssssssssssssssssssss\\Client\\src\\main\\resources\\com\\example\\graphiscord\\itl.cat_macbook-pro-wallpaper_51012.png")),"png"
 //            ));
 //        }
+        new OnlineThread().start();
         launch();
     }
 }

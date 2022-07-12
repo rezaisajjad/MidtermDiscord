@@ -18,7 +18,7 @@ public class Person implements Serializable {
     private ArrayList<String> blockList = new ArrayList<>();
     private ArrayList<code.PrivateChat> privateChatList = new ArrayList<>();
     private HashSet<Integer> serverChatsList = new HashSet<>();
-    private String imageID;
+    private Integer imageID;
 
     public code.Person cloneWithoutList() {
         var person = new code.Person();
@@ -112,7 +112,7 @@ public class Person implements Serializable {
         return privateChatList;
     }
 
-    public String getImageID() {
+    public Integer getImageID() {
         return imageID;
     }
     //setters
@@ -154,7 +154,7 @@ public class Person implements Serializable {
         this.privateChatList = privateChatList;
     }
 
-    public void setImageID(String imageID) {
+    public void setImageID(Integer imageID) {
         this.imageID = imageID;
     }
 

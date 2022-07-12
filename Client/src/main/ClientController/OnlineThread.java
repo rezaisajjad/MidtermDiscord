@@ -22,11 +22,12 @@ public class OnlineThread extends Thread {
             try {
                 socket = new Socket("localhost", Statics.SecondPort);
                 PrintWriter pw = new PrintWriter(socket.getOutputStream());
-                if (!(userName = HelloApplication.person.getUserName()).equals("")) {
-                    pw.println(userName);
-                    pw.flush();
-                    socket.close();
-                }
+                if (HelloApplication.person != null)
+                    if (!(userName = HelloApplication.person.getUserName()).equals("")) {
+                        pw.println(userName);
+                        pw.flush();
+                        socket.close();
+                    }
                 updates = Server.getServer().getUpdates(userName);
                 if (updates != null && !updates.equals(""))
                     System.err.println(updates);

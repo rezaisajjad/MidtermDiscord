@@ -14,6 +14,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
+<?import javafx.scene.control.ComboBox?>
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="429.0" prefWidth="720.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.graphiscord.MainViewController">
     <children>
         <TabPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -56,13 +57,9 @@
                 <Tab text="friends">
                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="621.0">
                         <ListView layoutY="47.0" prefHeight="200.0" prefWidth="200.0" />
-                        <SplitMenuButton layoutY="1.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="200.0" text="what friends?" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
-                            <items>
-                                <MenuItem mnemonicParsing="false" onAction="#allFriends" text="All" />
-                                <MenuItem mnemonicParsing="false" onAction="#onlineFriends" text="Onlines" />
-                                <MenuItem mnemonicParsing="false" onAction="#pendingFriends" text="Pending" />
-                            </items>
-                        </SplitMenuButton>
+                        <ComboBox layoutY="1.0" fx:id="friedComboBox"  prefHeight="25.0" prefWidth="200.0"  AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+
+                        </ComboBox>
                         <ListView fx:id="friendsListView" layoutY="26.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="26.0" />
                   <AnchorPane layoutX="200.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="200.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>

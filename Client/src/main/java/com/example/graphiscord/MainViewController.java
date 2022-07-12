@@ -11,10 +11,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.ContentDisplay;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -36,6 +33,7 @@ import java.util.HashSet;
 import java.util.Objects;
 
 public class MainViewController {
+    public ComboBox friedComboBox;
     @FXML
     private TextArea friendTextArea = new TextArea();
     @FXML
@@ -255,6 +253,11 @@ public class MainViewController {
     @FXML
     public void initialize() {
         refresh();
+        friedComboBox.getItems().add("All Friends");
+        friedComboBox.getItems().add("Online");
+        friedComboBox.getItems().add("Pending");
+        friedComboBox.getItems().add("Requests");
+        friedComboBox.getSelectionModel().select(0);
     }
 
     @FXML

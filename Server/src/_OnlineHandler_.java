@@ -1,11 +1,7 @@
 import Repository.PeopleRepository;
 
 import java.time.Duration;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.Period;
-import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalUnit;
 
 public class _OnlineHandler_ extends Thread{
     @Override

@@ -221,6 +221,9 @@ public class SocketHandler extends Thread {
         }else if (request instanceof ChangeEmailRequest res) {
             people.changePersonEmail(res.getUsername(), res.getNewMail());
             return res;
+        } else if (request instanceof ChangePhoneNumberRequest res) {
+            people.changePhoneNumber(res.getUsername(), res.getPhoneNumber());
+            return res;
         } else {
             return null;
         }
