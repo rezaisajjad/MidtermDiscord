@@ -318,7 +318,7 @@ public class PeopleRepository implements Serializable {
      * @param userName person username
      * @param fileID fileID
      */
-    public void setPersonProfilePicture(String userName, String fileID) {
+    public void setPersonProfilePicture(String userName, Integer fileID) {
         people.get(userName).setImageID(fileID);
     }
 

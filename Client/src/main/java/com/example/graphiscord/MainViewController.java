@@ -120,7 +120,8 @@ public class MainViewController {
     }
 
     @FXML
-    void newServerButton(ActionEvent event) {
+    void newServerButton(ActionEvent event) throws IOException {
+        HelloApplication.changeScene(event,"newServer-view.fxml");
 
     }
 
@@ -228,6 +229,9 @@ public class MainViewController {
     void aServerTextChannelSelected() {
         currentListView= serverTextChannelsListView;
         int index = serverTextChannelsListView.getSelectionModel().getSelectedIndex();
+        if (index <= 0) {
+            return;
+        }
         for ( TextChannelMessage item : server.getChannelMessages((String) currentServersTextChannels.toArray()[index],currentServer,HelloApplication.person.getUserName())) {
             //todo
             //todo

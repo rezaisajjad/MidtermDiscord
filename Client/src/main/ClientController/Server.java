@@ -215,7 +215,7 @@ public class Server {
      * @param fileID    fileID
      * @param userName person userName
      */
-    public void setPersonProfilePicture(String userName, String fileID) {
+    public void setPersonProfilePicture(String userName, Integer fileID) {
         ChangeProfilePictureRequest request = new ChangeProfilePictureRequest(userName, fileID);
         sendRequest(request);
     }
