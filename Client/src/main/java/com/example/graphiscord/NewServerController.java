@@ -17,7 +17,6 @@ import javafx.stage.FileChooser;
 
 public class NewServerController {
 
-
     @FXML // fx:id="nameTextField"
     private TextField nameTextField; // Value injected by FXMLLoader
 
