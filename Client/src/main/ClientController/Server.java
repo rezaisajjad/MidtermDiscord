@@ -1,8 +1,11 @@
 package ClientController;
 
-import code.*;
 import code.Account.*;
-import code.Chats.*;
+import code.*;
+import code.Chats.DownloadFileRequest;
+import code.Chats.GetPersonPrivateChatsRequest;
+import code.Chats.SendMessagePrivateChatRequest;
+import code.Chats.UploadFileRequest;
 import code.Friend.*;
 import code.SC.*;
 
@@ -209,12 +212,11 @@ public class Server {
     /**
      * change profile picture
      *
-     * @param bytes    file bytes
-     * @param format   file format (suffix)
+     * @param fileID    fileID
      * @param userName person userName
      */
-    public void setPersonProfilePicture(String userName, byte[] bytes, String format) {
-        ChangeProfilePictureRequest request = new ChangeProfilePictureRequest(userName, bytes, format);
+    public void setPersonProfilePicture(String userName, String fileID) {
+        ChangeProfilePictureRequest request = new ChangeProfilePictureRequest(userName, fileID);
         sendRequest(request);
     }
 
@@ -618,14 +620,26 @@ public class Server {
         GetServerImageRequest request=new GetServerImageRequest(serverID);
         return ((GetServerImageRequest)sendRequest(request)).getServerImage();
     }
+
     /**
      * sets image of a server
+     *
      * @param serverID server id
-     * @param fileID fileId of image
+     * @param fileID   fileId of image
      */
-    public void setServerImage(Integer serverID,Integer fileID)
-    {
-        SetServerImageRequest request = new SetServerImageRequest(serverID,fileID);
+    public void setServerImage(Integer serverID, Integer fileID) {
+        SetServerImageRequest request = new SetServerImageRequest(serverID, fileID);
         sendRequest(request);
+    }
+
+    /**
+     * check if a email already exist or not
+     *
+     * @param email email
+     * @return true:not exist --> available       false: exist --> unavailable
+     */
+    public boolean checkEmailAvailability(String email) {
+        CheckEmailAvailabilityRequest request = new CheckEmailAvailabilityRequest(email);
+        return ((CheckEmailAvailabilityRequest) sendRequest(request)).isAvailable();
     }
 }

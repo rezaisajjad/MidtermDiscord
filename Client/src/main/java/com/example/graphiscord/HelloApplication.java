@@ -1,7 +1,6 @@
 package com.example.graphiscord;
 
 import ClientController.Server;
-import code.ChannelType;
 import code.Person;
 import code.PrivateChat;
 import code.PrivateChatMessage;
@@ -13,8 +12,6 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 
 public class HelloApplication extends Application {
     public static Person person;
@@ -22,7 +19,7 @@ public class HelloApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         stage.setResizable(false);
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("setting-view.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("login-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 600, 400);
         System.err.println(scene);
         stage.setScene(scene);

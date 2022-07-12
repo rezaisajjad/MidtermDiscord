@@ -1,16 +1,12 @@
 package Repository;
 
-import code.Friend.*;
 import code.*;
-import code.SC.*;
-
+import code.Friend.AddFriendRequest;
+import code.SC.ChatFile;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Random;
+import java.util.*;
 
 public class PeopleRepository implements Serializable {
 
@@ -318,13 +314,11 @@ public class PeopleRepository implements Serializable {
     /**
      * sets person picture
      *
-     * @param userName  person username
-     * @param bytes     file bytes
-     * @param extension file format
+     * @param userName person username
+     * @param fileID fileID
      */
-    public void setPersonProfilePicture(String userName, byte[] bytes, String extension) {
-        people.get(userName).setImage(bytes);
-        people.get(userName).setImageFormat(extension);
+    public void setPersonProfilePicture(String userName, String fileID) {
+        people.get(userName).setImageID(fileID);
     }
 
     /**
@@ -765,11 +759,25 @@ public class PeopleRepository implements Serializable {
 
     /**
      * sets image of a server
+     *
      * @param serverID server id
-     * @param fileID fileId of image
+     * @param fileID   fileId of image
      */
-    public void setServerImage(Integer serverID,Integer fileID)
-    {
+    public void setServerImage(Integer serverID, Integer fileID) {
         servers.get(serverID).setImageID(fileID);
+    }
+
+    /**
+     * check if a email already exist or not
+     *
+     * @param email email
+     * @return true:not exist --> available       false: exist --> unavailable
+     */
+    public boolean checkEmailAvailability(String email) {
+        for (var item : people.values()) {
+            if (item.getEmail().toLowerCase(Locale.ROOT).trim().equals(email.trim().toLowerCase(Locale.ROOT)))
+                return false;
+        }
+        return true;
     }
 }

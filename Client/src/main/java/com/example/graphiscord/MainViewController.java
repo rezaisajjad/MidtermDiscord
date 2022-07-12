@@ -36,11 +36,11 @@ import java.util.Objects;
 
 public class MainViewController {
     @FXML
-    private TextArea friendTextArea=new TextArea();
+    private TextArea friendTextArea = new TextArea();
     @FXML
-    private final ListView serverMessagesListView=new ListView();
+    private final ListView serverMessagesListView = new ListView();
     @FXML
-    private TextArea serverTextArea=new TextArea();
+    private TextArea serverTextArea = new TextArea();
     @FXML
     private final ListView friendMessageListView=new ListView();
 
@@ -66,6 +66,8 @@ public class MainViewController {
     private HashMap<Integer, String> serversList;
     private HashSet<String> currentServersTextChannels=new HashSet<>();
     private Integer currentServer;
+
+
 
     public void refresh() {
         // add servers to list
@@ -226,6 +228,7 @@ public class MainViewController {
 
     @FXML
     void aServerTextChannelSelected() {
+
 //        int index = channelMessages.sele;
 //        if ()
 //        .clear();
