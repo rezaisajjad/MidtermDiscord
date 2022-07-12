@@ -1,9 +1,7 @@
 package com.example.graphiscord;
 
 import ClientController.Server;
-import code.Person;
 import code.PrivateChat;
-import code.PrivateChatMessage;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -16,6 +14,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
@@ -24,6 +23,7 @@ import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Objects;
@@ -46,6 +46,8 @@ public class MainViewController {
     private ListView<?> friendsList = new ListView<>();
     @FXML
     private AnchorPane membersPane = new AnchorPane();
+
+    ArrayList<String> friends;
     @FXML
     private AnchorPane messagesPane = new AnchorPane();
     private HashMap<Integer, String> serversList;
@@ -127,9 +129,28 @@ public class MainViewController {
         changeView(event, "setting-view.fxml");
     }
 
+    void getFriendHBox() {
+        HBox hBox = new HBox();
+        VBox vBox = new VBox();
+        Circle circle = new Circle(20,20,20);
+        Label label = new Label();
+        HBox innerHBox = new HBox();
+
+
+        hBox.getChildren().add(vBox);
+        hBox.getChildren().add(circle);
+        vBox.getChildren().add(label);
+        vBox.getChildren().add(circle);
+    }
+
     @FXML
     void allFriends(ActionEvent event) {
+        friendsList.getItems().clear();
+        friends = server.getPersonFriends(HelloApplication.person.getUserName());
+        // for (var item :
+        //) {
 
+        //}
     }
 
     @FXML
