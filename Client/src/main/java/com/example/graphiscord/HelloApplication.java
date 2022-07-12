@@ -1,6 +1,7 @@
 package com.example.graphiscord;
 
 import ClientController.Server;
+import code.ChannelType;
 import code.Person;
 import javafx.application.Application;
 import javafx.event.ActionEvent;

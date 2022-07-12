@@ -3,6 +3,7 @@ package com.example.graphiscord;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 
+<<<<<<< HEAD
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -10,10 +11,35 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
+=======
+
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.paint.ImagePattern;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+
+import java.io.IOException;
+import java.util.Objects;
+>>>>>>> origin/Graphic2
 
 public class SettingViewController {
 
     @FXML
+<<<<<<< HEAD
+=======
+    private TextField phoneTextField;
+    @FXML
+    private Label phoneValidity;
+    @FXML
+>>>>>>> origin/Graphic2
     private TextField emailTextField;
 
     @FXML
@@ -42,17 +68,49 @@ public class SettingViewController {
 
     @FXML
     void changePicButton(ActionEvent event) {
+<<<<<<< HEAD
 
+=======
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Open Resource File");
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.gif")
+        );
+        //check file chooser if it's null
+
+        profilePic.setFill(new ImagePattern(new Image(fileChooser.showOpenDialog(null).toURI().toString())));
+>>>>>>> origin/Graphic2
     }
 
     @FXML
     void emailEditButton(ActionEvent event) {
+<<<<<<< HEAD
+=======
+        //check email validity and if it's not already in use then change it
+        if (emailTextField.getText().matches("^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$")) {
+            emailValidity.setVisible(true);
+            emailValidity.setText("Valid");
+            emailValidity.setStyle("-fx-text-fill: green;");
+            //ToDO: check if email is already in use
+            //ToDO: change email in server
+
+        } else {
+            emailValidity.setText("Invalid");
+            emailValidity.setStyle("-fx-text-fill: red;");
+        }
+
+>>>>>>> origin/Graphic2
 
     }
 
     @FXML
+<<<<<<< HEAD
     void exitSettings(ActionEvent event) {
 
+=======
+    void exitSettings(ActionEvent event) throws IOException {
+        changeView(event,"main-view.fxml");
+>>>>>>> origin/Graphic2
     }
 
     @FXML
@@ -78,6 +136,31 @@ public class SettingViewController {
         assert usernameValidity != null : "fx:id=\"usernameValidity\" was not injected: check your FXML file 'setting-view.fxml'.";
 
     }
+<<<<<<< HEAD
+=======
+
+    public void phoneEditButton(ActionEvent actionEvent) {
+
+    }
+
+    public void logoutButton(ActionEvent actionEvent) throws IOException {
+        changeView(actionEvent,"login-view.fxml");
+        HelloApplication.person = null;
+    }
+    private void changeView(ActionEvent event, String name) {
+        Parent root;
+        try {
+            root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(name)));
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            Scene scene = new Scene(root);
+            stage.setResizable(false);
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+>>>>>>> origin/Graphic2
 }
 
 
