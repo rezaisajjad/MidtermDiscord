@@ -261,6 +261,7 @@ public class MainViewController {
     public void newFriendButton(ActionEvent event) {
     }
 
+
     public HBox getMessageHBox(Image image,String message,int likes,int dislikes,int laugh_) {
         HBox hBox = new HBox();
         hBox.setPadding(new Insets(5));
