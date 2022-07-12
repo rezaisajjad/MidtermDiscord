@@ -600,6 +600,7 @@ public class Server {
         SendChannelServerMessageRequest request = new SendChannelServerMessageRequest(text, sender, channel, serverID);
         sendRequest(request);
     }
+
     /**
      * returns new notifications
      * @param userName username
@@ -615,8 +616,7 @@ public class Server {
      * @param serverID server id
      * @return file
      */
-    public Integer getServerImageID(Integer serverID)
-    {
+    public Integer getServerImageID(Integer serverID) {
         GetServerImageRequest request=new GetServerImageRequest(serverID);
         return ((GetServerImageRequest)sendRequest(request)).getServerImage();
     }
@@ -641,5 +641,16 @@ public class Server {
     public boolean checkEmailAvailability(String email) {
         CheckEmailAvailabilityRequest request = new CheckEmailAvailabilityRequest(email);
         return ((CheckEmailAvailabilityRequest) sendRequest(request)).isAvailable();
+    }
+
+    /**
+     * changes user password
+     *
+     * @param username person username
+     * @param newMail  newEmail
+     */
+    public void changePersonEmail(String username, String newMail) {
+        ChangeEmailRequest request = new ChangeEmailRequest(username, newMail);
+        sendRequest(request);
     }
 }
