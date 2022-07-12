@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.SplitMenuButton?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.shape.Rectangle?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.graphiscord.SettingViewController">
+   <Circle fx:id="profilePic" fill="DODGERBLUE" layoutX="147.0" layoutY="71.0" radius="31.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" />
+   <Button layoutX="550.0" layoutY="14.0" mnemonicParsing="false" onAction="#exitSettings" text="ESC" />
+   <Label fx:id="userName" layoutX="203.0" layoutY="59.0" prefHeight="25.0" prefWidth="107.0" text="Label" />
+   <Button layoutX="316.0" layoutY="59.0" mnemonicParsing="false" onAction="#changePicButton" text="Change Profile Picture" />
+   <Rectangle fx:id="state" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="60.0" layoutX="111.0" layoutY="42.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="5.0" />
+   <TextField fx:id="usernameTextField" layoutX="80.0" layoutY="159.0" />
+   <TextField fx:id="passwordTextField" layoutX="80.0" layoutY="293.0" />
+   <TextField fx:id="emailTextField" layoutX="80.0" layoutY="226.0" />
+   <Label layoutX="85.0" layoutY="134.0" prefHeight="17.0" prefWidth="126.0" text="Username" />
+   <Label layoutX="84.0" layoutY="267.0" prefHeight="17.0" prefWidth="126.0" text="Password" />
+   <Label layoutX="84.0" layoutY="202.0" prefHeight="17.0" prefWidth="126.0" text="Email" />
+   <Label fx:id="usernameValidity" layoutX="254.0" layoutY="163.0" prefHeight="17.0" prefWidth="175.0" text="Label" textFill="RED" visible="false" />
+   <Label fx:id="passwordValidity" layoutX="254.0" layoutY="297.0" prefHeight="17.0" prefWidth="175.0" text="Label" textFill="RED" visible="false" />
+   <Label fx:id="emailValidity" layoutX="254.0" layoutY="230.0" prefHeight="17.0" prefWidth="175.0" text="Label" textFill="RED" visible="false" />
+   <Button layoutX="484.0" layoutY="159.0" mnemonicParsing="false" onAction="#usernameEditButton" text="Edit" />
+   <Button layoutX="484.0" layoutY="293.0" mnemonicParsing="false" onAction="#passwordEditButton" text="Edit" />
+   <Button layoutX="484.0" layoutY="226.0" mnemonicParsing="false" onAction="#emailEditButton" text="Edit" />
+   <TextField fx:id="phoneTextField" layoutX="80.0" layoutY="361.0" />
+   <Label layoutX="84.0" layoutY="337.0" prefHeight="17.0" prefWidth="126.0" text="Pone number" />
+   <Label fx:id="phoneValidity" layoutX="254.0" layoutY="365.0" prefHeight="17.0" prefWidth="175.0" text="Label" textFill="RED" visible="false" />
+   <Button layoutX="484.0" layoutY="361.0" mnemonicParsing="false" onAction="#phoneEditButton" text="Edit" />
+   <Button layoutX="484.0" layoutY="59.0" mnemonicParsing="false" onAction="#logoutButton" text="Log out" />
+   <SplitMenuButton layoutX="38.0" layoutY="60.0" mnemonicParsing="false" text="State">
+     <items>
+       <MenuItem fx:id="stateOnline" mnemonicParsing="false" text="Online" />
+       <MenuItem fx:id="stateIdle" mnemonicParsing="false" text="Idle" />
+         <MenuItem fx:id="stateDND" mnemonicParsing="false" text="Do Not Disturb" />
+         <MenuItem fx:id="stateIV" mnemonicParsing="false" text="Invisible" />
+     </items>
+   </SplitMenuButton>
+</AnchorPane>
