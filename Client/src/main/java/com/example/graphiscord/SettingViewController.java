@@ -3,16 +3,12 @@ package com.example.graphiscord;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 
-<<<<<<< HEAD
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
-=======
-
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -28,49 +24,52 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.Objects;
->>>>>>> origin/Graphic2
 
 public class SettingViewController {
+    @FXML
+    private MenuItem stateIV;
+    @FXML
+    private MenuItem stateDND;
+    @FXML
+    private MenuItem stateIdle;
+    @FXML
+    private MenuItem stateOnline;
+    // fields start here
+        @FXML
+        private TextField phoneTextField;
+        @FXML
+        private Label phoneValidity;
+        @FXML
+        private TextField emailTextField;
 
-    @FXML
-<<<<<<< HEAD
-=======
-    private TextField phoneTextField;
-    @FXML
-    private Label phoneValidity;
-    @FXML
->>>>>>> origin/Graphic2
-    private TextField emailTextField;
+        @FXML
+        private Label emailValidity;
 
-    @FXML
-    private Label emailValidity;
+        @FXML
+        private TextField passwordTextField;
 
-    @FXML
-    private TextField passwordTextField;
+        @FXML
+        private Label passwordValidity;
 
-    @FXML
-    private Label passwordValidity;
+        @FXML
+        private Circle profilePic;
 
-    @FXML
-    private Circle profilePic;
+        @FXML
+        private Rectangle state;
 
-    @FXML
-    private Rectangle state;
+        @FXML
+        private Label userName;
 
-    @FXML
-    private Label userName;
+        @FXML
+        private TextField usernameTextField;
 
-    @FXML
-    private TextField usernameTextField;
-
-    @FXML
-    private Label usernameValidity;
+        @FXML
+        private Label usernameValidity;
+    // fields end here
 
     @FXML
     void changePicButton(ActionEvent event) {
-<<<<<<< HEAD
 
-=======
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open Resource File");
         fileChooser.getExtensionFilters().addAll(
@@ -79,13 +78,10 @@ public class SettingViewController {
         //check file chooser if it's null
 
         profilePic.setFill(new ImagePattern(new Image(fileChooser.showOpenDialog(null).toURI().toString())));
->>>>>>> origin/Graphic2
     }
 
     @FXML
     void emailEditButton(ActionEvent event) {
-<<<<<<< HEAD
-=======
         //check email validity and if it's not already in use then change it
         if (emailTextField.getText().matches("^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$")) {
             emailValidity.setVisible(true);
@@ -99,18 +95,14 @@ public class SettingViewController {
             emailValidity.setStyle("-fx-text-fill: red;");
         }
 
->>>>>>> origin/Graphic2
 
     }
 
-    @FXML
-<<<<<<< HEAD
-    void exitSettings(ActionEvent event) {
 
-=======
+
+    @FXML
     void exitSettings(ActionEvent event) throws IOException {
         changeView(event,"main-view.fxml");
->>>>>>> origin/Graphic2
     }
 
     @FXML
@@ -136,8 +128,7 @@ public class SettingViewController {
         assert usernameValidity != null : "fx:id=\"usernameValidity\" was not injected: check your FXML file 'setting-view.fxml'.";
 
     }
-<<<<<<< HEAD
-=======
+
 
     public void phoneEditButton(ActionEvent actionEvent) {
 
@@ -160,7 +151,6 @@ public class SettingViewController {
             throw new RuntimeException(e);
         }
     }
->>>>>>> origin/Graphic2
 }
 
 

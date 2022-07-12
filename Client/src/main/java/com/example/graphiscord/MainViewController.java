@@ -37,11 +37,17 @@ import java.util.HashSet;
 import java.util.Objects;
 
 public class MainViewController {
+    @FXML
+    private TextArea friendTextArea=new TextArea();
+    @FXML
+    private final ListView serverMessagesListView=new ListView();
+    @FXML
+    private TextArea serverTextArea=new TextArea();
+    @FXML
+    private final ListView friendMessageListView=new ListView();
     Server server = Server.getServer();
     @FXML
     private final ListView<HBox> chats = new ListView<>();
-    @FXML
-    private TextArea sendingMessageText = new TextArea();
     @FXML
     private ListView<HBox> serversListView = new ListView<>();
     @FXML
@@ -51,7 +57,7 @@ public class MainViewController {
     @FXML
     private ListView<HBox> serverTextChannelsListView = new ListView<>();
     @FXML
-    private ListView<?> friendsList = new ListView<>();
+    private final ListView<?> friendsList = new ListView<>();
     @FXML
     private AnchorPane membersPane = new AnchorPane();
 
@@ -59,7 +65,7 @@ public class MainViewController {
     @FXML
     private AnchorPane messagesPane = new AnchorPane();
     private HashMap<Integer, String> serversList;
-    private HashSet<String> currentServersTextChannels;
+    private HashSet<String> currentServersTextChannels=new HashSet<>();
     private Integer currentServer;
 
     public void refresh() {
@@ -232,10 +238,19 @@ public class MainViewController {
         //currentServersTextChannels.sendMessage(message);
     }
 
+    @FXML
     public void initialize() {
         refresh();
     }
 
+    @FXML
     public void newFriendButton(ActionEvent event) {
+    }
+    @FXML
+    private void sendVoiceButton(ActionEvent actionEvent) {
+    }
+
+    @FXML
+    public void sendFileButton(ActionEvent actionEvent) {
     }
 }
