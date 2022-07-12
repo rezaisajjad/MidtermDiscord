@@ -2,8 +2,6 @@ package com.example.graphiscord;
 
 import ClientController.Server;
 import code.Person;
-import code.PrivateChat;
-import code.PrivateChatMessage;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
@@ -15,6 +13,10 @@ import java.io.IOException;
 
 public class HelloApplication extends Application {
     public static Person person;
+
+    public static void reFreshPerson() {
+        person = Server.getServer().loginPerson(person.getUserName(), person.getPassWord());
+    }
 
     @Override
     public void start(Stage stage) throws IOException {
@@ -35,9 +37,6 @@ public class HelloApplication extends Application {
         stage.show();
     }
     public static void main(String[] args) throws IOException {
-        Server.getServer().sendPrivateChatMessage(new PrivateChat("sajjadmahdi","hasan"),new PrivateChatMessage(
-                "sajjadmahdi","salam khoobi?"
-        ));
 //        String uName= "sajjadmahdi";
 //        var person = new Person();
 //        person.setEmail("a@b.com");

@@ -18,8 +18,7 @@ public class PeopleRepository implements Serializable {
         return pr;
     }
 
-    private PeopleRepository()
-    {}
+    private PeopleRepository() {}
 
     private void addUpdateMessage(String userName, String message) {
         if (updates.containsKey(userName))
@@ -216,6 +215,7 @@ public class PeopleRepository implements Serializable {
         String _message = "you have friend request from: " + senderUserName;
         addUpdateMessage(receiverUserName, _message);
     }
+
     /**
      * returns request of a person
      *
@@ -303,6 +303,7 @@ public class PeopleRepository implements Serializable {
     public String getStatus(String userName) {
         return people.get(userName).getIsOnline() ? people.get(userName).getStatus().toString() : "Offline";
     }
+
     /**
      * sets person status
      *
@@ -458,18 +459,18 @@ public class PeopleRepository implements Serializable {
         }
         return result;
     }
+
     /**
      * removes a person from server
      * @param userName person username
      * @param serverUniqueID server id
      */
-    public void removePersonFromServer(String userName, Integer serverUniqueID)
-    {
+    public void removePersonFromServer(String userName, Integer serverUniqueID) {
         people.get(userName).removeServerChat(serverUniqueID);
         servers.get(serverUniqueID).getMembers().remove(userName);
         servers.get(serverUniqueID).getRegisterDates().remove(userName);
         for (var item:servers.get(serverUniqueID).getRoles().values()
-             ) {
+        ) {
             item.getMembers().remove(userName);
         }
         addUpdateMessage(userName, "you removed from " + servers.get(serverUniqueID).getName());
@@ -480,8 +481,7 @@ public class PeopleRepository implements Serializable {
      * @param role role
      * @param uniqueID server id
      */
-    public void addRoleToServer(Role role,Integer uniqueID)
-    {
+    public void addRoleToServer(Role role,Integer uniqueID) {
         servers.get(uniqueID).getRoles().put(role.getName(),role);
     }
 
@@ -681,10 +681,10 @@ public class PeopleRepository implements Serializable {
      * @param serverUniqueID serverID
      * @return list of channels that person can see
      */
-    public HashSet<String> getPersonFreemon(String userName, Integer serverUniqueID)
-    {
+    public HashSet<String> getPersonFreemon(String userName, Integer serverUniqueID) {
         return servers.get(serverUniqueID).getRestrictBut().get(userName);
     }
+
     /**
      * return messages of a channel
      * @param channelName channel name
@@ -697,14 +697,14 @@ public class PeopleRepository implements Serializable {
             return servers.get(serverID).getChannels().get(channelName).getMessages();
         return servers.get(serverID).getChannels().get(channelName).getMessages(servers.get(serverID).getRegisterDates().get(userName));
     }
+
     /**
      * pins a message to chat
      * @param channelName channel name
      * @param serverID server unique id
      * @param message message
      */
-    public void pinMessageToChannel(String channelName,Integer serverID,TextChannelMessage message)
-    {
+    public void pinMessageToChannel(String channelName,Integer serverID,TextChannelMessage message) {
         servers.get(serverID).getChannels().get(channelName).getPins().add(message);
     }
 
@@ -747,14 +747,14 @@ public class PeopleRepository implements Serializable {
     public void sendChannelMessage(String channel, Integer serverID, String text, String sender) {
         servers.get(serverID).getChannels().get(channel).getMessages().add(new TextChannelMessage(LocalDateTime.now(), text, sender));
     }
+
     /**
      * returns file of server Image
      * @param serverID server id
      * @return file
      */
-    public Integer getServerImageID(Integer serverID)
-    {
-           return servers.get(serverID).getImageID();
+    public Integer getServerImageID(Integer serverID) {
+        return servers.get(serverID).getImageID();
     }
 
     /**
@@ -779,5 +779,15 @@ public class PeopleRepository implements Serializable {
                 return false;
         }
         return true;
+    }
+
+    /**
+     * changes user password
+     *
+     * @param username person username
+     * @param newMail  newEmail
+     */
+    public void changePersonEmail(String username, String newMail) {
+        people.get(username).setEmail(newMail);
     }
 }

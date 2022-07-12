@@ -1,19 +1,15 @@
 package com.example.graphiscord;
 
+import ClientController.InputValidator;
+import ClientController.Server;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-
-import java.net.URL;
-import java.util.ResourceBundle;
-
-import javafx.scene.control.*;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Rectangle;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.paint.ImagePattern;
@@ -26,6 +22,7 @@ import java.io.IOException;
 import java.util.Objects;
 
 public class SettingViewController {
+    Server server = Server.getServer();
     @FXML
     private MenuItem stateIV;
     @FXML
@@ -83,19 +80,25 @@ public class SettingViewController {
     @FXML
     void emailEditButton(ActionEvent event) {
         //check email validity and if it's not already in use then change it
-        if (emailTextField.getText().matches("^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$")) {
-            emailValidity.setVisible(true);
-            emailValidity.setText("Valid");
-            emailValidity.setStyle("-fx-text-fill: green;");
-            //ToDO: check if email is already in use
-            //ToDO: change email in server
-
+        String email = emailTextField.getText();
+        if (InputValidator.validateEmail(email)) {
+            if (server.checkEmailAvailability(email)) {
+                server.changePersonEmail(HelloApplication.person.getUserName(), email);
+                emailValidity.setVisible(true);
+                emailValidity.setText("Changed");
+                emailValidity.setStyle("-fx-text-fill: green;");
+                HelloApplication.reFreshPerson();
+            }else
+            {
+                emailValidity.setVisible(true);
+                emailValidity.setText("Already exist");
+                emailValidity.setStyle("-fx-text-fill: red;");
+            }
         } else {
+            emailValidity.setVisible(true);
             emailValidity.setText("Invalid");
             emailValidity.setStyle("-fx-text-fill: red;");
         }
-
-
     }
 
 
@@ -117,6 +120,9 @@ public class SettingViewController {
 
     @FXML
     void initialize() {
+        emailTextField.setText(HelloApplication.person.getEmail());
+        usernameTextField.setEditable(false);
+        usernameTextField.setText(HelloApplication.person.getUserName());
         assert emailTextField != null : "fx:id=\"emailTextField\" was not injected: check your FXML file 'setting-view.fxml'.";
         assert emailValidity != null : "fx:id=\"emailValidity\" was not injected: check your FXML file 'setting-view.fxml'.";
         assert passwordTextField != null : "fx:id=\"passwordTextField\" was not injected: check your FXML file 'setting-view.fxml'.";
