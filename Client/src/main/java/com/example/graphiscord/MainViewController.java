@@ -1,13 +1,19 @@
 package com.example.graphiscord;
 
 import ClientController.Server;
+import code.Friend.AddFriendRequest;
+import code.Person;
 import code.PrivateChat;
+import code.Status;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
@@ -15,7 +21,9 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 
@@ -129,28 +137,46 @@ public class MainViewController {
         changeView(event, "setting-view.fxml");
     }
 
-    void getFriendHBox() {
+    HBox getFriendHBox(String name, String status ,String lastMessage,Image picture) {
         HBox hBox = new HBox();
         VBox vBox = new VBox();
         Circle circle = new Circle(20,20,20);
         Label label = new Label();
         HBox innerHBox = new HBox();
+        Label innerLabel = new Label();
+        Circle innerCircle = new Circle(5,5,5);
 
-
-        hBox.getChildren().add(vBox);
         hBox.getChildren().add(circle);
+        hBox.getChildren().add(vBox);
         vBox.getChildren().add(label);
-        vBox.getChildren().add(circle);
+        vBox.getChildren().add(innerHBox);
+        innerHBox.getChildren().add(innerCircle);
+        innerHBox.getChildren().add(innerLabel);
+
+        label.setText(name);
+        label.setAlignment(Pos.CENTER);
+        label.setContentDisplay(ContentDisplay.CENTER);
+        hBox.prefWidthProperty().bind(friendsListView.widthProperty());
+        vBox.prefWidthProperty().bind(hBox.widthProperty().subtract(5));
+        label.prefWidthProperty().bind(vBox.widthProperty());
+        innerLabel.prefWidthProperty().bind(vBox.widthProperty());
+        circle.setFill(Color.RED);
+        innerCircle.setFill(Color.GREEN);
+        innerLabel.setText(lastMessage);
+        innerHBox.setPadding(new Insets(2));
+        hBox.setPadding(new Insets(2));
+        vBox.setPadding(new Insets(2));
+        return hBox;
     }
 
     @FXML
     void allFriends(ActionEvent event) {
         friendsList.getItems().clear();
         friends = server.getPersonFriends(HelloApplication.person.getUserName());
-        // for (var item :
-        //) {
-
-        //}
+         for (var item : server.getPersonFriends(HelloApplication.person.getUserName())
+        ) {
+        friendsListView.getItems().add(getFriendHBox(item,server.getStatus(item),"none",null));
+        }
     }
 
     @FXML
