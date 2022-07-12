@@ -200,6 +200,7 @@ public class MainViewController {
             for (var item : server.getPersonPrivateChats(HelloApplication.person.getUserName())) {
                 serverTextChannelsListView.getItems().add(new HBox(new Label(chatContact(item))));
             }
+            return;
         }
         index--;
         currentServer = (Integer) serversList.keySet().toArray()[index];
@@ -233,5 +234,8 @@ public class MainViewController {
 
     public void initialize() {
         refresh();
+    }
+
+    public void newFriendButton(ActionEvent event) {
     }
 }
