@@ -2,6 +2,7 @@ package com.example.graphiscord;
 
 import ClientController.Server;
 import code.PrivateChat;
+import code.TextChannelMessage;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -44,6 +45,7 @@ public class MainViewController {
     @FXML
     private final ListView friendMessageListView=new ListView();
 
+    private ListView<HBox> currentListView=new ListView<>();
     Server server = Server.getServer();
     @FXML
     private final ListView<HBox> chats = new ListView<>();
@@ -66,6 +68,7 @@ public class MainViewController {
     private HashMap<Integer, String> serversList;
     private HashSet<String> currentServersTextChannels=new HashSet<>();
     private Integer currentServer;
+    private String currentServerTextChannel;
 
     public void refresh() {
         // add servers to list
@@ -212,6 +215,7 @@ public class MainViewController {
         index--;
         currentServer = (Integer) serversList.keySet().toArray()[index];
         serverTextChannelsListView.getItems().clear();
+        currentServersTextChannels.clear();
         currentServersTextChannels = server.getServerChannels(currentServer, HelloApplication.person.getUserName());
         for (var item : currentServersTextChannels) {
             serverTextChannelsListView.getItems().add(new HBox(new Label(item)));
@@ -226,13 +230,20 @@ public class MainViewController {
 
     @FXML
     void aServerTextChannelSelected() {
-//        int index = channelMessages.sele;
-//        if ()
-//        .clear();
-//        for (String u : currentServer.getMembers()) {
-//            membersListView.getItems().add(new HBox(new Label(u)));
-//        }
-//        messagesPane.setVisible(true);
+        currentListView= serverTextChannelsListView;
+        int index = serverTextChannelsListView.getSelectionModel().getSelectedIndex();
+        for ( TextChannelMessage item : server.getChannelMessages((String) currentServersTextChannels.toArray()[index],currentServer,HelloApplication.person.getUserName())) {
+            //todo
+            //todo
+            //todo
+            //todo
+            serverMessagesListView.getItems().add(getMessageHBox(null,null,0,0,0));
+            //todo
+            //todo
+            //todo
+            //todo
+
+        }
     }
 
     public void sendMessageButton(ActionEvent actionEvent) {
@@ -317,5 +328,22 @@ public class MainViewController {
 
     @FXML
     public void sendFileButton(ActionEvent actionEvent) {
+    }
+
+    public void pinnedMessageButton(ActionEvent actionEvent) {
+        currentListView= serverTextChannelsListView;
+        int index = serverTextChannelsListView.getSelectionModel().getSelectedIndex();
+        for ( TextChannelMessage item : server.getPinMessages((String) currentServersTextChannels.toArray()[index],currentServer)) {
+            //todo
+            //todo
+            //todo
+            //todo
+            serverMessagesListView.getItems().add(getMessageHBox(null,null,0,0,0));
+            //todo
+            //todo
+            //todo
+            //todo
+
+        }
     }
 }
